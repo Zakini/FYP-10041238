@@ -25,9 +25,7 @@ namespace UnitTests
 			expectedPath.emplace_back(1, 0);
 
 			// get actual path
-			jw::location* start, * target;
-
-			std::vector<sf::Vector2f> actualPath = testPather.findPath(start, target);
+			std::vector<sf::Vector2f> actualPath = testPather.findPath(1, 2);
 
 			Assert::IsTrue(expectedPath == actualPath);
 		}

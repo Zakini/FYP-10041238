@@ -4,19 +4,21 @@
 
 namespace jw
 {
-	vector<sf::Vector2f> pathEngine::findPath(location* from, location* to)
+	vector<sf::Vector2f> pathEngine::findPath(int fromId, int toId)
 	{
 		const float MAX_COST = std::numeric_limits<float>::max();	// TODO infinity?
 
+		location* to = &targetGraph->nodeAt(toId);
 		priority_queue<pathingTuple, vector<pathingTuple>, comparePriority> frontier;
 		set<location*> visitedNodes;
 
-		frontier.push(pathingTuple(0, from, vector<sf::Vector2f>(), 0));
+		frontier.push(pathingTuple(0, fromId, vector<sf::Vector2f>(), 0));
 
 		while (frontier.size() > 0)
 		{
 			float costToCurrent = frontier.top().costToHere;
-			location* currentNode = frontier.top().pathNode;
+			int currentId = frontier.top().pathNodeId;
+			location* currentNode = &targetGraph->nodeAt(currentId);
 			vector<sf::Vector2f> currentPath = frontier.top().pathToHere;
 			frontier.pop();
 
@@ -29,12 +31,16 @@ namespace jw
 
 			visitedNodes.insert(currentNode);
 
-			graph<location, road>::edge_container_type& neighbours = targetGraph->at(*currentNode);
+			graph<location, road>::edge_container_type& neighbours = targetGraph->edgesAt(currentId);
 
 			for (auto it = neighbours.begin(); it != neighbours.end(); it++)
 			{
-				float costToNeighbour = it->first.cost();
-				float heuristicCostToTarget = it->second.heuristic(to);
+				const road& connectingRoad = it->first;
+				int neighbourId = it->second;
+				location& neighbour = targetGraph->nodeAt(neighbourId);
+
+				float costToNeighbour = connectingRoad.cost();
+				float heuristicCostToTarget = neighbour.heuristic(to);
 				float cost;
 				float newPriority;
 
@@ -50,9 +56,9 @@ namespace jw
 				}
 
 				vector<sf::Vector2f> newPath = currentPath;
-				newPath.push_back(it->second.position());
+				newPath.push_back(neighbour.position());
 
-				frontier.push(pathingTuple(newPriority, &it->second, newPath, cost));
+				frontier.push(pathingTuple(newPriority, neighbourId, newPath, cost));
 			}
 		}
 

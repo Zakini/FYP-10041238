@@ -28,7 +28,7 @@ namespace jw
 
 		pathEngine(graph_type* p_targetGraph) : targetGraph(p_targetGraph) {}
 
-		vector<sf::Vector2f> findPath(location* from, location* to);	// TODO references instead?
+		vector<sf::Vector2f> findPath(int fromId, int toId);
 
 	private:
 		graph_type* targetGraph;
@@ -37,12 +37,12 @@ namespace jw
 		struct pathingTuple
 		{
 			float priority;
-			location* pathNode;
+			int pathNodeId;
 			vector<sf::Vector2f> pathToHere;
 			float costToHere;
 
-			pathingTuple(float p_priority, location* p_pathNode, vector<sf::Vector2f> p_pathToHere, float p_costToHere)
-				: priority(p_priority), pathNode(p_pathNode), pathToHere(p_pathToHere), costToHere(p_costToHere)
+			pathingTuple(float p_priority, int p_pathNodeId, vector<sf::Vector2f> p_pathToHere, float p_costToHere)
+				: priority(p_priority), pathNodeId(p_pathNodeId), pathToHere(p_pathToHere), costToHere(p_costToHere)
 			{}
 		};
 
