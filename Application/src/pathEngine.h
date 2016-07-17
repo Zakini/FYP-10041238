@@ -24,13 +24,15 @@ namespace jw
 	class pathEngine
 	{
 	public:
-		pathEngine(graph<location, road>* p_targetGraph) : targetGraph(p_targetGraph) {}
+		using graph_type = graph<location, road>;
+
+		pathEngine(graph_type* p_targetGraph) : targetGraph(p_targetGraph) {}
 
 		vector<sf::Vector2f> findPath(location* from, location* to);	// TODO references instead?
 
 	private:
-		graph<location, road>* targetGraph;
-		//float mindistancebetween(vector2d a, vector2d b);
+		graph_type* targetGraph;
+		//float mindistancebetween(vector2d a, vector2d b);	// TODO remove?
 
 		struct pathingTuple
 		{

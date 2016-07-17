@@ -2,6 +2,7 @@
 
 #include <string>
 #include <SFML/Graphics.hpp>
+#include "../lib/json-master/src/json.hpp"
 #include "graph.h"
 #include "location.h"
 #include "road.h"
@@ -13,8 +14,13 @@ namespace jw
 	class world
 	{
 	public:
+		using graph_type = graph<location, road>;
+
 		world() : worldGraph() {}
-		world(string filename);
+		world(string filepath);
+
+		static graph_type loadGraph(string filepath);
+		static graph_type loadGraph(nlohmann::json mapJson);
 
 		void update();
 		void draw(sf::RenderWindow& targetWindow);
