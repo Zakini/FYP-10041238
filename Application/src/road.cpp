@@ -6,9 +6,8 @@
 
 namespace jw
 {
-	float road::cost() const
+	float road::cost()
 	{
-		// TODO
-		return 0.0f;
+		return from->heuristic(to);
 	}
 }

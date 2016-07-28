@@ -17,7 +17,7 @@ namespace jw
 	public:
 		using node_type = node;
 		using edge_type = edge;
-		using edge_container_type = std::map<edge_type, int>;	// TODO edge becomes const, is this gonna work?
+		using edge_container_type = std::map<int, edge_type>;
 		using value_type = std::pair<node_type, edge_container_type>;
 		using container_type = std::map<int, value_type>;
 		using iterator = typename container_type::iterator;
@@ -78,27 +78,26 @@ namespace jw
 	{
 		if (graphMap.find(id) != graphMap.end()) return false;
 
-		nodes[id].first = newNode;	// Also constructs an empty edge map
+		graphMap[id].first = newNode;	// Also constructs an empty edge map
 		return true;
 	}
 
 	template<typename node, typename edge>
 	bool graph<node, edge>::insertEdge(int fromId, int toId, edge_type link, bool bidirectional)
 	{
-		node_type from = nodes.at(fromId);
-		node_type to = nodes.at(toId);
-
-		return insertEdge(fromId, toId, link, bidirectional);
-	}
-
-	template<typename node, typename edge>
-	bool graph<node, edge>::insertEdge(node_type from, node_type to, edge_type link, bool bidirectional)
-	{
 		// Check nodes exist
-		if (graphMap.find(from) == graphMap.end() || graphMap.find(to) == graphMap.end()) return false;
+		if (graphMap.find(fromId) == graphMap.end() || graphMap.find(toId) == graphMap.end()) return false;
 
-		// Link nodes (Note: overrides existing edges)
-		graphMap[from][link] = to;
-		return true;
+		graphMap[fromId].second[toId] = link;
+
+		bool bidirectionalResult = true;
+
+		if (bidirectional)
+		{
+			bidirectionalResult = insertEdge(toId, fromId, link, false);
+		}
+
+		// first link result && second link result
+		return bidirectionalResult;
 	}
 }

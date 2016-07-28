@@ -153,7 +153,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\game.cpp" />
-    <ClCompile Include="src\graph.cpp" />
     <ClCompile Include="src\location.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\pathEngine.cpp" />
