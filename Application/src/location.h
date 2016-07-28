@@ -19,6 +19,6 @@ namespace jw
 		friend bool operator<(const location& lhs, const location& rhs);	// Purely for std::map<location, road>. Done lexicographically (x then y).
 
 	private:
-		sf::Vector2f _position;
+		sf::Vector2f _position;	// TODO 3D vector?
 	};
 }

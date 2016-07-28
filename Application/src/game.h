@@ -13,7 +13,7 @@ namespace jw
 			gameWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/map.json")
 			{}
 
-		int run();
+		int run();	// TODO UT?
 
 	private:
 		sf::RenderWindow gameWindow;

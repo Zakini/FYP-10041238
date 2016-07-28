@@ -22,8 +22,8 @@ namespace jw
 		static graph_type loadGraph(string filepath);
 		static graph_type loadGraph(nlohmann::json mapJson);
 
-		void update();
-		void draw(sf::RenderWindow& targetWindow);
+		void update();	// TODO UT?
+		void draw(sf::RenderWindow& targetWindow);	// TODO UT?
 
 	private:
 		graph<location, road> worldGraph;

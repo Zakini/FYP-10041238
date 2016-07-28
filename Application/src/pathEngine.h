@@ -1,5 +1,3 @@
-// TODO
-
 #pragma once
 
 #include <vector>
@@ -32,7 +30,6 @@ namespace jw
 
 	private:
 		graph_type* targetGraph;
-		//float mindistancebetween(vector2d a, vector2d b);	// TODO remove?
 
 		struct pathingTuple
 		{
