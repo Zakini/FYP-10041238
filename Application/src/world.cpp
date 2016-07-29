@@ -87,9 +87,23 @@ namespace jw
 
 	void world::update()
 	{
+		for (auto& graphPair : worldGraph)
+		{
+			location& currentLocation = graphPair.second.first;
+			// TODO roads
+
+			currentLocation.update();
+		}
 	}
 
-	void world::draw(sf::RenderWindow& targetWindow)
+	void world::draw(sf::RenderWindow& renderTarget)
 	{
+		for (auto& graphPair : worldGraph)
+		{
+			location& currentLocation = graphPair.second.first;
+			// TODO roads
+
+			currentLocation.draw(renderTarget);
+		}
 	}
 }
