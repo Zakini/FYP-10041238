@@ -1,18 +1,25 @@
 #pragma once
 
+#include <SFML/Graphics/Vertex.hpp>
 #include "location.h"
+#include "gameObject.h"
 
 namespace jw
 {
-	class road
+	class road : public gameObject
 	{
 	public:
-		road() : from(), to() {}
-		road(location* p_from, location* p_to) : from(p_from), to(p_to) {}
+		road(location* p_from = nullptr, location* p_to = nullptr, float p_lineThickness = 4.0f);
 
 		float cost();
 
+		// Inherited via drawable
+		virtual void update() override;	// TODO UT?
+		virtual void draw(sf::RenderWindow& renderTarget) override;	// TODO UT?
+
 	private:
 		location* from, * to;
+		sf::VertexArray renderShape;
+		float lineThickness;
 	};
 }

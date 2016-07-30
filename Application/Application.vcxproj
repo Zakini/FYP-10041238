@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\gameObject.cpp" />
     <ClCompile Include="src\location.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\pathEngine.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="src\world.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\gameObject.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\graph.h" />
     <ClInclude Include="src\location.h" />

@@ -35,11 +35,11 @@ namespace jw
 
 			for (auto it = neighbours.begin(); it != neighbours.end(); it++)
 			{
-				road& connectingRoad = it->second;
+				road* connectingRoad = it->second;
 				int neighbourId = it->first;
 				location& neighbour = targetGraph->nodeAt(neighbourId);
 
-				float costToNeighbour = connectingRoad.cost();
+				float costToNeighbour = connectingRoad->cost();
 				float heuristicCostToTarget = neighbour.heuristic(to);
 				float cost;
 				float newPriority;

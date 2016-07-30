@@ -1,13 +1,16 @@
 #pragma once
 
 #include <string>
+#include <set>
 #include <SFML/Graphics.hpp>
 #include "../lib/json-master/src/json.hpp"
 #include "graph.h"
 #include "location.h"
 #include "road.h"
+#include "gameObject.h"
 
 using std::string;
+using std::set;
 
 namespace jw
 {
@@ -27,5 +30,6 @@ namespace jw
 
 	private:
 		graph<location, road> worldGraph;
+		set<gameObject*> gameObjects;
 	};
 }

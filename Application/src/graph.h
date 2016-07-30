@@ -15,12 +15,15 @@ namespace jw
 	class graph	// TODO UT?
 	{
 	public:
+		// TODO make edges a separate adjacency matrix?
 		using node_type = node;
-		using edge_type = edge;
+		using edge_type = edge*;
 		using edge_container_type = std::map<int, edge_type>;
 		using value_type = std::pair<node_type, edge_container_type>;
 		using container_type = std::map<int, value_type>;
 		using iterator = typename container_type::iterator;
+
+		// TODO Destructor
 
 		// Access
 		value_type& at(int targetId);
@@ -34,7 +37,6 @@ namespace jw
 		// Modifiers
 		bool insertNode(int id, node_type newNode);
 		bool insertEdge(int fromId, int toId, edge_type link, bool bidirectional = false);
-		bool insertEdge(node_type from, node_type to, edge_type link, bool bidirectional = false);
 
 	private:
 		container_type graphMap;

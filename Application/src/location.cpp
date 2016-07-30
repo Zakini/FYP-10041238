@@ -5,8 +5,10 @@
 
 namespace jw
 {
-	location::location() : _position(), renderShape(10)
+	location::location(sf::Vector2f p_position, float shapeSize) : _position(p_position), renderShape(shapeSize)
 	{
+		_depth = 0;
+
 		renderShape.setOrigin(renderShape.getRadius(), renderShape.getRadius());
 		renderShape.setFillColor(sf::Color::White);
 	}

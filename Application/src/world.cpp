@@ -10,6 +10,18 @@ namespace jw
 	world::world(string filepath)
 	{
 		worldGraph = loadGraph(filepath);
+
+		for (auto& graphPair : worldGraph)
+		{
+			gameObject* currentLocation = &graphPair.second.first;
+			gameObjects.insert(currentLocation);
+
+			for (auto& roadPair : graphPair.second.second)
+			{
+				gameObject* currentRoad = roadPair.second;
+				gameObjects.insert(currentRoad);
+			}
+		}
 	}
 
 	world::graph_type world::loadGraph(string filepath)
@@ -75,7 +87,7 @@ namespace jw
 				location* source = &outputGraph.nodeAt(sourceId);
 				int destId = roadJson.at(toKey);
 				location* dest = &outputGraph.nodeAt(destId);
-				road roadEdge(source, dest);
+				road* roadEdge = new road(source, dest);
 				bool bidirectional = roadJson.at(bidirectionalKey);
 
 				outputGraph.insertEdge(sourceId, destId, roadEdge, bidirectional);
@@ -87,23 +99,17 @@ namespace jw
 
 	void world::update()
 	{
-		for (auto& graphPair : worldGraph)
+		for (auto gameObj : gameObjects)
 		{
-			location& currentLocation = graphPair.second.first;
-			// TODO roads
-
-			currentLocation.update();
+			gameObj->update();
 		}
 	}
 
 	void world::draw(sf::RenderWindow& renderTarget)
 	{
-		for (auto& graphPair : worldGraph)
+		for (auto gameObj : gameObjects)
 		{
-			location& currentLocation = graphPair.second.first;
-			// TODO roads
-
-			currentLocation.draw(renderTarget);
+			gameObj->draw(renderTarget);
 		}
 	}
 }
