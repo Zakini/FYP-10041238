@@ -23,8 +23,8 @@ namespace jw
 		world() : worldGraph() {}
 		world(string filepath);
 
-		static graph_type loadGraph(string filepath);
-		static graph_type loadGraph(nlohmann::json mapJson);
+		static graph_type loadWorld(string filepath);
+		static graph_type loadWorld(nlohmann::json mapJson);
 
 		void update(sf::Time timeSinceLastFrame);	// TODO UT?
 		void draw(sf::RenderWindow& renderTarget);	// TODO UT?

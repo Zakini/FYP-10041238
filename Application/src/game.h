@@ -2,23 +2,26 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Clock.hpp>
+#include <vector>
 #include "world.h"
+#include "gameObject.h"
+#include "car.h"
+
+using std::vector;
 
 namespace jw
 {
 	class game
 	{
 	public:
-		game() :
-			gameWindow(sf::VideoMode(800, 600), "FYP - 10041238", sf::Style::Close | sf::Style::Titlebar),
-			gameWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/map.json")
-			{}
+		game();
 
 		int run();	// TODO UT?
 
 	private:
 		sf::RenderWindow gameWindow;
 		world gameWorld;
+		vector<gameObject*> entities;
 		sf::Clock frameTimer;
 
 		void update(sf::Time timeSinceLastFrame);

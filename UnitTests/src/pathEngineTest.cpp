@@ -22,7 +22,7 @@ namespace UnitTests
 			// S---T
 
 			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadGraph(filePathBase + "astar-unit-test1.json");
+			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test1.json");
 			
 			jw::pathEngine testPather(&testGraph);
 
@@ -39,7 +39,7 @@ namespace UnitTests
 			// S-X-T
 
 			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadGraph(filePathBase + "astar-unit-test2.json");
+			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test2.json");
 
 			jw::pathEngine testPather(&testGraph);
 
@@ -55,7 +55,7 @@ namespace UnitTests
 			// ST
 
 			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadGraph(filePathBase + "astar-unit-test3.json");
+			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test3.json");
 
 			jw::pathEngine testPather(&testGraph);
 
@@ -71,7 +71,7 @@ namespace UnitTests
 			// S---O---T
 
 			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadGraph(filePathBase + "astar-unit-test4.json");
+			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test4.json");
 
 			jw::pathEngine testPather(&testGraph);
 
@@ -97,7 +97,7 @@ namespace UnitTests
 			//     O
 
 			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadGraph(filePathBase + "astar-unit-test5.json");
+			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test5.json");
 
 			jw::pathEngine testPather(&testGraph);
 
@@ -123,7 +123,7 @@ namespace UnitTests
 			//         O
 
 			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadGraph(filePathBase + "astar-unit-test6.json");
+			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test6.json");
 
 			jw::pathEngine testPather(&testGraph);
 
@@ -151,7 +151,7 @@ namespace UnitTests
 			//         O
 
 			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadGraph(filePathBase + "astar-unit-test7.json");
+			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test7.json");
 
 			jw::pathEngine testPather(&testGraph);
 
@@ -167,7 +167,7 @@ namespace UnitTests
 			// S<--T
 
 			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadGraph(filePathBase + "astar-unit-test8.json");
+			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test8.json");
 
 			jw::pathEngine testPather(&testGraph);
 
@@ -195,7 +195,7 @@ namespace UnitTests
 			//             O
 
 			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadGraph(filePathBase + "astar-unit-test9.json");
+			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test9.json");
 
 			jw::pathEngine testPather(&testGraph);
 
@@ -215,7 +215,7 @@ namespace UnitTests
 			// Random generated map
 
 			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadGraph(filePathBase + "astar-unit-test10.json");
+			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test10.json");
 
 			jw::pathEngine testPather(&testGraph);
 

@@ -9,7 +9,7 @@ namespace jw
 {
 	world::world(string filepath)
 	{
-		worldGraph = loadGraph(filepath);
+		worldGraph = loadWorld(filepath);
 
 		for (auto& graphPair : worldGraph)
 		{
@@ -24,17 +24,17 @@ namespace jw
 		}
 	}
 
-	world::graph_type world::loadGraph(string filepath)
+	world::graph_type world::loadWorld(string filepath)
 	{
 		ifstream mapFile(filepath);
 		nlohmann::json mapJson;
 
 		mapFile >> mapJson;
 
-		return loadGraph(mapJson);
+		return loadWorld(mapJson);
 	}
 
-	world::graph_type world::loadGraph(nlohmann::json mapJson)
+	world::graph_type world::loadWorld(nlohmann::json mapJson)
 	{
 		const string locationsKey = "locations";
 		const string junctionsKey = "junctions";
@@ -49,49 +49,40 @@ namespace jw
 
 		graph_type outputGraph;
 		
-		if (mapJson.find(locationsKey) != mapJson.end())
+		for (auto& locationJson : mapJson[locationsKey])
 		{
-			for (auto& locationJson : mapJson.at(locationsKey))
-			{
-				nlohmann::json positionJson = locationJson.at(positionKey);
-				sf::Vector2f position;
-				position.x = positionJson.at(xKey);
-				position.y = positionJson.at(zKey);
-				int sourceId = locationJson.at(idKey);
+			nlohmann::json positionJson = locationJson.at(positionKey);
+			sf::Vector2f position;
+			position.x = positionJson.at(xKey);
+			position.y = positionJson.at(zKey);
+			int sourceId = locationJson.at(idKey);
 
-				location newLocation(position);
-				outputGraph.insertNode(sourceId, newLocation);
-			}
+			location newLocation(position);
+			outputGraph.insertNode(sourceId, newLocation);
 		}
 
-		if (mapJson.find(junctionsKey) != mapJson.end())
+		for (auto& locationJson : mapJson[junctionsKey])
 		{
-			for (auto& locationJson : mapJson.at(junctionsKey))
-			{
-				nlohmann::json positionJson = locationJson.at(positionKey);
-				sf::Vector2f position;
-				position.x = positionJson.at(xKey);
-				position.y = positionJson.at(zKey);
-				int sourceId = locationJson.at(idKey);
+			nlohmann::json positionJson = locationJson.at(positionKey);
+			sf::Vector2f position;
+			position.x = positionJson.at(xKey);
+			position.y = positionJson.at(zKey);
+			int sourceId = locationJson.at(idKey);
 
-				location newLocation(position);
-				outputGraph.insertNode(sourceId, newLocation);
-			}
+			location newLocation(position);
+			outputGraph.insertNode(sourceId, newLocation);
 		}
 
-		if (mapJson.find(roadsKey) != mapJson.end())
+		for (auto& roadJson : mapJson[roadsKey])
 		{
-			for (auto& roadJson : mapJson.at(roadsKey))
-			{
-				int sourceId = roadJson.at(fromKey);
-				location* source = &outputGraph.nodeAt(sourceId);
-				int destId = roadJson.at(toKey);
-				location* dest = &outputGraph.nodeAt(destId);
-				road* roadEdge = new road(source, dest);
-				bool bidirectional = roadJson.at(bidirectionalKey);
+			int sourceId = roadJson.at(fromKey);
+			location* source = &outputGraph.nodeAt(sourceId);
+			int destId = roadJson.at(toKey);
+			location* dest = &outputGraph.nodeAt(destId);
+			road* roadEdge = new road(source, dest);
+			bool bidirectional = roadJson.at(bidirectionalKey);
 
-				outputGraph.insertEdge(sourceId, destId, roadEdge, bidirectional);
-			}
+			outputGraph.insertEdge(sourceId, destId, roadEdge, bidirectional);
 		}
 
 		return outputGraph;

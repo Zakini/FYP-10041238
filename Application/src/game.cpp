@@ -2,6 +2,16 @@
 
 namespace jw
 {
+	game::game() :
+		gameWindow(sf::VideoMode(800, 600), "FYP - 10041238", sf::Style::Close | sf::Style::Titlebar),
+		gameWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/map.json"),
+		entities(),
+		frameTimer()
+	{
+		auto cars = car::loadCars(string("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/entities/entities.json"));
+		entities.assign(cars.begin(), cars.end());
+	}
+
 	int game::run()
 	{
 		frameTimer.restart();
@@ -10,6 +20,8 @@ namespace jw
 		{
 			update(frameTimer.getElapsedTime());
 			draw();
+
+			frameTimer.restart();
 		}
 
 		return 0;
@@ -37,7 +49,11 @@ namespace jw
 
 		// World and entities
 		gameWorld.update(timeSinceLastFrame);
-		// TODO
+		
+		for (auto entity : entities)
+		{
+			entity->update(timeSinceLastFrame);
+		}
 	}
 
 	void game::draw()
@@ -45,6 +61,11 @@ namespace jw
 		gameWindow.clear();
 
 		gameWorld.draw(gameWindow);
+
+		for (auto entity : entities)
+		{
+			entity->draw(gameWindow);
+		}
 
 		gameWindow.display();
 	}
