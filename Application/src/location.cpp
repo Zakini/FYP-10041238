@@ -28,7 +28,7 @@ namespace jw
 		return length(target->_position - _position);
 	}
 
-	void location::update()
+	void location::update(sf::Time timeSinceLastFrame)
 	{
 		renderShape.setPosition(_position);
 	}

@@ -3,6 +3,7 @@
 #include <string>
 #include <set>
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Time.hpp>
 #include "../lib/json-master/src/json.hpp"
 #include "graph.h"
 #include "location.h"
@@ -25,7 +26,7 @@ namespace jw
 		static graph_type loadGraph(string filepath);
 		static graph_type loadGraph(nlohmann::json mapJson);
 
-		void update();	// TODO UT?
+		void update(sf::Time timeSinceLastFrame);	// TODO UT?
 		void draw(sf::RenderWindow& renderTarget);	// TODO UT?
 
 	private:

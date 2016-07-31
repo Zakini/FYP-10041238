@@ -18,7 +18,7 @@ namespace jw
 		float heuristic(location* target);	// TODO rename to pathingHeuristic?
 
 		// Inherited from gameObject
-		virtual void update() override;	// TODO UT?
+		virtual void update(sf::Time timeSinceLastFrame) override;	// TODO UT?
 		virtual void draw(sf::RenderWindow& renderTarget) override;	// TODO UT?
 
 		friend bool operator==(const location& lhs, const location& rhs);

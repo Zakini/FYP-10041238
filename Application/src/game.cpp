@@ -4,16 +4,18 @@ namespace jw
 {
 	int game::run()
 	{
+		frameTimer.restart();
+
 		while (gameWindow.isOpen())
 		{
-			update();
+			update(frameTimer.getElapsedTime());
 			draw();
 		}
 
 		return 0;
 	}
 
-	void game::update()
+	void game::update(sf::Time timeSinceLastFrame)
 	{
 		sf::Event event;
 
@@ -34,7 +36,7 @@ namespace jw
 		}
 
 		// World and entities
-		gameWorld.update();
+		gameWorld.update(timeSinceLastFrame);
 		// TODO
 	}
 

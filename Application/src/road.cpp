@@ -16,7 +16,7 @@ namespace jw
 		return from->heuristic(to);
 	}
 
-	void road::update()
+	void road::update(sf::Time timeSinceLastFrame)
 	{
 	}
 

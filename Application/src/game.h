@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
 #include "world.h"
 
 namespace jw
@@ -18,8 +19,9 @@ namespace jw
 	private:
 		sf::RenderWindow gameWindow;
 		world gameWorld;
+		sf::Clock frameTimer;
 
-		void update();
+		void update(sf::Time timeSinceLastFrame);
 		void draw();
 	};
 }

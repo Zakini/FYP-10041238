@@ -97,11 +97,11 @@ namespace jw
 		return outputGraph;
 	}
 
-	void world::update()
+	void world::update(sf::Time timeSinceLastFrame)
 	{
 		for (auto gameObj : gameObjects)
 		{
-			gameObj->update();
+			gameObj->update(timeSinceLastFrame);
 		}
 	}
 

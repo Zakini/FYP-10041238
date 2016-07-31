@@ -14,7 +14,7 @@ namespace jw
 		float cost();
 
 		// Inherited via drawable
-		virtual void update() override;	// TODO UT?
+		virtual void update(sf::Time timeSinceLastFrame) override;	// TODO UT?
 		virtual void draw(sf::RenderWindow& renderTarget) override;	// TODO UT?
 
 	private:
