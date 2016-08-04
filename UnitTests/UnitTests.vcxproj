@@ -160,6 +160,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\carTest.cpp" />
     <ClCompile Include="src\locationTest.cpp" />
     <ClCompile Include="src\pathEngineTest.cpp" />
     <ClCompile Include="src\roadTest.cpp" />

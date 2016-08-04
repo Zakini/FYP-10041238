@@ -11,7 +11,6 @@
 using std::vector;
 using std::string;
 
-// TODO UT
 namespace jw
 {
 	class car : public gameObject
@@ -23,10 +22,11 @@ namespace jw
 		static vector<car*> loadCars(nlohmann::json carsJson);
 
 		// Inherited via gameObject
-		virtual void update(sf::Time timeSinceLastFrame) override;
-		virtual void draw(sf::RenderWindow& renderTarget) override;
+		virtual void update(sf::Time timeSinceLastFrame) override;	// TODO UT?
+		virtual void draw(sf::RenderWindow& renderTarget) override;	// TODO UT?
 
 	private:
+		// TODO separate for UTs?
 		sf::Vector2f generateForce();
 		void applyForce(sf::Vector2f force, sf::Time period);
 
