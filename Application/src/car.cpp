@@ -48,7 +48,7 @@ vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson)
 
 void jw::car::update(sf::Time timeSinceLastFrame)
 {
-	controller.update();
+	controller.update(timeSinceLastFrame);
 
 	renderShape.setPosition(position);
 }
