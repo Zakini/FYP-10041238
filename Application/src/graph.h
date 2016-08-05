@@ -23,7 +23,9 @@ namespace jw
 		using container_type = std::map<int, value_type>;
 		using iterator = typename container_type::iterator;
 
-		// TODO Destructor
+		// TODO copy constructor!
+
+		// TODO destructor
 
 		// Access
 		value_type& at(int targetId);

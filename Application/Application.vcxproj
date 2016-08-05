@@ -153,6 +153,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\car.cpp" />
+    <ClCompile Include="src\carFsm.cpp" />
+    <ClCompile Include="src\finiteStateMachine.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\gameObject.cpp" />
     <ClCompile Include="src\location.cpp" />
@@ -163,12 +165,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\car.h" />
+    <ClInclude Include="src\carFsm.h" />
+    <ClInclude Include="src\finiteStateMachine.h" />
     <ClInclude Include="src\gameObject.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\graph.h" />
     <ClInclude Include="src\location.h" />
     <ClInclude Include="src\pathEngine.h" />
     <ClInclude Include="src\road.h" />
+    <ClInclude Include="src\state.h" />
+    <ClInclude Include="src\transition.h" />
     <ClInclude Include="src\vectorMaths.h" />
     <ClInclude Include="src\world.h" />
   </ItemGroup>

@@ -4,7 +4,8 @@
 
 using std::ifstream;
 
-jw::car::car(sf::Vector2f p_position) : position(p_position), velocity(), mass(1), renderShape(sf::Vector2f(4, 2))
+jw::car::car(sf::Vector2f p_position, pathEngine* p_pather)
+	: position(p_position), velocity(), mass(1), renderShape(sf::Vector2f(2, 2)), pather(p_pather)
 {
 	renderShape.setOrigin(renderShape.getSize() / 2.0f);
 	renderShape.setFillColor(sf::Color::Green);
