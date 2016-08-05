@@ -2,11 +2,13 @@
 
 #include "state.h"
 #include "transition.h"
-#include "car.h"
 #include "finiteStateMachine.h"
 
 namespace jw
 {
+	// forward declaration for cyclic dependency
+	class car;
+
 	namespace carFsm
 	{
 		class carState : public state
@@ -27,13 +29,22 @@ namespace jw
 			car& targetCar;
 		};
 
+		class findPath : public carState
+		{
+		public:
+			findPath(car& targetCar) : carState(targetCar) {}
+
+			// Inherited via carState
+			virtual void update(sf::Time period) override;
+		};
+
 		class travelling : public carState
 		{
 		public:
 			travelling(car& targetCar) : carState(targetCar) {}
 
 			// Inherited via carState
-			virtual void update() override;
+			virtual void update(sf::Time period) override;
 		};
 
 		class arrived : public carTransition

@@ -3,6 +3,7 @@
 #include "graph.h"
 #include "state.h"
 #include "transition.h"
+#include <SFML/System/Time.hpp>
 
 namespace jw
 {
@@ -14,9 +15,11 @@ namespace jw
 		using transition_type = transition*;
 		using container_type = graph<state_type, transition_type>;
 
+		// TODO destructor
+
 		// Usage
 		void initialise();
-		void update();
+		void update(sf::Time period);
 
 		// Modifiers
 		bool addState(int id, state_type newNode);

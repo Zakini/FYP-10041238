@@ -5,10 +5,12 @@
 using std::ifstream;
 
 jw::car::car(sf::Vector2f p_position, pathEngine* p_pather)
-	: position(p_position), velocity(), mass(1), renderShape(sf::Vector2f(2, 2)), pather(p_pather)
+	: position(p_position), velocity(), mass(1), renderShape(sf::Vector2f(2, 2)), pather(p_pather), controller(carFsm::generate(*this))
 {
 	renderShape.setOrigin(renderShape.getSize() / 2.0f);
 	renderShape.setFillColor(sf::Color::Green);
+
+	controller.initialise();
 }
 
 vector<jw::car*> jw::car::loadCars(string filepath)
@@ -46,8 +48,7 @@ vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson)
 
 void jw::car::update(sf::Time timeSinceLastFrame)
 {
-	sf::Vector2f force = generateForce();
-	applyForce(force, timeSinceLastFrame);
+	controller.update();
 
 	renderShape.setPosition(position);
 }

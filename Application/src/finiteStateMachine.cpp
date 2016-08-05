@@ -1,15 +1,21 @@
 #include "finiteStateMachine.h"
 
+#include <stdexcept>
+
+using std::domain_error;
+
 void jw::fsm::initialise()
 {
 	currentState = fsmGraph.nodeAt(initialStateId);
 	possibleTransitions = &fsmGraph.edgesAt(initialStateId);
 }
 
-void jw::fsm::update()
+void jw::fsm::update(sf::Time period)
 {
+	if (currentState == nullptr) throw domain_error("fsm.update called before fsm.initialise");
+
 	checkTransitions();
-	currentState->update();
+	currentState->update(period);
 }
 
 bool jw::fsm::addState(int id, state_type newNode)
