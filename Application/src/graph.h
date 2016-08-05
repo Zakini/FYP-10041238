@@ -17,15 +17,11 @@ namespace jw
 	public:
 		// TODO make edges a separate adjacency matrix?
 		using node_type = node;
-		using edge_type = edge*;
+		using edge_type = edge;
 		using edge_container_type = std::map<int, edge_type>;
 		using value_type = std::pair<node_type, edge_container_type>;
 		using container_type = std::map<int, value_type>;
 		using iterator = typename container_type::iterator;
-
-		// TODO copy constructor!
-
-		// TODO destructor
 
 		// Access
 		value_type& at(int targetId);

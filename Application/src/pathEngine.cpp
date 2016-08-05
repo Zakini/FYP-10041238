@@ -35,7 +35,7 @@ namespace jw
 
 			for (auto it = neighbours.begin(); it != neighbours.end(); it++)
 			{
-				road* connectingRoad = it->second;
+				road* connectingRoad = &it->second;
 				int neighbourId = it->first;
 				location& neighbour = targetGraph->nodeAt(neighbourId);
 

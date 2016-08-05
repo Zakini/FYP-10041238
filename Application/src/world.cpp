@@ -18,7 +18,7 @@ namespace jw
 
 			for (auto& roadPair : graphPair.second.second)
 			{
-				gameObject* currentRoad = roadPair.second;
+				gameObject* currentRoad = &roadPair.second;
 				gameObjects.insert(currentRoad);
 			}
 		}
@@ -79,7 +79,7 @@ namespace jw
 			location* source = &outputGraph.nodeAt(sourceId);
 			int destId = roadJson.at(toKey);
 			location* dest = &outputGraph.nodeAt(destId);
-			road* roadEdge = new road(source, dest);
+			road roadEdge(source, dest);
 			bool bidirectional = roadJson.at(bidirectionalKey);
 
 			outputGraph.insertEdge(sourceId, destId, roadEdge, bidirectional);

@@ -6,14 +6,13 @@
 
 namespace jw
 {
+	// Note: always initialise before update (especially after copy)
 	class fsm
 	{
 	public:
 		using state_type = state*;
 		using transition_type = transition*;
-		using container_type = graph<state_type, transition>;
-
-		// TODO copy constructor!
+		using container_type = graph<state_type, transition_type>;
 
 		// Usage
 		void initialise();
