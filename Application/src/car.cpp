@@ -34,14 +34,18 @@ vector<jw::car*> jw::car::loadCars(string filepath, pathEngine* pather)
 vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson, pathEngine* pather)
 {
 	const string carsKey = "cars";
-	const string xKey = "x";
-	const string zKey = "z";
+	const string homeKey = "home";
+	const string workKey = "work";
 
 	vector<car*> outputVector;
 
 	for (auto& carJson : carsJson[carsKey])
 	{
 		car* newCar = new car(pather);
+
+		newCar->homeLocationId = carJson[homeKey];
+		newCar->workLocationId = carJson[workKey];
+
 		outputVector.push_back(newCar);
 	}
 
