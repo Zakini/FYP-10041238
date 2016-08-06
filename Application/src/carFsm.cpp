@@ -3,6 +3,12 @@
 
 #include <SFML/System/Vector2.hpp>
 
+void jw::carFsm::moveToHome::update(sf::Time period)
+{
+	sf::Vector2f homePosition = targetCar.pather->getLocationPosition(targetCar.homeLocationId);
+	targetCar.position = homePosition;
+}
+
 void jw::carFsm::findPath::update(sf::Time period)
 {
 	// TODO
@@ -23,11 +29,13 @@ jw::fsm jw::carFsm::generate(car& targetCar)
 {
 	fsm outputFsm;
 
-	outputFsm.addState(1, new carFsm::findPath(targetCar));
-	outputFsm.addState(2, new carFsm::travelling(targetCar));
+	outputFsm.addState(1, new moveToHome(targetCar));
+	outputFsm.addState(2, new findPath(targetCar));
+	outputFsm.addState(3, new travelling(targetCar));
 
 	outputFsm.addTransition(1, 2, new nullTransition());
-	outputFsm.addTransition(2, 1, new carFsm::arrived(targetCar));
+	outputFsm.addTransition(2, 3, new nullTransition());
+	outputFsm.addTransition(3, 2, new arrived(targetCar));
 
 	outputFsm.setInitialState(1);
 

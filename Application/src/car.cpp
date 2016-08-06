@@ -4,8 +4,15 @@
 
 using std::ifstream;
 
-jw::car::car(pathEngine* p_pather, sf::Vector2f p_position)
-	: position(p_position), velocity(), mass(1), renderShape(sf::Vector2f(2, 2)), pather(p_pather), controller(carFsm::generate(*this))
+jw::car::car(pathEngine* p_pather)
+	: position(0, 0)
+	, velocity(0, 0)
+	, mass(1)
+	, renderShape(sf::Vector2f(2, 2))
+	, homeLocationId(1)	// TODO un-hardcode
+	, workLocationId(2)	// TODO un-hardcode
+	, pather(p_pather)
+	, controller(carFsm::generate(*this))
 {
 	renderShape.setOrigin(renderShape.getSize() / 2.0f);
 	renderShape.setFillColor(sf::Color::Green);
@@ -23,10 +30,10 @@ vector<jw::car*> jw::car::loadCars(string filepath, pathEngine* pather)
 	return loadCars(carJson, pather);
 }
 
+// TODO load home/work/etc. location IDs
 vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson, pathEngine* pather)
 {
 	const string carsKey = "cars";
-	const string positionKey = "position";
 	const string xKey = "x";
 	const string zKey = "z";
 
@@ -34,12 +41,7 @@ vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson, pathEngine* pather)
 
 	for (auto& carJson : carsJson[carsKey])
 	{
-		nlohmann::json positionJson = carJson.at(positionKey);
-		sf::Vector2f position;
-		position.x = positionJson.at(xKey);
-		position.y = positionJson.at(zKey);
-
-		car* newCar = new car(pather, position);
+		car* newCar = new car(pather);
 		outputVector.push_back(newCar);
 	}
 

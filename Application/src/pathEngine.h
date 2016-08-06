@@ -27,6 +27,7 @@ namespace jw
 		pathEngine(graph_type* p_targetGraph = nullptr) : targetGraph(p_targetGraph) {}
 
 		vector<sf::Vector2f> findPath(int fromId, int toId);
+		sf::Vector2f getLocationPosition(int id);
 
 		void setGraph(graph_type* newGraph);
 

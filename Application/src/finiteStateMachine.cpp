@@ -14,8 +14,8 @@ void jw::fsm::update(sf::Time period)
 {
 	if (currentState == nullptr) throw domain_error("fsm.update called before fsm.initialise");
 
-	checkTransitions();
 	currentState->update(period);
+	checkTransitions();
 }
 
 bool jw::fsm::addState(int id, state_type newNode)

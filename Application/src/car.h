@@ -19,10 +19,12 @@ namespace jw
 	class car : public gameObject
 	{
 	public:
+		friend class carFsm::moveToHome;
+		friend class carFsm::findPath;
 		friend class carFsm::travelling;
 		friend class carFsm::arrived;
 
-		car(pathEngine* p_pather, sf::Vector2f p_position = {0, 0});
+		car(pathEngine* p_pather);
 
 		static vector<car*> loadCars(string filepath, pathEngine* pather);
 		static vector<car*> loadCars(nlohmann::json carsJson, pathEngine* pather);
@@ -40,6 +42,7 @@ namespace jw
 		sf::Vector2f velocity;
 		float mass;
 		sf::RectangleShape renderShape;
+		int homeLocationId, workLocationId;
 		pathEngine* pather;
 		fsm controller;
 	};

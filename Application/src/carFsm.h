@@ -29,6 +29,15 @@ namespace jw
 			car& targetCar;
 		};
 
+		class moveToHome : public carState
+		{
+		public:
+			moveToHome(car& targetCar) : carState(targetCar) {}
+
+			// Inherited via carState
+			virtual void update(sf::Time period) override;
+		};
+
 		class findPath : public carState
 		{
 		public:

@@ -66,6 +66,11 @@ namespace jw
 		return vector<sf::Vector2f>();
 	}
 
+	sf::Vector2f pathEngine::getLocationPosition(int id)
+	{
+		return targetGraph->nodeAt(id).position();
+	}
+
 	void pathEngine::setGraph(graph_type* newGraph)
 	{
 		targetGraph = newGraph;
