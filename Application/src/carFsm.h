@@ -38,10 +38,19 @@ namespace jw
 			virtual void update(sf::Time period) override;
 		};
 
-		class findPath : public carState
+		class pathToHome : public carState
 		{
 		public:
-			findPath(car& targetCar) : carState(targetCar) {}
+			pathToHome(car& targetCar) : carState(targetCar) {}
+
+			// Inherited via carState
+			virtual void update(sf::Time period) override;
+		};
+
+		class pathToWork : public carState
+		{
+		public:
+			pathToWork(car& targetCar) : carState(targetCar) {}
 
 			// Inherited via carState
 			virtual void update(sf::Time period) override;

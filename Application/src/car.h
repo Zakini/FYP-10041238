@@ -20,7 +20,8 @@ namespace jw
 	{
 	public:
 		friend class carFsm::moveToHome;
-		friend class carFsm::findPath;
+		friend class carFsm::pathToHome;
+		friend class carFsm::pathToWork;
 		friend class carFsm::travelling;
 		friend class carFsm::arrived;
 
@@ -39,11 +40,13 @@ namespace jw
 		void applyForce(sf::Vector2f force, sf::Time period);
 
 		sf::Vector2f position;
+		// TODO add currentLocationId - how to update this?
 		sf::Vector2f velocity;
 		float mass;
 		sf::RectangleShape renderShape;
 		int homeLocationId, workLocationId;
 		pathEngine* pather;
+		vector<sf::Vector2f> currentPath;
 		fsm controller;
 	};
 }

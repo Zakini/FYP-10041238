@@ -9,8 +9,8 @@ jw::car::car(pathEngine* p_pather)
 	, velocity(0, 0)
 	, mass(1)
 	, renderShape(sf::Vector2f(2, 2))
-	, homeLocationId(1)	// TODO un-hardcode
-	, workLocationId(2)	// TODO un-hardcode
+	, homeLocationId(0)
+	, workLocationId(0)
 	, pather(p_pather)
 	, controller(carFsm::generate(*this))
 {
@@ -30,7 +30,6 @@ vector<jw::car*> jw::car::loadCars(string filepath, pathEngine* pather)
 	return loadCars(carJson, pather);
 }
 
-// TODO load home/work/etc. location IDs
 vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson, pathEngine* pather)
 {
 	const string carsKey = "cars";
