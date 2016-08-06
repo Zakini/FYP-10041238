@@ -22,10 +22,10 @@ namespace jw
 		friend class carFsm::travelling;
 		friend class carFsm::arrived;
 
-		car(sf::Vector2f p_position = {0, 0}, pathEngine* p_pather = nullptr);
+		car(pathEngine* p_pather, sf::Vector2f p_position = {0, 0});
 
-		static vector<car*> loadCars(string filepath);
-		static vector<car*> loadCars(nlohmann::json carsJson);
+		static vector<car*> loadCars(string filepath, pathEngine* pather);
+		static vector<car*> loadCars(nlohmann::json carsJson, pathEngine* pather);
 
 		// Inherited via gameObject
 		virtual void update(sf::Time timeSinceLastFrame) override;	// TODO UT?

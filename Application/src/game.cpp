@@ -2,13 +2,16 @@
 
 namespace jw
 {
-	game::game() :
-		gameWindow(sf::VideoMode(800, 600), "FYP - 10041238", sf::Style::Close | sf::Style::Titlebar),
-		gameWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/map.json"),
-		entities(),
-		frameTimer()
+	game::game()
+		: gameWindow(sf::VideoMode(800, 600), "FYP - 10041238", sf::Style::Close | sf::Style::Titlebar)
+		, gameWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/map.json")
+		, pather()
+		, entities()
+		, frameTimer()
 	{
-		auto cars = car::loadCars(string("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/entities/entities.json"));
+		string carsJsonPath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/entities/entities.json";
+		gameWorld.attachToGraph(&pather);
+		auto cars = car::loadCars(carsJsonPath, &pather);
 		entities.assign(cars.begin(), cars.end());
 	}
 

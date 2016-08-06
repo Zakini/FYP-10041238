@@ -66,6 +66,11 @@ namespace jw
 		return vector<sf::Vector2f>();
 	}
 
+	void pathEngine::setGraph(graph_type* newGraph)
+	{
+		targetGraph = newGraph;
+	}
+
 	bool pathEngine::comparePriority::operator()(pathingTuple a, pathingTuple b)
 	{
 		return a.priority > b.priority;

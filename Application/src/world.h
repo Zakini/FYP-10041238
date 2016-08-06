@@ -9,6 +9,7 @@
 #include "location.h"
 #include "road.h"
 #include "gameObject.h"
+#include "pathEngine.h"
 
 using std::string;
 using std::set;
@@ -29,8 +30,10 @@ namespace jw
 		void update(sf::Time timeSinceLastFrame);	// TODO UT?
 		void draw(sf::RenderWindow& renderTarget);	// TODO UT?
 
+		void attachToGraph(pathEngine* pather);
+
 	private:
 		graph<location, road> worldGraph;
-		set<gameObject*> gameObjects;
+		set<gameObject*> gameObjects;	// TODO rename to worldObjects
 	};
 }

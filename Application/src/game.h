@@ -6,6 +6,7 @@
 #include "world.h"
 #include "gameObject.h"
 #include "car.h"
+#include "pathEngine.h"
 
 using std::vector;
 
@@ -21,6 +22,7 @@ namespace jw
 	private:
 		sf::RenderWindow gameWindow;
 		world gameWorld;
+		pathEngine pather;
 		vector<gameObject*> entities;
 		sf::Clock frameTimer;
 

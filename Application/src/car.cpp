@@ -4,7 +4,7 @@
 
 using std::ifstream;
 
-jw::car::car(sf::Vector2f p_position, pathEngine* p_pather)
+jw::car::car(pathEngine* p_pather, sf::Vector2f p_position)
 	: position(p_position), velocity(), mass(1), renderShape(sf::Vector2f(2, 2)), pather(p_pather), controller(carFsm::generate(*this))
 {
 	renderShape.setOrigin(renderShape.getSize() / 2.0f);
@@ -13,17 +13,17 @@ jw::car::car(sf::Vector2f p_position, pathEngine* p_pather)
 	controller.initialise();
 }
 
-vector<jw::car*> jw::car::loadCars(string filepath)
+vector<jw::car*> jw::car::loadCars(string filepath, pathEngine* pather)
 {
 	ifstream carFile(filepath);
 	nlohmann::json carJson;
 
 	carFile >> carJson;
 
-	return loadCars(carJson);
+	return loadCars(carJson, pather);
 }
 
-vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson)
+vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson, pathEngine* pather)
 {
 	const string carsKey = "cars";
 	const string positionKey = "position";
@@ -39,7 +39,7 @@ vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson)
 		position.x = positionJson.at(xKey);
 		position.y = positionJson.at(zKey);
 
-		car* newCar = new car(position);
+		car* newCar = new car(pather, position);
 		outputVector.push_back(newCar);
 	}
 

@@ -24,9 +24,11 @@ namespace jw
 	public:
 		using graph_type = graph<location, road>;
 
-		pathEngine(graph_type* p_targetGraph) : targetGraph(p_targetGraph) {}
+		pathEngine(graph_type* p_targetGraph = nullptr) : targetGraph(p_targetGraph) {}
 
 		vector<sf::Vector2f> findPath(int fromId, int toId);
+
+		void setGraph(graph_type* newGraph);
 
 	private:
 		graph_type* targetGraph;

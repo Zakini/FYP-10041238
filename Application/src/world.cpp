@@ -103,4 +103,9 @@ namespace jw
 			gameObj->draw(renderTarget);
 		}
 	}
+
+	void world::attachToGraph(pathEngine* pather)
+	{
+		pather->setGraph(&worldGraph);
+	}
 }
