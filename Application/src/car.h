@@ -4,14 +4,17 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <vector>
+#include <deque>
 #include <string>
 #include "../lib/json-master/src/json.hpp"
 #include "gameObject.h"
 #include "pathEngine.h"
 #include "finiteStateMachine.h"
 #include "carFsm.h"
+#include "vectorMaths.h"
 
 using std::vector;
+using std::deque;
 using std::string;
 
 namespace jw
@@ -40,13 +43,15 @@ namespace jw
 		void applyForce(sf::Vector2f force, sf::Time period);
 
 		sf::Vector2f position;
-		// TODO add currentLocationId - how to update this?
+		int currentLocationID;	// TODO update this when reaching a location
 		sf::Vector2f velocity;
 		float mass;
+		const float maxEngineForce;
+		const float maxBrakeForce;
 		sf::RectangleShape renderShape;
 		int homeLocationId, workLocationId;
 		pathEngine* pather;
-		vector<sf::Vector2f> currentPath;
+		deque<sf::Vector2f> currentPath;
 		fsm controller;
 	};
 }

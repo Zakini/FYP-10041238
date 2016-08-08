@@ -7,44 +7,50 @@ void jw::carFsm::moveToHome::update(sf::Time period)
 {
 	sf::Vector2f homePosition = targetCar.pather->getLocationPosition(targetCar.homeLocationId);
 	targetCar.position = homePosition;
+	targetCar.currentLocationID = targetCar.homeLocationId;
 }
 
 void jw::carFsm::pathToHome::update(sf::Time period)
 {
-	// TODO
+	targetCar.currentPath = targetCar.pather->findPath(targetCar.currentLocationID, targetCar.homeLocationId);
 }
 
 void jw::carFsm::pathToWork::update(sf::Time period)
 {
-	// TODO
+	targetCar.currentPath = targetCar.pather->findPath(targetCar.currentLocationID, targetCar.workLocationId);
 }
 
 void jw::carFsm::travelling::update(sf::Time period)
 {
 	sf::Vector2f newForce = targetCar.generateForce();
 	targetCar.applyForce(newForce, period);
+	// check if reached current step of path
+	if (targetCar.position == targetCar.currentPath.front()) targetCar.currentPath.pop_front();
 }
 
 bool jw::carFsm::arrived::changeState()
 {
-	return false;	// TODO is car at target location?
+	// if path is empty, we've popped off the target location, so we must have arrived!
+	return targetCar.currentPath.empty();
 }
 
 jw::fsm jw::carFsm::generate(car& targetCar)
 {
 	fsm outputFsm;
 
-	outputFsm.addState(1, new moveToHome(targetCar));
-	outputFsm.addState(2, new pathToWork(targetCar));
-	outputFsm.addState(3, new travelling(targetCar));
-	outputFsm.addState(4, new pathToHome(targetCar));
-	outputFsm.addState(5, new travelling(targetCar));
+	outputFsm.addState(1, new nullState());
+	outputFsm.addState(2, new moveToHome(targetCar));
+	outputFsm.addState(3, new pathToWork(targetCar));
+	outputFsm.addState(4, new travelling(targetCar));
+	outputFsm.addState(5, new pathToHome(targetCar));
+	outputFsm.addState(6, new travelling(targetCar));
 
 	outputFsm.addTransition(1, 2, new nullTransition());
 	outputFsm.addTransition(2, 3, new nullTransition());
-	outputFsm.addTransition(3, 4, new arrived(targetCar));
-	outputFsm.addTransition(4, 5, new nullTransition());
-	outputFsm.addTransition(5, 1, new arrived(targetCar));
+	outputFsm.addTransition(3, 4, new nullTransition());
+	outputFsm.addTransition(4, 5, new arrived(targetCar));
+	outputFsm.addTransition(5, 6, new nullTransition());
+	outputFsm.addTransition(6, 3, new arrived(targetCar));
 
 	outputFsm.setInitialState(1);
 

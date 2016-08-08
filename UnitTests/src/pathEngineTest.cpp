@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include <vector>
+#include <deque>
 #include <SFML/System/Vector2.hpp>
 #include "../../Application/src/graph.h"
 #include "../../Application/src/world.h"
@@ -26,10 +26,10 @@ namespace UnitTests
 			
 			jw::pathEngine testPather(&testGraph);
 
-			std::vector<sf::Vector2f> expectedPath;
+			std::deque<sf::Vector2f> expectedPath;
 			expectedPath.emplace_back(1, 0);
 
-			std::vector<sf::Vector2f> actualPath = testPather.findPath(1, 2);
+			std::deque<sf::Vector2f> actualPath = testPather.findPath(1, 2);
 
 			Assert::IsTrue(expectedPath == actualPath);
 		}
@@ -43,9 +43,9 @@ namespace UnitTests
 
 			jw::pathEngine testPather(&testGraph);
 
-			std::vector<sf::Vector2f> expectedPath;	// Empty path
+			std::deque<sf::Vector2f> expectedPath;	// Empty path
 
-			std::vector<sf::Vector2f> actualPath = testPather.findPath(1, 2);
+			std::deque<sf::Vector2f> actualPath = testPather.findPath(1, 2);
 
 			Assert::IsTrue(expectedPath == actualPath);
 		}
@@ -59,9 +59,9 @@ namespace UnitTests
 
 			jw::pathEngine testPather(&testGraph);
 
-			std::vector<sf::Vector2f> expectedPath;	// Empty path
+			std::deque<sf::Vector2f> expectedPath;	// Empty path
 
-			std::vector<sf::Vector2f> actualPath = testPather.findPath(1, 1);
+			std::deque<sf::Vector2f> actualPath = testPather.findPath(1, 1);
 
 			Assert::IsTrue(expectedPath == actualPath);
 		}
@@ -75,11 +75,11 @@ namespace UnitTests
 
 			jw::pathEngine testPather(&testGraph);
 
-			std::vector<sf::Vector2f> expectedPath;
+			std::deque<sf::Vector2f> expectedPath;
 			expectedPath.emplace_back(1, 0);
 			expectedPath.emplace_back(2, 0);
 
-			std::vector<sf::Vector2f> actualPath = testPather.findPath(1, 3);
+			std::deque<sf::Vector2f> actualPath = testPather.findPath(1, 3);
 
 			Assert::IsTrue(expectedPath == actualPath);
 		}
@@ -101,11 +101,11 @@ namespace UnitTests
 
 			jw::pathEngine testPather(&testGraph);
 
-			std::vector<sf::Vector2f> expectedPath;
+			std::deque<sf::Vector2f> expectedPath;
 			expectedPath.emplace_back(1, 0);
 			expectedPath.emplace_back(2, 0);
 
-			std::vector<sf::Vector2f> actualPath = testPather.findPath(1, 5);
+			std::deque<sf::Vector2f> actualPath = testPather.findPath(1, 5);
 
 			Assert::IsTrue(expectedPath == actualPath);
 		}
@@ -127,13 +127,13 @@ namespace UnitTests
 
 			jw::pathEngine testPather(&testGraph);
 
-			std::vector<sf::Vector2f> expectedPath;
+			std::deque<sf::Vector2f> expectedPath;
 			expectedPath.emplace_back(1, 0);
 			expectedPath.emplace_back(2, 1);	// This could also be 2,-1
 			expectedPath.emplace_back(3, 0);
 			expectedPath.emplace_back(10, 0);
 
-			std::vector<sf::Vector2f> actualPath = testPather.findPath(1, 6);
+			std::deque<sf::Vector2f> actualPath = testPather.findPath(1, 6);
 
 			Assert::IsTrue(expectedPath == actualPath);
 		}
@@ -155,9 +155,9 @@ namespace UnitTests
 
 			jw::pathEngine testPather(&testGraph);
 
-			std::vector<sf::Vector2f> expectedPath;	// Empty path
+			std::deque<sf::Vector2f> expectedPath;	// Empty path
 
-			std::vector<sf::Vector2f> actualPath = testPather.findPath(1, 6);
+			std::deque<sf::Vector2f> actualPath = testPather.findPath(1, 6);
 
 			Assert::IsTrue(expectedPath == actualPath);
 		}
@@ -171,9 +171,9 @@ namespace UnitTests
 
 			jw::pathEngine testPather(&testGraph);
 
-			std::vector<sf::Vector2f> expectedPath;	// Empty path
+			std::deque<sf::Vector2f> expectedPath;	// Empty path
 
-			std::vector<sf::Vector2f> actualPath = testPather.findPath(1, 2);
+			std::deque<sf::Vector2f> actualPath = testPather.findPath(1, 2);
 
 			Assert::IsTrue(expectedPath == actualPath);
 		}
@@ -199,13 +199,13 @@ namespace UnitTests
 
 			jw::pathEngine testPather(&testGraph);
 
-			std::vector<sf::Vector2f> expectedPath;
+			std::deque<sf::Vector2f> expectedPath;
 			expectedPath.emplace_back(1, 0);
 			expectedPath.emplace_back(2, -10);
 			expectedPath.emplace_back(3, 0);
 			expectedPath.emplace_back(4, 0);
 
-			std::vector<sf::Vector2f> actualPath = testPather.findPath(1, 6);
+			std::deque<sf::Vector2f> actualPath = testPather.findPath(1, 6);
 
 			Assert::IsTrue(expectedPath == actualPath);
 		}
@@ -219,12 +219,12 @@ namespace UnitTests
 
 			jw::pathEngine testPather(&testGraph);
 
-			std::vector<sf::Vector2f> expectedPath;
+			std::deque<sf::Vector2f> expectedPath;
 			expectedPath.emplace_back(5.63f, 4.06f);
 			expectedPath.emplace_back(5.16f, 3.05f);
 			expectedPath.emplace_back(9.35f, 1.33f);
 
-			std::vector<sf::Vector2f> actualPath = testPather.findPath(10, 9);
+			std::deque<sf::Vector2f> actualPath = testPather.findPath(10, 9);
 
 			Assert::IsTrue(expectedPath == actualPath);
 		}

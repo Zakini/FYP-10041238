@@ -1,14 +1,18 @@
 #include "car.h"
 
 #include <fstream>
+#include <math.h>
 
 using std::ifstream;
 
 jw::car::car(pathEngine* p_pather)
 	: position(0, 0)
+	, currentLocationID(0)
 	, velocity(0, 0)
 	, mass(1)
-	, renderShape(sf::Vector2f(2, 2))
+	, maxEngineForce(100000.0f)
+	, maxBrakeForce(200000.0f)
+	, renderShape(sf::Vector2f(4, 4))
 	, homeLocationId(0)
 	, workLocationId(0)
 	, pather(p_pather)
@@ -65,12 +69,48 @@ void jw::car::draw(sf::RenderWindow& renderTarget)
 
 sf::Vector2f jw::car::generateForce()
 {
-	return sf::Vector2f();	// TODO
+	// Move to target, aim to be stationary on arrival
+	sf::Vector2f outputForce;
+
+	float speed = length(velocity);
+	float currentStoppingDistance = std::pow(speed, 2) / (2 * maxBrakeForce);
+	sf::Vector2f direction;
+	if (speed != 0)
+	{
+		direction = velocity / speed;
+	}
+	// else direction is {0,0}
+
+	sf::Vector2f targetPosition = currentPath.front();
+	sf::Vector2f vectorToTarget = targetPosition - position;
+	float distanceFromTarget = length(vectorToTarget);
+	sf::Vector2f targetDirection;
+	if (distanceFromTarget != 0)
+	{
+		targetDirection = vectorToTarget / distanceFromTarget;
+	}
+	// else direction is {0,0}
+
+	if (distanceFromTarget > currentStoppingDistance)
+	{
+		// accelerate
+		outputForce = targetDirection * maxEngineForce;
+	}
+	else
+	{
+		// decelerate
+		// negate direction for opposite braking force
+		outputForce = -direction * maxBrakeForce;
+	}
+
+	// TODO friction
+
+	return outputForce;
 }
 
 void jw::car::applyForce(sf::Vector2f force, sf::Time period)
 {
 	sf::Vector2f acceleration = force / mass;
-	sf::Vector2f newVelocity = velocity + acceleration * period.asSeconds();
+	velocity += acceleration * period.asSeconds();
 	position += velocity * period.asSeconds();
 }

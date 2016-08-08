@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <deque>
 #include <queue>
 #include <utility>
 #include <set>
@@ -10,7 +10,7 @@
 #include "road.h"
 #include "SFML/System/Vector2.hpp"
 
-using std::vector;
+using std::deque;
 using std::priority_queue;
 using std::pair;
 using std::make_pair;
@@ -26,7 +26,7 @@ namespace jw
 
 		pathEngine(graph_type* p_targetGraph = nullptr) : targetGraph(p_targetGraph) {}
 
-		vector<sf::Vector2f> findPath(int fromId, int toId);
+		deque<sf::Vector2f> findPath(int fromId, int toId);
 		sf::Vector2f getLocationPosition(int id);
 
 		void setGraph(graph_type* newGraph);
@@ -38,10 +38,10 @@ namespace jw
 		{
 			float priority;
 			int pathNodeId;
-			vector<sf::Vector2f> pathToHere;
+			deque<sf::Vector2f> pathToHere;
 			float costToHere;
 
-			pathingTuple(float p_priority, int p_pathNodeId, vector<sf::Vector2f> p_pathToHere, float p_costToHere)
+			pathingTuple(float p_priority, int p_pathNodeId, deque<sf::Vector2f> p_pathToHere, float p_costToHere)
 				: priority(p_priority), pathNodeId(p_pathNodeId), pathToHere(p_pathToHere), costToHere(p_costToHere)
 			{}
 		};
