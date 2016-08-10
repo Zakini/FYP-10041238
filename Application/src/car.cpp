@@ -74,14 +74,9 @@ sf::Vector2f jw::car::generateForce()
 
 	float speed = length(velocity);
 	float currentStoppingDistance = std::pow(speed, 2) / (2 * maxBrakeForce);
-	sf::Vector2f direction;
-	if (speed != 0)
-	{
-		direction = velocity / speed;
-	}
-	// else direction is {0,0}
 
-	sf::Vector2f targetPosition = currentPath.front();
+	int targetLocationId = currentPath.front();
+	sf::Vector2f targetPosition = pather->getLocationPosition(targetLocationId);
 	sf::Vector2f vectorToTarget = targetPosition - position;
 	float distanceFromTarget = length(vectorToTarget);
 	sf::Vector2f targetDirection;
@@ -89,21 +84,23 @@ sf::Vector2f jw::car::generateForce()
 	{
 		targetDirection = vectorToTarget / distanceFromTarget;
 	}
-	// else direction is {0,0}
+	// else targetDirection is {0,0}
 
 	if (distanceFromTarget > currentStoppingDistance)
 	{
 		// accelerate
-		outputForce = targetDirection * maxEngineForce;
+		outputForce += targetDirection * maxEngineForce;
 	}
 	else
 	{
 		// decelerate
 		// negate direction for opposite braking force
-		outputForce = -direction * maxBrakeForce;
+		outputForce += -velocity * maxBrakeForce;
 	}
 
-	// TODO friction
+	// friction
+	const float frictionCoefficient = 0.3f;
+	sf::Vector2f friction = -velocity * (frictionCoefficient * mass * 10);	// mass * 10 = normal force
 
 	return outputForce;
 }

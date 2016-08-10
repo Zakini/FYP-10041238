@@ -24,8 +24,17 @@ void jw::carFsm::travelling::update(sf::Time period)
 {
 	sf::Vector2f newForce = targetCar.generateForce();
 	targetCar.applyForce(newForce, period);
+
 	// check if reached current step of path
-	if (targetCar.position == targetCar.currentPath.front()) targetCar.currentPath.pop_front();
+	int targetLocationId = targetCar.currentPath.front();
+	sf::Vector2f targetPosition = targetCar.pather->getLocationPosition(targetLocationId);
+	float distanceFromTarget = length(targetCar.position - targetPosition);
+	float currentSpeed = length(targetCar.velocity);
+	if (distanceFromTarget <= arrivalThreshold && currentSpeed < 1)
+	{
+		targetCar.currentLocationID = targetLocationId;
+		targetCar.currentPath.pop_front();
+	}
 }
 
 bool jw::carFsm::arrived::changeState()

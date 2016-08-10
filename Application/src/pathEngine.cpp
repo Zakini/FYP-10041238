@@ -4,7 +4,7 @@
 
 namespace jw
 {
-	deque<sf::Vector2f> pathEngine::findPath(int fromId, int toId)
+	deque<int> pathEngine::findPath(int fromId, int toId)
 	{
 		const float MAX_COST = std::numeric_limits<float>::max();	// TODO infinity?
 
@@ -12,14 +12,14 @@ namespace jw
 		priority_queue<pathingTuple, deque<pathingTuple>, comparePriority> frontier;
 		set<location*> visitedNodes;
 
-		frontier.push(pathingTuple(0, fromId, deque<sf::Vector2f>(), 0));
+		frontier.push(pathingTuple(0, fromId, deque<int>(), 0));
 
 		while (frontier.size() > 0)
 		{
 			float costToCurrent = frontier.top().costToHere;
 			int currentId = frontier.top().pathNodeId;
 			location* currentNode = &targetGraph->nodeAt(currentId);
-			deque<sf::Vector2f> currentPath = frontier.top().pathToHere;
+			deque<int> currentPath = frontier.top().pathToHere;
 			frontier.pop();
 
 			if (visitedNodes.find(currentNode) != visitedNodes.end()) continue;	// currentNode has been visited already
@@ -48,6 +48,7 @@ namespace jw
 				if (costToCurrent == MAX_COST || costToNeighbour == MAX_COST || heuristicCostToTarget == MAX_COST)
 				{
 					cost = MAX_COST;
+					newPriority = MAX_COST;
 				}
 				else
 				{
@@ -55,15 +56,15 @@ namespace jw
 					newPriority = cost + heuristicCostToTarget;
 				}
 
-				deque<sf::Vector2f> newPath = currentPath;
-				newPath.push_back(neighbour.position());
+				deque<int> newPath = currentPath;
+				newPath.push_back(neighbourId);
 
 				frontier.push(pathingTuple(newPriority, neighbourId, newPath, cost));
 			}
 		}
 
 		// Path not found
-		return deque<sf::Vector2f>();
+		return deque<int>();
 	}
 
 	sf::Vector2f pathEngine::getLocationPosition(int id)

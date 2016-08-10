@@ -26,7 +26,7 @@ namespace jw
 
 		pathEngine(graph_type* p_targetGraph = nullptr) : targetGraph(p_targetGraph) {}
 
-		deque<sf::Vector2f> findPath(int fromId, int toId);
+		deque<int> findPath(int fromId, int toId);
 		sf::Vector2f getLocationPosition(int id);
 
 		void setGraph(graph_type* newGraph);
@@ -38,10 +38,10 @@ namespace jw
 		{
 			float priority;
 			int pathNodeId;
-			deque<sf::Vector2f> pathToHere;
+			deque<int> pathToHere;
 			float costToHere;
 
-			pathingTuple(float p_priority, int p_pathNodeId, deque<sf::Vector2f> p_pathToHere, float p_costToHere)
+			pathingTuple(float p_priority, int p_pathNodeId, deque<int> p_pathToHere, float p_costToHere)
 				: priority(p_priority), pathNodeId(p_pathNodeId), pathToHere(p_pathToHere), costToHere(p_costToHere)
 			{}
 		};

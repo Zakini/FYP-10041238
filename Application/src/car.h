@@ -51,7 +51,7 @@ namespace jw
 		sf::RectangleShape renderShape;
 		int homeLocationId, workLocationId;
 		pathEngine* pather;
-		deque<sf::Vector2f> currentPath;
+		deque<int> currentPath;
 		fsm controller;
 	};
 }
