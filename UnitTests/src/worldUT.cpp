@@ -9,10 +9,10 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTests
 {
-	TEST_CLASS(worldTest)
+	TEST_CLASS(world)
 	{
 	public:
-		TEST_METHOD(loadGraphStringTest)
+		TEST_METHOD(loadGraphString)
 		{
 			jw::world::graph_type testGraph = jw::world::loadWorld(std::string("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/load-unit-test1.json"));
 
@@ -27,7 +27,7 @@ namespace UnitTests
 			Assert::IsTrue(testGraph.edgesAt(2).at(1).cost() == 1);
 		}
 
-		TEST_METHOD(loadGraphJsonTest)
+		TEST_METHOD(loadGraphJson)
 		{
 			std::ifstream testFile("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/load-unit-test1.json");
 			nlohmann::json testJson;
@@ -45,6 +45,12 @@ namespace UnitTests
 			Assert::IsTrue(testGraph.nodeAt(2).position() == sf::Vector2f(1, 0));
 			// Assert node 2 has 1 edge to 1
 			Assert::IsTrue(testGraph.edgesAt(2).at(1).cost() == 1);
+		}
+
+		TEST_METHOD(attachToGraph)
+		{
+			// TODO
+			Assert::IsTrue(false);
 		}
 	};
 }

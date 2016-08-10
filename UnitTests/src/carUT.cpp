@@ -5,18 +5,20 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTests
 {
-	TEST_CLASS(carTest)
+	TEST_CLASS(car)
 	{
 	public:
-		// TODO add position() for UTs?
-		TEST_METHOD(loadCarsStringTest)
+		// TODO add accessor methods for UTs
+		TEST_METHOD(loadFromString)
 		{
 			// TODO
+			Assert::IsTrue(false);
 		}
 
-		TEST_METHOD(loadCarsJsonTest)
+		TEST_METHOD(loadFromJson)
 		{
 			// TODO
+			Assert::IsTrue(false);
 		}
 	};
 }

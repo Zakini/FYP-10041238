@@ -7,10 +7,10 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTests
 {
-	TEST_CLASS(locationTest)
+	TEST_CLASS(location)
 	{
 	public:
-		TEST_METHOD(positionTest)
+		TEST_METHOD(position)
 		{
 			jw::location testLoc;
 			sf::Vector2f testVec(1, 2);
@@ -19,7 +19,7 @@ namespace UnitTests
 			Assert::IsTrue(testLoc.position() == testVec);
 		}
 
-		TEST_METHOD(heuristicTest)
+		TEST_METHOD(pathingHeuristic)
 		{
 			jw::location testSrc(sf::Vector2f(0, 0));
 			jw::location testDest(sf::Vector2f(3, 4));
@@ -27,7 +27,7 @@ namespace UnitTests
 			Assert::IsTrue(testSrc.pathingHeuristic(&testDest) == 5.0f);
 		}
 
-		TEST_METHOD(opEqualsTest)
+		TEST_METHOD(opEquals)
 		{
 			jw::location testLoc1(sf::Vector2f(1, 2));
 			jw::location testLoc2(sf::Vector2f(1, 2));
@@ -35,7 +35,7 @@ namespace UnitTests
 			Assert::IsTrue(testLoc1 == testLoc2);
 		}
 
-		TEST_METHOD(opLessThanTest)
+		TEST_METHOD(opLessThan)
 		{
 			jw::location testLoc1(sf::Vector2f(1, 2));
 			jw::location testLoc2(sf::Vector2f(3, 4));

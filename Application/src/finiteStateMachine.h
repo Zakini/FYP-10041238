@@ -15,7 +15,7 @@ namespace jw
 		using transition_type = transition*;
 		using container_type = graph<state_type, transition_type>;
 
-		~fsm();	// TODO UT?
+		~fsm();
 
 		// Usage
 		void initialise();

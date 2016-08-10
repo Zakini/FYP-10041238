@@ -11,13 +11,13 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTests
 {
-	TEST_CLASS(pathEngineTest)
+	TEST_CLASS(pathEngine)
 	{
 	private:
 		const string filePathBase = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/";
 
 	public:
-		TEST_METHOD(findPathTest1)
+		TEST_METHOD(findPath1)
 		{
 			// S---T
 
@@ -34,7 +34,7 @@ namespace UnitTests
 			Assert::IsTrue(expectedPath == actualPath);
 		}
 
-		TEST_METHOD(findPathTest2)
+		TEST_METHOD(findPath2)
 		{
 			// S-X-T
 
@@ -50,7 +50,7 @@ namespace UnitTests
 			Assert::IsTrue(expectedPath == actualPath);
 		}
 
-		TEST_METHOD(findPathTest3)
+		TEST_METHOD(findPath3)
 		{
 			// ST
 
@@ -66,7 +66,7 @@ namespace UnitTests
 			Assert::IsTrue(expectedPath == actualPath);
 		}
 
-		TEST_METHOD(findPathTest4)
+		TEST_METHOD(findPath4)
 		{
 			// S---O---T
 
@@ -84,7 +84,7 @@ namespace UnitTests
 			Assert::IsTrue(expectedPath == actualPath);
 		}
 
-		TEST_METHOD(findPathTest5)
+		TEST_METHOD(findPath5)
 		{
 			//     O
 			//    / \
@@ -110,7 +110,7 @@ namespace UnitTests
 			Assert::IsTrue(expectedPath == actualPath);
 		}
 
-		TEST_METHOD(findPathTest6)
+		TEST_METHOD(findPath6)
 		{
 			//         O
 			//        / \
@@ -138,7 +138,7 @@ namespace UnitTests
 			Assert::IsTrue(expectedPath == actualPath);
 		}
 
-		TEST_METHOD(findPathTest7)
+		TEST_METHOD(findPath7)
 		{
 			//         O
 			//        / \
@@ -162,7 +162,7 @@ namespace UnitTests
 			Assert::IsTrue(expectedPath == actualPath);
 		}
 
-		TEST_METHOD(findPathTest8)
+		TEST_METHOD(findPath8)
 		{
 			// S<--T
 
@@ -178,7 +178,7 @@ namespace UnitTests
 			Assert::IsTrue(expectedPath == actualPath);
 		}
 
-		TEST_METHOD(findPathTest9)
+		TEST_METHOD(findPath9)
 		{
 			//             O
 			//           /   ^
@@ -210,7 +210,7 @@ namespace UnitTests
 			Assert::IsTrue(expectedPath == actualPath);
 		}
 
-		TEST_METHOD(findPathTest10)
+		TEST_METHOD(findPath10)
 		{
 			// Random generated map
 
@@ -227,6 +227,24 @@ namespace UnitTests
 			std::deque<int> actualPath = testPather.findPath(10, 9);
 
 			Assert::IsTrue(expectedPath == actualPath);
+		}
+
+		TEST_METHOD(findPath11)
+		{
+			// TODO no attached graph
+			Assert::IsTrue(false);
+		}
+
+		TEST_METHOD(getLocationPosition)
+		{
+			// TODO
+			Assert::IsTrue(false);
+		}
+
+		TEST_METHOD(setGraph)
+		{
+			// TODO
+			Assert::IsTrue(false);
 		}
 	};
 }

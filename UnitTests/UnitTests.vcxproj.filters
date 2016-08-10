@@ -26,22 +26,34 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\locationTest.cpp">
+    <ClCompile Include="src\roadUT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\vectorMathsTest.cpp">
+    <ClCompile Include="src\carFsmUT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\pathEngineTest.cpp">
+    <ClCompile Include="src\carUT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\roadTest.cpp">
+    <ClCompile Include="src\locationUT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\worldTest.cpp">
+    <ClCompile Include="src\pathEngineUT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\carTest.cpp">
+    <ClCompile Include="src\vectorMathsUT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\worldUT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fsmUT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gameObjectUT.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphUT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

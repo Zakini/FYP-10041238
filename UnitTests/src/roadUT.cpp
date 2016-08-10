@@ -8,10 +8,10 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTests
 {
-	TEST_CLASS(roadTest)
+	TEST_CLASS(road)
 	{
 	public:
-		TEST_METHOD(costTest)
+		TEST_METHOD(cost)
 		{
 			jw::location from(sf::Vector2f(0, 0));
 			jw::location to(sf::Vector2f(3, 4));

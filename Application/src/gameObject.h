@@ -18,6 +18,6 @@ namespace jw
 		friend bool operator<(const gameObject& lhs, const gameObject& rhs);
 
 	protected:
-		float _depth;
+		float _depth;	// TODO actually set this in objects
 	};
 }

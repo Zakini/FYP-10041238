@@ -7,10 +7,10 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace UnitTests
 {		
-	TEST_CLASS(vectorMathsTest)
+	TEST_CLASS(vectorMaths)
 	{
 	public:
-		TEST_METHOD(lengthTest)
+		TEST_METHOD(length)
 		{
 			sf::Vector2f testVector(3, 4);
 			Assert::IsTrue(jw::length(testVector) == 5.0f);

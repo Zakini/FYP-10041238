@@ -160,12 +160,16 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\carTest.cpp" />
-    <ClCompile Include="src\locationTest.cpp" />
-    <ClCompile Include="src\pathEngineTest.cpp" />
-    <ClCompile Include="src\roadTest.cpp" />
-    <ClCompile Include="src\vectorMathsTest.cpp" />
-    <ClCompile Include="src\worldTest.cpp" />
+    <ClCompile Include="src\carFsmUT.cpp" />
+    <ClCompile Include="src\carUT.cpp" />
+    <ClCompile Include="src\fsmUT.cpp" />
+    <ClCompile Include="src\gameObjectUT.cpp" />
+    <ClCompile Include="src\graphUT.cpp" />
+    <ClCompile Include="src\locationUT.cpp" />
+    <ClCompile Include="src\pathEngineUT.cpp" />
+    <ClCompile Include="src\roadUT.cpp" />
+    <ClCompile Include="src\vectorMathsUT.cpp" />
+    <ClCompile Include="src\worldUT.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
