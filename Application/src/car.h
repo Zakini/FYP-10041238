@@ -33,6 +33,9 @@ namespace jw
 		static vector<car*> loadCars(string filepath, pathEngine* pather);
 		static vector<car*> loadCars(nlohmann::json carsJson, pathEngine* pather);
 
+		int homeLocation() { return homeLocationId; }
+		int workLocation() { return workLocationId; }
+
 		// Inherited via gameObject
 		virtual void update(sf::Time timeSinceLastFrame) override;	// TODO UT?
 		virtual void draw(sf::RenderWindow& renderTarget) override;	// TODO UT?

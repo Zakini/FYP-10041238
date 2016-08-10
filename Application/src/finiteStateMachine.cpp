@@ -6,13 +6,16 @@ using std::domain_error;
 
 jw::fsm::~fsm()
 {
-	for (int i = 0; i < fsmGraph.size(); i++)
+	for (auto& idDataPair : fsmGraph)
 	{
-		delete fsmGraph.nodeAt(i);
+		auto& stateToDelete = idDataPair.second.first;
+		auto& edgesToDelete = idDataPair.second.second;
 
-		for (auto& edge : fsmGraph.edgesAt(i))
+		delete stateToDelete;
+
+		for (auto& idTransPair : idDataPair.second.second)
 		{
-			delete edge.second;
+			delete idTransPair.second;
 		}
 	}
 }

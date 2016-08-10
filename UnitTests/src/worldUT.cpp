@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
+
 #include "../../Application/src/world.h"
 #include <SFML/System/Vector2.hpp>
 #include <string>
 #include <fstream>
+#include "../../Application/lib/json-master/src/json.hpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
