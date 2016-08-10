@@ -4,6 +4,13 @@
 
 using std::domain_error;
 
+jw::fsm::fsm(const fsm& toCopy)
+{
+	// TODO
+	// copy states
+	// copy transitions
+}
+
 jw::fsm::~fsm()
 {
 	for (auto& idDataPair : fsmGraph)

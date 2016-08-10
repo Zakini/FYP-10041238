@@ -8,6 +8,7 @@ namespace jw
 	{
 	public:
 		virtual ~state() = default;
+		virtual state* clone() = 0;
 
 		virtual void update(sf::Time period) = 0;
 	};
@@ -16,6 +17,7 @@ namespace jw
 	{
 	public:
 		// Inherited via state
+		virtual nullState* clone() override { return new nullState(*this); }
 		virtual void update(sf::Time period) override {}
 	};
 }

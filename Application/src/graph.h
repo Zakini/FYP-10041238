@@ -16,28 +16,32 @@ namespace jw
 	{
 	public:
 		// TODO make edges a separate adjacency matrix?
+		using id_type = int;
 		using node_type = node;
 		using edge_type = edge;
-		using edge_container_type = std::map<int, edge_type>;
+		using edge_container_type = std::map<id_type, edge_type>;
 		using value_type = std::pair<node_type, edge_container_type>;
-		using container_type = std::map<int, value_type>;
+		using container_type = std::map<id_type, value_type>;
 		using iterator = typename container_type::iterator;
+		using const_iterator = typename container_type::const_iterator;
 
 		// Access
-		value_type& at(int targetId);
-		node_type& nodeAt(int targetId);
-		edge_container_type& edgesAt(int targetId);
+		value_type& at(id_type targetId);
+		node_type& nodeAt(id_type targetId);
+		edge_container_type& edgesAt(id_type targetId);
 
 		// Meta
 		int size();
 
 		// Iterators
 		iterator begin();
+		const_iterator begin() const;
 		iterator end();
+		const_iterator end() const;
 
 		// Modifiers
-		bool insertNode(int id, node_type newNode);
-		bool insertEdge(int fromId, int toId, edge_type link, bool bidirectional = false);
+		void insertNode(id_type id, node_type newNode);
+		void insertEdge(id_type fromId, id_type toId, edge_type link, bool bidirectional = false);
 
 	private:
 		container_type graphMap;
@@ -47,19 +51,19 @@ namespace jw
 	// ### Definitions ###
 	// ###################
 	template<typename node, typename edge>
-	typename graph<node, edge>::value_type& graph<node, edge>::at(int targetId)
+	typename graph<node, edge>::value_type& graph<node, edge>::at(id_type targetId)
 	{
 		return graphMap.at(targetId);
 	}
 
 	template<typename node, typename edge>
-	typename graph<node, edge>::node_type& graph<node, edge>::nodeAt(int targetId)
+	typename graph<node, edge>::node_type& graph<node, edge>::nodeAt(id_type targetId)
 	{
 		return at(targetId).first;
 	}
 
 	template<typename node, typename edge>
-	typename graph<node, edge>::edge_container_type& graph<node, edge>::edgesAt(int targetId)
+	typename graph<node, edge>::edge_container_type& graph<node, edge>::edgesAt(id_type targetId)
 	{
 		return at(targetId).second;
 	}
@@ -77,36 +81,42 @@ namespace jw
 	}
 
 	template<typename node, typename edge>
+	typename graph<node, edge>::const_iterator graph<node, edge>::begin() const
+	{
+		return graphMap.begin();
+	}
+
+	template<typename node, typename edge>
 	typename graph<node, edge>::iterator graph<node, edge>::end()
 	{
 		return graphMap.end();
 	}
 
 	template<typename node, typename edge>
-	bool graph<node, edge>::insertNode(int id, node_type newNode)
+	typename graph<node, edge>::const_iterator graph<node, edge>::end() const
 	{
-		if (graphMap.find(id) != graphMap.end()) return false;
-
-		graphMap[id].first = newNode;	// Also constructs an empty edge map
-		return true;
+		return graphMap.end();
 	}
 
 	template<typename node, typename edge>
-	bool graph<node, edge>::insertEdge(int fromId, int toId, edge_type link, bool bidirectional)
+	void graph<node, edge>::insertNode(id_type id, node_type newNode)
+	{
+		graphMap[id].first = newNode;	// Also constructs an empty edge map
+	}
+
+	template<typename node, typename edge>
+	bool graph<node, edge>::insertEdge(id_type fromId, id_type toId, edge_type link, bool bidirectional)
 	{
 		// Check nodes exist
 		if (graphMap.find(fromId) == graphMap.end() || graphMap.find(toId) == graphMap.end()) return false;
 
 		graphMap[fromId].second[toId] = link;
 
-		bool bidirectionalResult = true;
-
 		if (bidirectional)
 		{
-			bidirectionalResult = insertEdge(toId, fromId, link, false);
+			insertEdge(toId, fromId, link, false);
 		}
 
-		// first link result && second link result
-		return bidirectionalResult;
+		return true;
 	}
 }

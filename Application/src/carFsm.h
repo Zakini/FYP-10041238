@@ -19,6 +19,8 @@ namespace jw
 			carState(car& p_targetCar) : targetCar(p_targetCar) {}
 			virtual ~carState() = default;
 
+			virtual carState* clone() override = 0;
+
 		protected:
 			car& targetCar;
 		};
@@ -28,6 +30,8 @@ namespace jw
 		public:
 			carTransition(car& p_targetCar) : targetCar(p_targetCar) {}
 			virtual ~carTransition() = default;
+
+			virtual carTransition* clone() override = 0;
 
 		protected:
 			car& targetCar;
@@ -39,6 +43,7 @@ namespace jw
 			moveToHome(car& targetCar) : carState(targetCar) {}
 
 			// Inherited via carState
+			virtual moveToHome* clone() override { return new moveToHome(*this); }
 			virtual void update(sf::Time period) override;
 		};
 
@@ -48,6 +53,7 @@ namespace jw
 			pathToHome(car& targetCar) : carState(targetCar) {}
 
 			// Inherited via carState
+			virtual pathToHome* clone() override { return new pathToHome(*this); }
 			virtual void update(sf::Time period) override;
 		};
 
@@ -57,6 +63,7 @@ namespace jw
 			pathToWork(car& targetCar) : carState(targetCar) {}
 
 			// Inherited via carState
+			virtual pathToWork* clone() override { return new pathToWork(*this); }
 			virtual void update(sf::Time period) override;
 		};
 
@@ -66,6 +73,7 @@ namespace jw
 			travelling(car& targetCar) : carState(targetCar) {}
 
 			// Inherited via carState
+			virtual travelling* clone() override { return new travelling(*this); }
 			virtual void update(sf::Time period) override;
 		};
 
@@ -75,6 +83,7 @@ namespace jw
 			arrived(car& targetCar) : carTransition(targetCar) {}
 
 			// Inherited via transition
+			virtual arrived* clone() override { return new arrived(*this); }
 			virtual bool changeState() override;
 		};
 

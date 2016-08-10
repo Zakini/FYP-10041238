@@ -15,6 +15,8 @@ namespace jw
 		using transition_type = transition*;
 		using container_type = graph<state_type, transition_type>;
 
+		fsm() = default;
+		fsm(const fsm& toCopy);
 		~fsm();
 
 		// Usage
