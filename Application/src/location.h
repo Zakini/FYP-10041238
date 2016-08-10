@@ -15,7 +15,7 @@ namespace jw
 		sf::Vector2f position();
 		void position(sf::Vector2f newPosition);
 
-		float heuristic(location* target);	// TODO rename to pathingHeuristic?
+		float pathingHeuristic(location* target);
 
 		// Inherited from gameObject
 		virtual void update(sf::Time timeSinceLastFrame) override;	// TODO UT?

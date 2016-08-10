@@ -14,12 +14,12 @@ namespace jw
 		for (auto& graphPair : worldGraph)
 		{
 			gameObject* currentLocation = &graphPair.second.first;
-			gameObjects.insert(currentLocation);
+			worldObjects.insert(currentLocation);
 
 			for (auto& roadPair : graphPair.second.second)
 			{
 				gameObject* currentRoad = &roadPair.second;
-				gameObjects.insert(currentRoad);
+				worldObjects.insert(currentRoad);
 			}
 		}
 	}
@@ -90,17 +90,17 @@ namespace jw
 
 	void world::update(sf::Time timeSinceLastFrame)
 	{
-		for (auto gameObj : gameObjects)
+		for (auto worldObj : worldObjects)
 		{
-			gameObj->update(timeSinceLastFrame);
+			worldObj->update(timeSinceLastFrame);
 		}
 	}
 
 	void world::draw(sf::RenderWindow& renderTarget)
 	{
-		for (auto gameObj : gameObjects)
+		for (auto worldObj : worldObjects)
 		{
-			gameObj->draw(renderTarget);
+			worldObj->draw(renderTarget);
 		}
 	}
 

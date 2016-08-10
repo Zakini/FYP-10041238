@@ -23,7 +23,7 @@ namespace jw
 		_position = newPosition;
 	}
 
-	float location::heuristic(location* target)
+	float location::pathingHeuristic(location* target)
 	{
 		return length(target->_position - _position);
 	}

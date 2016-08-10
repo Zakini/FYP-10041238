@@ -40,7 +40,7 @@ namespace jw
 				location& neighbour = targetGraph->nodeAt(neighbourId);
 
 				float costToNeighbour = connectingRoad->cost();
-				float heuristicCostToTarget = neighbour.heuristic(to);
+				float heuristicCostToTarget = neighbour.pathingHeuristic(to);
 				float cost;
 				float newPriority;
 

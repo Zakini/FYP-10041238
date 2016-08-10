@@ -11,7 +11,7 @@ namespace jw
 
 	namespace carFsm
 	{
-		const float arrivalThreshold = 1.0f;	// TODO err... actually use this?
+		const float arrivalThreshold = 1.0f;
 
 		class carState : public state
 		{

@@ -43,7 +43,7 @@ namespace jw
 		void applyForce(sf::Vector2f force, sf::Time period);
 
 		sf::Vector2f position;
-		int currentLocationID;	// TODO update this when reaching a location
+		int currentLocationID;
 		sf::Vector2f velocity;
 		float mass;
 		const float maxEngineForce;

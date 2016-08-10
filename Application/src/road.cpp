@@ -13,7 +13,7 @@ namespace jw
 
 	float road::cost()
 	{
-		return from->heuristic(to);
+		return from->pathingHeuristic(to);
 	}
 
 	void road::update(sf::Time timeSinceLastFrame)

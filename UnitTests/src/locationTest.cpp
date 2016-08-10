@@ -24,7 +24,7 @@ namespace UnitTests
 			jw::location testSrc(sf::Vector2f(0, 0));
 			jw::location testDest(sf::Vector2f(3, 4));
 
-			Assert::IsTrue(testSrc.heuristic(&testDest) == 5.0f);
+			Assert::IsTrue(testSrc.pathingHeuristic(&testDest) == 5.0f);
 		}
 
 		TEST_METHOD(opEqualsTest)

@@ -34,6 +34,6 @@ namespace jw
 
 	private:
 		graph<location, road> worldGraph;
-		set<gameObject*> gameObjects;	// TODO rename to worldObjects
+		set<gameObject*> worldObjects;
 	};
 }
