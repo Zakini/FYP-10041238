@@ -4,6 +4,19 @@
 
 using std::domain_error;
 
+jw::fsm::~fsm()
+{
+	for (int i = 0; i < fsmGraph.size(); i++)
+	{
+		delete fsmGraph.nodeAt(i);
+
+		for (auto& edge : fsmGraph.edgesAt(i))
+		{
+			delete edge.second;
+		}
+	}
+}
+
 void jw::fsm::initialise()
 {
 	currentState = fsmGraph.nodeAt(initialStateId);

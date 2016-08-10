@@ -17,6 +17,7 @@ namespace jw
 		{
 		public:
 			carState(car& p_targetCar) : targetCar(p_targetCar) {}
+			virtual ~carState() = default;
 
 		protected:
 			car& targetCar;
@@ -26,6 +27,7 @@ namespace jw
 		{
 		public:
 			carTransition(car& p_targetCar) : targetCar(p_targetCar) {}
+			virtual ~carTransition() = default;
 
 		protected:
 			car& targetCar;

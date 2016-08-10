@@ -7,6 +7,8 @@ namespace jw
 	class state
 	{
 	public:
+		virtual ~state() = default;
+
 		virtual void update(sf::Time period) = 0;
 	};
 

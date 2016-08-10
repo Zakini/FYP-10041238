@@ -5,6 +5,8 @@ namespace jw
 	class transition
 	{
 	public:
+		virtual ~transition() = default;
+
 		virtual bool changeState() = 0;
 	};
 

@@ -28,6 +28,9 @@ namespace jw
 		node_type& nodeAt(int targetId);
 		edge_container_type& edgesAt(int targetId);
 
+		// Meta
+		int size();
+
 		// Iterators
 		iterator begin();
 		iterator end();
@@ -59,6 +62,12 @@ namespace jw
 	typename graph<node, edge>::edge_container_type& graph<node, edge>::edgesAt(int targetId)
 	{
 		return at(targetId).second;
+	}
+
+	template<typename node, typename edge>
+	inline int graph<node, edge>::size()
+	{
+		return graphMap.size();
 	}
 
 	template<typename node, typename edge>
