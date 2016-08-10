@@ -5,14 +5,19 @@
 
 using std::ifstream;
 
+const float jw::car::defaultEngineForce = 100000.0f;
+const float jw::car::defaultBrakeForce = 200000.0f;
+const float jw::car::defaultMass = 1.0f;
+const sf::Vector2f jw::car::defaultRenderShape = { 4, 4 };
+
 jw::car::car(pathEngine* p_pather)
 	: position(0, 0)
 	, currentLocationID(0)
 	, velocity(0, 0)
-	, mass(1)
-	, maxEngineForce(100000.0f)
-	, maxBrakeForce(200000.0f)
-	, renderShape(sf::Vector2f(4, 4))
+	, mass(defaultMass)
+	, maxEngineForce(defaultEngineForce)
+	, maxBrakeForce(defaultBrakeForce)
+	, renderShape(defaultRenderShape)
 	, homeLocationId(0)
 	, workLocationId(0)
 	, pather(p_pather)

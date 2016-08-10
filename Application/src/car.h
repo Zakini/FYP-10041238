@@ -53,5 +53,10 @@ namespace jw
 		pathEngine* pather;
 		deque<int> currentPath;
 		fsm controller;
+
+		static const float defaultEngineForce;
+		static const float defaultBrakeForce;
+		static const float defaultMass;
+		static const sf::Vector2f defaultRenderShape;
 	};
 }
