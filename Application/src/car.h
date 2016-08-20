@@ -37,11 +37,11 @@ namespace jw
 		int workLocation() { return workLocationId; }
 
 		// Inherited via gameObject
-		virtual void update(sf::Time timeSinceLastFrame) override;	// TODO UT?
-		virtual void draw(sf::RenderWindow& renderTarget) override;	// TODO UT?
+		virtual void update(sf::Time timeSinceLastFrame) override;	// POSSIBLE UT?
+		virtual void draw(sf::RenderWindow& renderTarget) override;	// POSSIBLE UT?
 
 	private:
-		// TODO separate for UTs?
+		// POSSIBLE separate force gen/apply for UTs?
 		sf::Vector2f generateForce();
 		void applyForce(sf::Vector2f force, sf::Time period);
 

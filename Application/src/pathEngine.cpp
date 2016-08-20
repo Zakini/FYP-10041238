@@ -6,7 +6,7 @@ namespace jw
 {
 	deque<int> pathEngine::findPath(int fromId, int toId)
 	{
-		const float MAX_COST = std::numeric_limits<float>::max();	// TODO infinity?
+		const float MAX_COST = std::numeric_limits<float>::max();	// POSSIBLE infinity?
 
 		location* to = &targetGraph->nodeAt(toId);
 		priority_queue<pathingTuple, deque<pathingTuple>, comparePriority> frontier;

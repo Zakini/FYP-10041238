@@ -17,7 +17,7 @@ namespace jw
 	public:
 		game();
 
-		int run();	// TODO UT?
+		int run();	// POSSIBLE UT?
 
 	private:
 		sf::RenderWindow gameWindow;

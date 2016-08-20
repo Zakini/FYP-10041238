@@ -27,8 +27,8 @@ namespace jw
 		static graph_type loadWorld(string filepath);
 		static graph_type loadWorld(nlohmann::json mapJson);
 
-		void update(sf::Time timeSinceLastFrame);	// TODO UT?
-		void draw(sf::RenderWindow& renderTarget);	// TODO UT?
+		void update(sf::Time timeSinceLastFrame);	// POSSIBLE UT?
+		void draw(sf::RenderWindow& renderTarget);	// POSSIBLE UT?
 
 		void attachToGraph(pathEngine* pather);
 

@@ -23,7 +23,7 @@ namespace jw
 	void road::draw(sf::RenderWindow& renderTarget)
 	{
 		// Mostly copied from https://github.com/SFML/SFML/wiki/Source:-Line-segment-with-thickness
-		// TODO Move to a LineShape class?
+		// POSSIBLE Move to a LineShape class?
 
 		sf::Vector2f targetVector = to->position() - from->position();
 		sf::Vector2f unitVector = targetVector / length(targetVector);

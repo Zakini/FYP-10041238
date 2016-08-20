@@ -43,7 +43,7 @@ namespace jw
 				gameWindow.close();
 				break;
 
-			// TODO on resize, resize view?
+			// POSSIBLE on resize, resize view?
 
 			default:
 				break;

@@ -13,10 +13,10 @@ namespace jw
 	// ### Declaration ###
 	// ###################
 	template<typename node, typename edge>
-	class graph	// TODO UT?
+	class graph	// POSSIBLE UT?
 	{
 	public:
-		// TODO make edges a separate adjacency matrix?
+		// POSSIBLE make edges a separate adjacency matrix?
 		using id_type = int;
 		using node_type = node;
 		using edge_type = edge;
