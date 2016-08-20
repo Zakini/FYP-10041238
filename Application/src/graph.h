@@ -5,6 +5,7 @@
 #include <istream>
 #include <fstream>
 #include <utility>
+#include <stdexcept>
 
 namespace jw
 {
@@ -105,10 +106,10 @@ namespace jw
 	}
 
 	template<typename node, typename edge>
-	bool graph<node, edge>::insertEdge(id_type fromId, id_type toId, edge_type link, bool bidirectional)
+	void graph<node, edge>::insertEdge(id_type fromId, id_type toId, edge_type link, bool bidirectional)
 	{
 		// Check nodes exist
-		if (graphMap.find(fromId) == graphMap.end() || graphMap.find(toId) == graphMap.end()) return false;
+		if (graphMap.find(fromId) == graphMap.end() || graphMap.find(toId) == graphMap.end()) throw std::invalid_argument("invalid node ID");
 
 		graphMap[fromId].second[toId] = link;
 
@@ -116,7 +117,5 @@ namespace jw
 		{
 			insertEdge(toId, fromId, link, false);
 		}
-
-		return true;
 	}
 }

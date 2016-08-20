@@ -15,20 +15,26 @@ namespace jw
 		using transition_type = transition*;
 		using container_type = graph<state_type, transition_type>;
 
+		// Copy and swap idiom: http://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom
 		fsm() = default;
 		fsm(const fsm& toCopy);
+		fsm(fsm&& toMove);
 		~fsm();
+
+		fsm& operator=(fsm assignFrom);
 
 		// Usage
 		void initialise();
 		void update(sf::Time period);
 
 		// Modifiers
-		bool addState(int id, state_type newNode);
-		bool addTransition(int fromId, int toId, transition_type newTransition);
+		void addState(int id, state_type newNode);
+		void addTransition(int fromId, int toId, transition_type newTransition);
 		void setInitialState(int id);
 
 	private:
+		friend void swap(fsm& a, fsm& b);
+
 		void checkTransitions();
 
 		container_type fsmGraph;
