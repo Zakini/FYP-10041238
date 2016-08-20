@@ -34,13 +34,13 @@ namespace UnitTests
 
 		TEST_METHOD(begin)
 		{
-			// TODO
+			// TODO const and normal
 			Assert::IsTrue(false);
 		}
 
 		TEST_METHOD(end)
 		{
-			// TODO
+			// TODO const and normal
 			Assert::IsTrue(false);
 		}
 

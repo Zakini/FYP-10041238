@@ -8,6 +8,8 @@ namespace UnitTests
 	TEST_CLASS(gameObject)
 	{
 	public:
+		// TODO operator< ?
+
 		TEST_METHOD(depth)
 		{
 			// TODO

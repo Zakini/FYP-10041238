@@ -8,6 +8,8 @@ namespace UnitTests
 	TEST_CLASS(fsm)
 	{
 	public:
+		// TODO copy-constructor, move-constructor, assignment
+
 		TEST_METHOD(destructor)
 		{
 			// TODO

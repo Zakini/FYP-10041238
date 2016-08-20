@@ -55,5 +55,15 @@ namespace UnitTests
 			// Assert car 1's work is 4
 			Assert::IsTrue(testCars[1]->workLocation() == 4);
 		}
+	
+		TEST_METHOD(getHomeLocationId)
+		{
+			// TODO
+		}
+
+		TEST_METHOD(getWorkLocationId)
+		{
+			// TODO
+		}
 	};
 }
