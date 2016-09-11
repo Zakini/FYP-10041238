@@ -69,5 +69,35 @@ namespace UnitTests
 
 			Assert::IsTrue(testCar.workLocation() == 2);
 		}
+
+		TEST_METHOD(getPosition)
+		{
+			// TODO
+			Assert::Fail();
+		}
+
+		TEST_METHOD(getCurrentLocationId)
+		{
+			// TODO
+			Assert::Fail();
+		}
+
+		TEST_METHOD(setCurrentLocationId)
+		{
+			// TODO
+			Assert::Fail();
+		}
+
+		TEST_METHOD(getCurrentPath)
+		{
+			// TODO
+			Assert::Fail();
+		}
+	
+		TEST_METHOD(pathTo)
+		{
+			// TODO
+			Assert::Fail();
+		}
 	};
 }

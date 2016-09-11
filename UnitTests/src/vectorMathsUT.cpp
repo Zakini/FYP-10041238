@@ -15,5 +15,17 @@ namespace UnitTests
 			sf::Vector2f testVector(3, 4);
 			Assert::IsTrue(jw::length(testVector) == 5.0f);
 		}
+
+		TEST_METHOD(dotProduct)
+		{
+			// TODO
+			Assert::Fail();
+		}
+
+		TEST_METHOD(normalise)
+		{
+			// TODO
+			Assert::Fail();
+		}
 	};
 }

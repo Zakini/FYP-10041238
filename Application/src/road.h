@@ -13,7 +13,7 @@ namespace jw
 
 		float cost();
 
-		// Inherited via drawable
+		// Inherited via gameObject
 		virtual void update(sf::Time timeSinceLastFrame) override;	// POSSIBLE UT?
 		virtual void draw(sf::RenderWindow& renderTarget) override;	// POSSIBLE UT?
 

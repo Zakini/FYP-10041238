@@ -10,7 +10,7 @@ namespace UnitTests
 	TEST_CLASS(location)
 	{
 	public:
-		TEST_METHOD(position)
+		TEST_METHOD(getSetPosition)
 		{
 			jw::location testLoc;
 			sf::Vector2f testVec(1, 2);

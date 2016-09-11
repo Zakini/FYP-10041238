@@ -11,19 +11,31 @@ namespace UnitTests
 		TEST_METHOD(initialise)
 		{
 			// TODO
-			Assert::IsTrue(false);
+			Assert::Fail();
 		}
 
 		TEST_METHOD(update)
 		{
 			// TODO
-			Assert::IsTrue(false);
+			Assert::Fail();
 		}
 
-		TEST_METHOD(setup)
+		TEST_METHOD(addGetState)
 		{
 			// TODO
-			Assert::IsTrue(false);
+			Assert::Fail();
+		}
+
+		TEST_METHOD(addGetTransition)
+		{
+			// TODO
+			Assert::Fail();
+		}
+
+		TEST_METHOD(setGetInitialState)
+		{
+			// TODO
+			Assert::Fail();
 		}
 	};
 }
