@@ -2,24 +2,27 @@
 
 #include <fstream>
 #include <math.h>
+#include <stdexcept>
+#include "vectorMaths.h"
 
 using std::ifstream;
+using std::out_of_range;
 
 const float jw::car::defaultEngineForce = 100000.0f;
 const float jw::car::defaultBrakeForce = 200000.0f;
 const float jw::car::defaultMass = 1.0f;
 const sf::Vector2f jw::car::defaultRenderShape = { 4, 4 };
 
-jw::car::car(pathEngine* p_pather)
-	: position(0, 0)
+jw::car::car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId)
+	: _position(0, 0)
 	, currentLocationID(0)
 	, velocity(0, 0)
 	, mass(defaultMass)
 	, maxEngineForce(defaultEngineForce)
 	, maxBrakeForce(defaultBrakeForce)
 	, renderShape(defaultRenderShape)
-	, homeLocationId(0)
-	, workLocationId(0)
+	, homeLocationId(p_homeLocationId)
+	, workLocationId(p_workLocationId)
 	, pather(p_pather)
 	, controller(carFsm::generate(*this))
 {
@@ -49,22 +52,34 @@ vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson, pathEngine* pather)
 
 	for (auto& carJson : carsJson[carsKey])
 	{
-		car* newCar = new car(pather);
-
-		newCar->homeLocationId = carJson[homeKey];
-		newCar->workLocationId = carJson[workKey];
-
+		car* newCar = new car(pather, carJson[homeKey], carJson[workKey]);
 		outputVector.push_back(newCar);
 	}
 
 	return outputVector;
 }
 
+// Note: may need to set/reset other values as they're added
+void jw::car::currentLocation(int locationId)
+{
+	// check location exists (throws if invalid)
+	sf::Vector2f newPosition = pather->getLocationPosition(locationId);
+
+	// set new values
+	currentLocationID = locationId;
+	_position = newPosition;
+
+	// reset values that might be invalid now
+	velocity.x = 0;
+	velocity.y = 0;
+	_currentPath.clear();
+}
+
 void jw::car::update(sf::Time timeSinceLastFrame)
 {
 	controller.update(timeSinceLastFrame);
 
-	renderShape.setPosition(position);
+	renderShape.setPosition(_position);
 }
 
 void jw::car::draw(sf::RenderWindow& renderTarget)
@@ -72,47 +87,71 @@ void jw::car::draw(sf::RenderWindow& renderTarget)
 	renderTarget.draw(renderShape);
 }
 
-sf::Vector2f jw::car::generateForce()
+void jw::car::pathTo(int targetId)
 {
-	// Move to target, aim to be stationary on arrival
-	sf::Vector2f outputForce;
+	deque<int> newPath = pather->findPath(currentLocationID, targetId);
+
+	if (!_currentPath.empty())
+	{
+		// continue to the next node before starting new path
+		newPath.push_front(_currentPath.front());
+	}
+
+	_currentPath = newPath;
+}
+
+// Move to target, aim to be stationary on arrival
+void jw::car::generateForce(sf::Time period)
+{
+	// Calculate force
+	sf::Vector2f outputForce;	// TODO rename
 
 	float speed = length(velocity);
 	float currentStoppingDistance = std::pow(speed, 2) / (2 * maxBrakeForce);
 
-	int targetLocationId = currentPath.front();
+	int targetLocationId = _currentPath.front();
 	sf::Vector2f targetPosition = pather->getLocationPosition(targetLocationId);
-	sf::Vector2f vectorToTarget = targetPosition - position;
+	sf::Vector2f vectorToTarget = targetPosition - _position;
 	float distanceFromTarget = length(vectorToTarget);
-	sf::Vector2f targetDirection;
-	if (distanceFromTarget != 0)
+	
+	if (distanceFromTarget <= currentStoppingDistance || distanceFromTarget <= carFsm::arrivalThreshold)
 	{
-		targetDirection = vectorToTarget / distanceFromTarget;
+		if (speed > 0)
+		{
+			// decelerate
+			// negate direction for opposite braking force
+			sf::Vector2f direction = velocity / speed;
+			outputForce += -direction * maxBrakeForce;
+		}// else already stopped
 	}
-	// else targetDirection is {0,0}
-
-	if (distanceFromTarget > currentStoppingDistance)
+	else	// far from target
 	{
 		// accelerate
-		outputForce += targetDirection * maxEngineForce;
-	}
-	else
-	{
-		// decelerate
-		// negate direction for opposite braking force
-		outputForce += -velocity * maxBrakeForce;
+		sf::Vector2f trajectoryForCurrentStep = velocity * period.asSeconds();
+		sf::Vector2f idealForce = vectorToTarget - trajectoryForCurrentStep;
+		sf::Vector2f forceDirection = normalise(idealForce);
+		outputForce += forceDirection * maxEngineForce;
 	}
 
 	// friction
 	const float frictionCoefficient = 0.3f;
 	sf::Vector2f friction = -velocity * (frictionCoefficient * mass * 10);	// mass * 10 = normal force
+	// TODO actually apply friction
 
-	return outputForce;
-}
+	// Apply force
+	sf::Vector2f acceleration = outputForce / mass;
+	sf::Vector2f newVelocity = velocity + (acceleration * period.asSeconds());
 
-void jw::car::applyForce(sf::Vector2f force, sf::Time period)
-{
-	sf::Vector2f acceleration = force / mass;
-	velocity += acceleration * period.asSeconds();
-	position += velocity * period.asSeconds();
+	if (acos(dotProduct(velocity, newVelocity)) > 90)	// Car is completely stopping/turning around
+	{
+		// full stop
+		velocity.x = 0;
+		velocity.y = 0;
+	}
+	else
+	{
+		velocity = newVelocity;
+	}
+
+	_position += velocity * period.asSeconds();
 }

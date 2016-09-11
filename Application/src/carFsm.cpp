@@ -5,42 +5,40 @@
 
 void jw::carFsm::moveToHome::update(sf::Time period)
 {
-	sf::Vector2f homePosition = targetCar.pather->getLocationPosition(targetCar.homeLocationId);
-	targetCar.position = homePosition;
-	targetCar.currentLocationID = targetCar.homeLocationId;
+	targetCar.currentLocation(targetCar.homeLocation());
 }
 
 void jw::carFsm::pathToHome::update(sf::Time period)
 {
-	targetCar.currentPath = targetCar.pather->findPath(targetCar.currentLocationID, targetCar.homeLocationId);
+	targetCar.pathTo(targetCar.homeLocation());
 }
 
 void jw::carFsm::pathToWork::update(sf::Time period)
 {
-	targetCar.currentPath = targetCar.pather->findPath(targetCar.currentLocationID, targetCar.workLocationId);
+	targetCar.pathTo(targetCar.workLocation());
 }
 
 void jw::carFsm::travelling::update(sf::Time period)
 {
-	sf::Vector2f newForce = targetCar.generateForce();
-	targetCar.applyForce(newForce, period);
+	targetCar.generateForce(period);
 
+	// TODO move to arrived state?
 	// check if reached current step of path
-	int targetLocationId = targetCar.currentPath.front();
+	int targetLocationId = targetCar._currentPath.front();
 	sf::Vector2f targetPosition = targetCar.pather->getLocationPosition(targetLocationId);
-	float distanceFromTarget = length(targetCar.position - targetPosition);
+	float distanceFromTarget = length(targetCar._position - targetPosition);
 	float currentSpeed = length(targetCar.velocity);
 	if (distanceFromTarget <= arrivalThreshold && currentSpeed < 1)
 	{
 		targetCar.currentLocationID = targetLocationId;
-		targetCar.currentPath.pop_front();
+		targetCar._currentPath.pop_front();
 	}
 }
 
 bool jw::carFsm::arrived::changeState()
 {
 	// if path is empty, we've popped off the target location, so we must have arrived!
-	return targetCar.currentPath.empty();
+	return targetCar._currentPath.empty();
 }
 
 jw::fsm jw::carFsm::generate(car& targetCar)

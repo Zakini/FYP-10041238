@@ -28,24 +28,30 @@ namespace jw
 		friend class carFsm::travelling;
 		friend class carFsm::arrived;
 
-		car(pathEngine* p_pather);
+		car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId);
 
 		static vector<car*> loadCars(string filepath, pathEngine* pather);
 		static vector<car*> loadCars(nlohmann::json carsJson, pathEngine* pather);
 
+		// most of these were only added for tests, get rid for release?
 		int homeLocation() { return homeLocationId; }
 		int workLocation() { return workLocationId; }
+		sf::Vector2f position() { return _position; }
+		int currentLocation() { return currentLocationID; }
+		void currentLocation(int locationId);
+		deque<int> currentPath() { return _currentPath; }
 
 		// Inherited via gameObject
 		virtual void update(sf::Time timeSinceLastFrame) override;	// POSSIBLE UT?
 		virtual void draw(sf::RenderWindow& renderTarget) override;	// POSSIBLE UT?
 
-	private:
-		// POSSIBLE separate force gen/apply for UTs?
-		sf::Vector2f generateForce();
-		void applyForce(sf::Vector2f force, sf::Time period);
+		void pathTo(int targetId);
 
-		sf::Vector2f position;
+	private:
+		// POSSIBLE separate for UTs?
+		void generateForce(sf::Time period);
+
+		sf::Vector2f _position;
 		int currentLocationID;
 		sf::Vector2f velocity;
 		float mass;
@@ -54,7 +60,7 @@ namespace jw
 		sf::RectangleShape renderShape;
 		int homeLocationId, workLocationId;
 		pathEngine* pather;
-		deque<int> currentPath;
+		deque<int> _currentPath;
 		fsm controller;
 
 		static const float defaultEngineForce;

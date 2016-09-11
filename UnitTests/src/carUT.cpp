@@ -58,12 +58,16 @@ namespace UnitTests
 	
 		TEST_METHOD(getHomeLocationId)
 		{
-			// TODO
+			jw::car testCar(nullptr, 1, 2);
+
+			Assert::IsTrue(testCar.homeLocation() == 1);
 		}
 
 		TEST_METHOD(getWorkLocationId)
 		{
-			// TODO
+			jw::car testCar(nullptr, 1, 2);
+
+			Assert::IsTrue(testCar.workLocation() == 2);
 		}
 	};
 }

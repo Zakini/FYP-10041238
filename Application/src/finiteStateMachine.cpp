@@ -77,6 +77,21 @@ void jw::fsm::update(sf::Time period)
 	currentState->update(period);
 }
 
+jw::state* jw::fsm::getState(int stateId)
+{
+	return fsmGraph.nodeAt(stateId)->clone();
+}
+
+jw::fsm::transitions_container_type jw::fsm::getTransitionsFromState(int stateId)
+{
+	return fsmGraph.edgesAt(stateId);
+}
+
+int jw::fsm::getInitialState()
+{
+	return initialStateId;
+}
+
 void jw::fsm::addState(int id, state_type newNode)
 {
 	fsmGraph.insertNode(id, newNode);

@@ -11,7 +11,7 @@ namespace jw
 
 	namespace carFsm
 	{
-		const float arrivalThreshold = 1.0f;
+		const float arrivalThreshold = 1.0f;	// POSSIBLE make configurable?
 
 		class carState : public state
 		{
@@ -37,6 +37,7 @@ namespace jw
 			car& targetCar;
 		};
 
+		// Teleport car to its home location
 		class moveToHome : public carState
 		{
 		public:

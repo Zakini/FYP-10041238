@@ -30,7 +30,7 @@ namespace jw
 		void update(sf::Time timeSinceLastFrame);	// POSSIBLE UT?
 		void draw(sf::RenderWindow& renderTarget);	// POSSIBLE UT?
 
-		void attachToGraph(pathEngine* pather);
+		void attachToGraph(pathEngine* pather);	// POSSIBLE this is kinda sketchy and breaks encapsulation, alternative?
 
 	private:
 		graph<location, road> worldGraph;

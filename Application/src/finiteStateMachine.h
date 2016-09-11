@@ -14,6 +14,7 @@ namespace jw
 		using state_type = state*;
 		using transition_type = transition*;
 		using container_type = graph<state_type, transition_type>;
+		using transitions_container_type = container_type::edge_container_type;
 
 		// Copy and swap idiom: http://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom
 		fsm() = default;
@@ -26,6 +27,12 @@ namespace jw
 		// Usage
 		void initialise();
 		void update(sf::Time period);
+
+		// Access
+		// Added only for UTs
+		state* getState(int stateId);
+		transitions_container_type getTransitionsFromState(int stateId);
+		int getInitialState();
 
 		// Modifiers
 		void addState(int id, state_type newNode);
@@ -40,6 +47,6 @@ namespace jw
 		container_type fsmGraph;
 		int initialStateId;
 		state* currentState;
-		container_type::edge_container_type* possibleTransitions;
+		transitions_container_type* possibleTransitions;
 	};
 }
