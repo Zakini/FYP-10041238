@@ -7,11 +7,9 @@ using std::ifstream;
 
 namespace jw
 {
-	world::world(string filepath)
+	world::world(shared_ptr<graph_type> p_worldGraph) : worldGraph(p_worldGraph)
 	{
-		worldGraph = loadWorld(filepath);
-
-		for (auto& graphPair : worldGraph)
+		for (auto& graphPair : *worldGraph)
 		{
 			gameObject* currentLocation = &graphPair.second.first;
 			worldObjects.insert(currentLocation);
@@ -24,7 +22,7 @@ namespace jw
 		}
 	}
 
-	world::graph_type world::loadWorld(string filepath)
+	world::graph_type* world::loadWorld(string filepath)
 	{
 		ifstream mapFile(filepath);
 		nlohmann::json mapJson;
@@ -34,7 +32,7 @@ namespace jw
 		return loadWorld(mapJson);
 	}
 
-	world::graph_type world::loadWorld(nlohmann::json mapJson)
+	world::graph_type* world::loadWorld(nlohmann::json mapJson)
 	{
 		const string locationsKey = "locations";
 		const string junctionsKey = "junctions";
@@ -47,7 +45,7 @@ namespace jw
 		const string toKey = "to";
 		const string bidirectionalKey = "bidirectional";
 
-		graph_type outputGraph;
+		graph_type* outputGraph = new graph_type();
 		
 		for (auto& locationJson : mapJson[locationsKey])
 		{
@@ -58,7 +56,7 @@ namespace jw
 			int sourceId = locationJson.at(idKey);
 
 			location newLocation(position);
-			outputGraph.insertNode(sourceId, newLocation);
+			outputGraph->insertNode(sourceId, newLocation);
 		}
 
 		for (auto& locationJson : mapJson[junctionsKey])
@@ -70,19 +68,19 @@ namespace jw
 			int sourceId = locationJson.at(idKey);
 
 			location newLocation(position);
-			outputGraph.insertNode(sourceId, newLocation);
+			outputGraph->insertNode(sourceId, newLocation);
 		}
 
 		for (auto& roadJson : mapJson[roadsKey])
 		{
 			int sourceId = roadJson.at(fromKey);
-			location* source = &outputGraph.nodeAt(sourceId);
+			location* source = &outputGraph->nodeAt(sourceId);
 			int destId = roadJson.at(toKey);
-			location* dest = &outputGraph.nodeAt(destId);
+			location* dest = &outputGraph->nodeAt(destId);
 			road roadEdge(source, dest);
 			bool bidirectional = roadJson.at(bidirectionalKey);
 
-			outputGraph.insertEdge(sourceId, destId, roadEdge, bidirectional);
+			outputGraph->insertEdge(sourceId, destId, roadEdge, bidirectional);
 		}
 
 		return outputGraph;
@@ -102,10 +100,5 @@ namespace jw
 		{
 			worldObj->draw(renderTarget);
 		}
-	}
-
-	void world::attachToGraph(pathEngine* pather)
-	{
-		pather->setGraph(&worldGraph);
 	}
 }

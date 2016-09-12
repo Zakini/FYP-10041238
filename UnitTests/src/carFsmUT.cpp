@@ -20,28 +20,30 @@ namespace UnitTests
 	public:
 		TEST_METHOD(moveToHome)
 		{
-			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test1.json");
-			jw::pathEngine* pather =  new jw::pathEngine();
+			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test1.json";
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			testWorld.attachToGraph(pather);
+			jw::pathEngine pather(testGraphSp);
 
-			jw::car testCar(pather, 1, 2);
+			jw::car testCar(&pather, 1, 2);
 			jw::carFsm::moveToHome testState(testCar);
 
 			testState.update(sf::seconds(0));	// move should be instantaneous
 
-			Assert::IsTrue(testCar.position() == pather->getLocationPosition(1));
+			Assert::IsTrue(testCar.position() == pather.getLocationPosition(1));
 			Assert::IsTrue(testCar.currentLocation() == 1);
 		}
 
 		TEST_METHOD(pathToHome)
 		{
-			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test1.json");
-			jw::pathEngine* pather = new jw::pathEngine();
+			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test1.json";
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			testWorld.attachToGraph(pather);
+			jw::pathEngine pather(testGraphSp);
 
-			jw::car testCar(pather, 1, 2);
+			jw::car testCar(&pather, 1, 2);
 			jw::carFsm::pathToHome testState(testCar);
 
 			testCar.currentLocation(2);			// move to non-home location
@@ -55,12 +57,13 @@ namespace UnitTests
 
 		TEST_METHOD(pathToWork)
 		{
-			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test1.json");
-			jw::pathEngine* pather = new jw::pathEngine();
+			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test1.json";
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			testWorld.attachToGraph(pather);
+			jw::pathEngine pather(testGraphSp);
 
-			jw::car testCar(pather, 1, 2);
+			jw::car testCar(&pather, 1, 2);
 			jw::carFsm::pathToWork testState(testCar);
 
 			testCar.currentLocation(1);			// move to non-work location
@@ -74,12 +77,13 @@ namespace UnitTests
 
 		TEST_METHOD(travelling)
 		{
-			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test2.json");
-			jw::pathEngine* pather = new jw::pathEngine();
+			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test2.json";
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			testWorld.attachToGraph(pather);
+			jw::pathEngine pather(testGraphSp);
 
-			jw::car testCar(pather, 1, 2);
+			jw::car testCar(&pather, 1, 2);
 			jw::carFsm::travelling testState(testCar);
 
 			testCar.currentLocation(1);	// move to non-work location
@@ -103,12 +107,13 @@ namespace UnitTests
 
 		TEST_METHOD(arrived)
 		{
-			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test2.json");
-			jw::pathEngine* pather = new jw::pathEngine();
+			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test2.json";
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			testWorld.attachToGraph(pather);
+			jw::pathEngine pather(testGraphSp);
 
-			jw::car testCar(pather, 1, 2);
+			jw::car testCar(&pather, 1, 2);
 			jw::carFsm::travelling setupState(testCar);
 			jw::carFsm::arrived testState(testCar);
 

@@ -1,18 +1,27 @@
 #include "game.h"
 
+using std::make_shared;
+
+const string worldJsonPath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/map.json";
+const string carsJsonPath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/entities/entities.json";
+
 namespace jw
 {
-	game::game()
+	game::game(shared_ptr<world::graph_type> gameWorldGraph)
 		: gameWindow(sf::VideoMode(800, 600), "FYP - 10041238", sf::Style::Close | sf::Style::Titlebar)
-		, gameWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/map.json")
-		, pather()
+		, gameWorld(gameWorldGraph)
+		, pather(gameWorldGraph)
 		, entities()
 		, frameTimer()
 	{
-		string carsJsonPath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/entities/entities.json";
-		gameWorld.attachToGraph(&pather);
 		auto cars = car::loadCars(carsJsonPath, &pather);
 		entities.assign(cars.begin(), cars.end());
+	}
+
+	game* game::make_game()
+	{
+		shared_ptr<world::graph_type> gameWorldGraph(world::loadWorld(worldJsonPath));
+		return new game(gameWorldGraph);
 	}
 
 	int game::run()

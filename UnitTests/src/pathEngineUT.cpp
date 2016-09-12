@@ -6,6 +6,7 @@
 #include "../../Application/src/world.h"
 #include "../../Application/src/location.h"
 #include "../../Application/src/pathEngine.h"
+#include <memory>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -21,10 +22,9 @@ namespace UnitTests
 		{
 			// S---T
 
-			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test1.json");
-			
-			jw::pathEngine testPather(&testGraph);
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test1.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
 
 			std::deque<int> expectedPath;
 			expectedPath.emplace_back(2);
@@ -38,10 +38,9 @@ namespace UnitTests
 		{
 			// S-X-T
 
-			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test2.json");
-
-			jw::pathEngine testPather(&testGraph);
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test2.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
 
 			std::deque<int> expectedPath;	// Empty path
 
@@ -54,10 +53,9 @@ namespace UnitTests
 		{
 			// ST
 
-			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test3.json");
-
-			jw::pathEngine testPather(&testGraph);
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test3.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
 
 			std::deque<int> expectedPath;	// Empty path
 
@@ -70,10 +68,9 @@ namespace UnitTests
 		{
 			// S---O---T
 
-			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test4.json");
-
-			jw::pathEngine testPather(&testGraph);
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test4.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
 
 			std::deque<int> expectedPath;
 			expectedPath.emplace_back(2);
@@ -96,10 +93,9 @@ namespace UnitTests
 			//    \ /
 			//     O
 
-			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test5.json");
-
-			jw::pathEngine testPather(&testGraph);
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test5.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
 
 			std::deque<int> expectedPath;
 			expectedPath.emplace_back(2);
@@ -122,10 +118,9 @@ namespace UnitTests
 			//        \ /
 			//         O
 
-			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test6.json");
-
-			jw::pathEngine testPather(&testGraph);
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test6.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
 
 			std::deque<int> expectedPath;
 			expectedPath.emplace_back(2);
@@ -150,10 +145,9 @@ namespace UnitTests
 			//        \ /
 			//         O
 
-			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test7.json");
-
-			jw::pathEngine testPather(&testGraph);
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test7.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
 
 			std::deque<int> expectedPath;	// Empty path
 
@@ -166,10 +160,9 @@ namespace UnitTests
 		{
 			// S<--T
 
-			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test8.json");
-
-			jw::pathEngine testPather(&testGraph);
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test8.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
 
 			std::deque<int> expectedPath;	// Empty path
 
@@ -194,10 +187,9 @@ namespace UnitTests
 			//            V /
 			//             O
 
-			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test9.json");
-
-			jw::pathEngine testPather(&testGraph);
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test9.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
 
 			std::deque<int> expectedPath;
 			expectedPath.emplace_back(2);
@@ -214,10 +206,9 @@ namespace UnitTests
 		{
 			// Random generated map
 
-			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test10.json");
-
-			jw::pathEngine testPather(&testGraph);
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "astar-unit-test10.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
 
 			std::deque<int> expectedPath;
 			expectedPath.emplace_back(6);
@@ -233,7 +224,7 @@ namespace UnitTests
 		{
 			// no attached graph
 
-			jw::pathEngine testPather;
+			jw::pathEngine testPather(std::shared_ptr<jw::pathEngine::graph_type>(nullptr));
 			bool hasThrown = false;
 
 			try { testPather.findPath(1, 2); }	// read access violation, needs /EHa setting to catch
@@ -244,21 +235,9 @@ namespace UnitTests
 
 		TEST_METHOD(getLocationPosition)
 		{
-			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadWorld(filePathBase + "pather-test1.json");
-
-			jw::pathEngine testPather(&testGraph);
-
-			Assert::IsTrue(testPather.getLocationPosition(1) == sf::Vector2f(10, -3));
-		}
-
-		TEST_METHOD(setGraph)
-		{
-			jw::pathEngine testPather;
-
-			jw::world::graph_type testGraph;
-			testGraph = jw::world::loadWorld(filePathBase + "pather-test1.json");
-			testPather.setGraph(&testGraph);
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "pather-test1.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
 
 			Assert::IsTrue(testPather.getLocationPosition(1) == sf::Vector2f(10, -3));
 		}

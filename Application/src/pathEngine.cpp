@@ -72,11 +72,6 @@ namespace jw
 		return targetGraph->nodeAt(id).position();
 	}
 
-	void pathEngine::setGraph(graph_type* newGraph)
-	{
-		targetGraph = newGraph;
-	}
-
 	bool pathEngine::comparePriority::operator()(pathingTuple a, pathingTuple b)
 	{
 		return a.priority > b.priority;

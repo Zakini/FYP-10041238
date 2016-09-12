@@ -2,6 +2,6 @@
 
 int main(int argc, char** argv)
 {
-	jw::game gameInstance;
-	return gameInstance.run();
+	jw::game* gameInstance = jw::game::make_game();
+	return gameInstance->run();
 }

@@ -7,15 +7,18 @@
 #include "gameObject.h"
 #include "car.h"
 #include "pathEngine.h"
+#include <memory>
 
 using std::vector;
+using std::shared_ptr;
 
 namespace jw
 {
 	class game
 	{
 	public:
-		game();
+		game(shared_ptr<world::graph_type> gameWorldGraph);
+		static game* make_game();
 
 		int run();	// POSSIBLE UT?
 

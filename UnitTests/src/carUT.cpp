@@ -20,8 +20,9 @@ namespace UnitTests
 		{
 			std::string carJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/entities/load-cars-unit-test1.json";
 			std::string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test1.json";
-			jw::world::graph_type testGraph = jw::world::loadWorld(worldJsonFilePath);
-			jw::pathEngine testPather(&testGraph);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
 			std::vector<jw::car*> testCars = jw::car::loadCars(carJsonFilePath, &testPather);
 
 			// Assert car 0's home is 1
@@ -38,8 +39,9 @@ namespace UnitTests
 		{
 			std::ifstream testFile("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/entities/load-cars-unit-test1.json");
 			std::string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test1.json";
-			jw::world::graph_type testGraph = jw::world::loadWorld(worldJsonFilePath);
-			jw::pathEngine testPather(&testGraph);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
 			nlohmann::json testJson;
 
 			testFile >> testJson;
@@ -72,10 +74,11 @@ namespace UnitTests
 
 		TEST_METHOD(getPosition)
 		{
-			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json");
-			jw::pathEngine testPather;
+			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json";
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			testWorld.attachToGraph(&testPather);
+			jw::pathEngine testPather(testGraphSp);
 
 			jw::car testCar(&testPather, 1, 2);
 
@@ -86,10 +89,11 @@ namespace UnitTests
 
 		TEST_METHOD(getSetCurrentLocationId)
 		{
-			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json");
-			jw::pathEngine testPather;
+			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json";
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			testWorld.attachToGraph(&testPather);
+			jw::pathEngine testPather(testGraphSp);
 
 			jw::car testCar(&testPather, 1, 2);
 
@@ -100,10 +104,11 @@ namespace UnitTests
 	
 		TEST_METHOD(pathToAndGetPath)
 		{
-			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json");
-			jw::pathEngine testPather;
+			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json";
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			testWorld.attachToGraph(&testPather);
+			jw::pathEngine testPather(testGraphSp);
 
 			jw::car testCar(&testPather, 1, 2);
 
@@ -118,7 +123,6 @@ namespace UnitTests
 		
 		TEST_METHOD(depth)
 		{
-			// TODO
 			jw::car testCar(nullptr, 1, 2);
 
 			Assert::IsTrue(testCar.depth() == 10);
