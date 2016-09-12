@@ -93,6 +93,7 @@
       <AdditionalIncludeDirectories>C:\Users\Josh Wells\Google Drive\Uni\Level 6\Final Year Project\Artefact\FYP-10041238\Application\lib\SFML-2.3.2\include;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -163,7 +164,6 @@
     <ClCompile Include="src\carFsmUT.cpp" />
     <ClCompile Include="src\carUT.cpp" />
     <ClCompile Include="src\fsmUT.cpp" />
-    <ClCompile Include="src\gameObjectUT.cpp" />
     <ClCompile Include="src\graphUT.cpp" />
     <ClCompile Include="src\locationUT.cpp" />
     <ClCompile Include="src\pathEngineUT.cpp" />

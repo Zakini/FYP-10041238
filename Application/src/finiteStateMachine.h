@@ -30,9 +30,11 @@ namespace jw
 
 		// Access
 		// Added only for UTs
-		state* getState(int stateId);
+		state* getState(int stateId);	// TODO merge with setter
+		state* currentState();
 		transitions_container_type getTransitionsFromState(int stateId);
-		int getInitialState();
+		transitions_container_type currentPossibleTransitions();
+		int getInitialState();	// TODO merge with setter
 
 		// Modifiers
 		void addState(int id, state_type newNode);
@@ -46,7 +48,7 @@ namespace jw
 
 		container_type fsmGraph;
 		int initialStateId;
-		state* currentState;
+		state* _currentState;
 		transitions_container_type* possibleTransitions;
 	};
 }

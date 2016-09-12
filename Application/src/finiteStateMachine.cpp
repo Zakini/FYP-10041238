@@ -33,7 +33,7 @@ jw::fsm::fsm(const fsm& toCopy) : initialStateId(toCopy.initialStateId)
 		}
 	}
 
-	// TODO currentState and possibleTransitions
+	// TODO _currentState and possibleTransitions
 }
 
 jw::fsm::fsm(fsm&& toMove) : fsm()
@@ -65,26 +65,36 @@ jw::fsm& jw::fsm::operator=(fsm assignFrom)
 
 void jw::fsm::initialise()
 {
-	currentState = fsmGraph.nodeAt(initialStateId);
+	_currentState = fsmGraph.nodeAt(initialStateId);
 	possibleTransitions = &fsmGraph.edgesAt(initialStateId);
 }
 
 void jw::fsm::update(sf::Time period)
 {
-	if (currentState == nullptr) throw domain_error("fsm.update called before fsm.initialise");
+	if (_currentState == nullptr) throw domain_error("fsm.update called before fsm.initialise");
 
 	checkTransitions();
-	currentState->update(period);
+	_currentState->update(period);
 }
 
 jw::state* jw::fsm::getState(int stateId)
 {
-	return fsmGraph.nodeAt(stateId)->clone();
+	return fsmGraph.nodeAt(stateId);	// POSSIBLE clone?
+}
+
+jw::state* jw::fsm::currentState()
+{
+	return _currentState;
 }
 
 jw::fsm::transitions_container_type jw::fsm::getTransitionsFromState(int stateId)
 {
-	return fsmGraph.edgesAt(stateId);
+	return fsmGraph.edgesAt(stateId);	// POSSIBLE clone?
+}
+
+jw::fsm::transitions_container_type jw::fsm::currentPossibleTransitions()
+{
+	return *possibleTransitions;
 }
 
 int jw::fsm::getInitialState()
@@ -115,7 +125,7 @@ void jw::swap(fsm& a, fsm& b)
 
 	swap(a.fsmGraph, b.fsmGraph);
 	swap(a.initialStateId, b.initialStateId);
-	swap(a.currentState, b.currentState);
+	swap(a._currentState, b._currentState);
 	swap(a.possibleTransitions, b.possibleTransitions);
 }
 
@@ -128,7 +138,7 @@ void jw::fsm::checkTransitions()
 
 		if (currentTransition->changeState())
 		{
-			currentState = fsmGraph.nodeAt(possibleNewState);
+			_currentState = fsmGraph.nodeAt(possibleNewState);
 			possibleTransitions = &fsmGraph.edgesAt(possibleNewState);
 			break;
 		}

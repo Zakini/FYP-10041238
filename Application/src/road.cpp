@@ -6,10 +6,7 @@
 
 namespace jw
 {
-	road::road(location * p_from, location * p_to, float p_lineThickness) : from(p_from), to(p_to), renderShape(sf::Quads, 4), lineThickness(p_lineThickness)
-	{
-		_depth = 1;
-	}
+	const float road::defaultRenderDepth = 0.0f;
 
 	float road::cost()
 	{

@@ -231,20 +231,36 @@ namespace UnitTests
 
 		TEST_METHOD(findPath11)
 		{
-			// TODO no attached graph
-			Assert::IsTrue(false);
+			// no attached graph
+
+			jw::pathEngine testPather;
+			bool hasThrown = false;
+
+			try { testPather.findPath(1, 2); }	// read access violation, needs /EHa setting to catch
+			catch (...) { hasThrown = true; }
+
+			if (!hasThrown) Assert::Fail();
 		}
 
 		TEST_METHOD(getLocationPosition)
 		{
-			// TODO
-			Assert::IsTrue(false);
+			jw::world::graph_type testGraph;
+			testGraph = jw::world::loadWorld(filePathBase + "pather-test1.json");
+
+			jw::pathEngine testPather(&testGraph);
+
+			Assert::IsTrue(testPather.getLocationPosition(1) == sf::Vector2f(10, -3));
 		}
 
 		TEST_METHOD(setGraph)
 		{
-			// TODO
-			Assert::IsTrue(false);
+			jw::pathEngine testPather;
+
+			jw::world::graph_type testGraph;
+			testGraph = jw::world::loadWorld(filePathBase + "pather-test1.json");
+			testPather.setGraph(&testGraph);
+
+			Assert::IsTrue(testPather.getLocationPosition(1) == sf::Vector2f(10, -3));
 		}
 	};
 }

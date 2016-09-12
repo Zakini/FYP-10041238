@@ -20,7 +20,7 @@ namespace UnitTests
 	public:
 		TEST_METHOD(moveToHome)
 		{
-			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test-1.json");
+			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test1.json");
 			jw::pathEngine* pather =  new jw::pathEngine();
 
 			testWorld.attachToGraph(pather);
@@ -36,7 +36,7 @@ namespace UnitTests
 
 		TEST_METHOD(pathToHome)
 		{
-			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test-1.json");
+			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test1.json");
 			jw::pathEngine* pather = new jw::pathEngine();
 
 			testWorld.attachToGraph(pather);
@@ -55,7 +55,7 @@ namespace UnitTests
 
 		TEST_METHOD(pathToWork)
 		{
-			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test-1.json");
+			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test1.json");
 			jw::pathEngine* pather = new jw::pathEngine();
 
 			testWorld.attachToGraph(pather);
@@ -74,7 +74,7 @@ namespace UnitTests
 
 		TEST_METHOD(travelling)
 		{
-			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test-2.json");
+			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test2.json");
 			jw::pathEngine* pather = new jw::pathEngine();
 
 			testWorld.attachToGraph(pather);
@@ -103,7 +103,7 @@ namespace UnitTests
 
 		TEST_METHOD(arrived)
 		{
-			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test-2.json");
+			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test2.json");
 			jw::pathEngine* pather = new jw::pathEngine();
 
 			testWorld.attachToGraph(pather);

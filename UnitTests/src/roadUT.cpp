@@ -19,5 +19,12 @@ namespace UnitTests
 
 			Assert::IsTrue(testRoad.cost() == 5);
 		}
+
+		TEST_METHOD(depth)
+		{
+			jw::road testRoad;
+
+			Assert::IsTrue(testRoad.depth() == 0);
+		}
 	};
 }

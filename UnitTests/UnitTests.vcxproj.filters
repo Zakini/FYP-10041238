@@ -50,9 +50,6 @@
     <ClCompile Include="src\fsmUT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gameObjectUT.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphUT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

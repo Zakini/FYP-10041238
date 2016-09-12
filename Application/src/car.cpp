@@ -8,10 +8,12 @@
 using std::ifstream;
 using std::out_of_range;
 
+// TODO make static?
 const float jw::car::defaultEngineForce = 100000.0f;
 const float jw::car::defaultBrakeForce = 200000.0f;
 const float jw::car::defaultMass = 1.0f;
 const sf::Vector2f jw::car::defaultRenderShape = { 4, 4 };
+const float defaultRenderDepth = 10.0f;
 
 jw::car::car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId)
 	: _position(0, 0)
@@ -25,6 +27,7 @@ jw::car::car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId)
 	, workLocationId(p_workLocationId)
 	, pather(p_pather)
 	, controller(carFsm::generate(*this))
+	, gameObject(defaultRenderDepth)
 {
 	renderShape.setOrigin(renderShape.getSize() / 2.0f);
 	renderShape.setFillColor(sf::Color::Green);
@@ -142,6 +145,7 @@ void jw::car::generateForce(sf::Time period)
 	sf::Vector2f acceleration = outputForce / mass;
 	sf::Vector2f newVelocity = velocity + (acceleration * period.asSeconds());
 
+	// TODO normalise first!
 	if (acos(dotProduct(velocity, newVelocity)) > 90)	// Car is completely stopping/turning around
 	{
 		// full stop

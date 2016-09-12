@@ -19,13 +19,34 @@ namespace UnitTests
 		TEST_METHOD(dotProduct)
 		{
 			// TODO
-			Assert::Fail();
+			sf::Vector2f testVector1, testVector2;
+
+			// right angled
+			testVector1 = { 1, 0 };
+			testVector2 = { 0, 1 };
+
+			Assert::IsTrue(jw::dotProduct(testVector1, testVector2) == 0);
+
+			// aligned
+			testVector1 = { 3, 0 };
+			testVector2 = { 2, 0 };
+
+			Assert::IsTrue(jw::dotProduct(testVector1, testVector2) == 6);
+
+			// "random"
+			testVector1 = { 39, 73 };
+			testVector2 = { 134, -669 };
+
+			Assert::IsTrue(jw::dotProduct(testVector1, testVector2) == -43611);
 		}
 
 		TEST_METHOD(normalise)
 		{
-			// TODO
-			Assert::Fail();
+			sf::Vector2f testVector(-305, -529);
+			sf::Vector2f normalVector = jw::normalise(testVector);
+
+			// could check they're pointing the same way too but that requires normalising both vectors... which is kinda pointless
+			Assert::IsTrue(round(jw::length(normalVector)) == 1);	// 1 unit long
 		}
 	};
 }

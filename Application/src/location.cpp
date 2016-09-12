@@ -3,12 +3,15 @@
 #include <typeinfo>
 #include "vectorMaths.h"
 
+const float defaultRenderDepth = 1.0f;
+
 namespace jw
 {
-	location::location(sf::Vector2f p_position, float shapeSize) : _position(p_position), renderShape(shapeSize)
+	location::location(sf::Vector2f p_position, float shapeSize)
+		: _position(p_position)
+		, renderShape(shapeSize)
+		, gameObject(defaultRenderDepth)
 	{
-		_depth = 0;
-
 		renderShape.setOrigin(renderShape.getRadius(), renderShape.getRadius());
 		renderShape.setFillColor(sf::Color::White);
 	}

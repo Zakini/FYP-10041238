@@ -58,46 +58,70 @@ namespace UnitTests
 	
 		TEST_METHOD(getHomeLocationId)
 		{
-			jw::car testCar(nullptr, 1, 2);
+			jw::car testCar(nullptr, 1, 2);	// nullptr is invalid but works for this test
 
 			Assert::IsTrue(testCar.homeLocation() == 1);
 		}
 
 		TEST_METHOD(getWorkLocationId)
 		{
-			jw::car testCar(nullptr, 1, 2);
+			jw::car testCar(nullptr, 1, 2);	// nullptr is invalid but works for this test
 
 			Assert::IsTrue(testCar.workLocation() == 2);
 		}
 
 		TEST_METHOD(getPosition)
 		{
-			// TODO
-			Assert::Fail();
+			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json");
+			jw::pathEngine testPather;
+
+			testWorld.attachToGraph(&testPather);
+
+			jw::car testCar(&testPather, 1, 2);
+
+			testCar.currentLocation(2);
+
+			Assert::IsTrue(testCar.position() == sf::Vector2f(3, 4));
 		}
 
-		TEST_METHOD(getCurrentLocationId)
+		TEST_METHOD(getSetCurrentLocationId)
 		{
-			// TODO
-			Assert::Fail();
-		}
+			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json");
+			jw::pathEngine testPather;
 
-		TEST_METHOD(setCurrentLocationId)
-		{
-			// TODO
-			Assert::Fail();
-		}
+			testWorld.attachToGraph(&testPather);
 
-		TEST_METHOD(getCurrentPath)
-		{
-			// TODO
-			Assert::Fail();
+			jw::car testCar(&testPather, 1, 2);
+
+			testCar.currentLocation(2);
+
+			Assert::IsTrue(testCar.currentLocation() == 2);
 		}
 	
-		TEST_METHOD(pathTo)
+		TEST_METHOD(pathToAndGetPath)
+		{
+			jw::world testWorld("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json");
+			jw::pathEngine testPather;
+
+			testWorld.attachToGraph(&testPather);
+
+			jw::car testCar(&testPather, 1, 2);
+
+			testCar.currentLocation(1);
+			testCar.pathTo(2);
+
+			deque<int> expectedPath;
+			expectedPath.push_back(2);	// maybe use more complicated map for a longer route?
+
+			Assert::IsTrue(testCar.currentPath() == expectedPath);
+		}
+		
+		TEST_METHOD(depth)
 		{
 			// TODO
-			Assert::Fail();
+			jw::car testCar(nullptr, 1, 2);
+
+			Assert::IsTrue(testCar.depth() == 10);
 		}
 	};
 }
