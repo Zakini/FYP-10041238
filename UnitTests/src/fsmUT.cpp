@@ -27,7 +27,7 @@ namespace UnitTests
 			Assert::IsTrue(testFsm.currentPossibleTransitions().at(2) == expectedTransition);
 		}
 
-		TEST_METHOD(update)
+		TEST_METHOD(updateGetCurrent)
 		{
 			jw::fsm testFsm;
 

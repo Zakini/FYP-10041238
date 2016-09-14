@@ -16,6 +16,7 @@ namespace jw
 		using container_type = graph<state_type, transition_type>;
 		using transitions_container_type = container_type::edge_container_type;
 
+		// POSSIBLE UT c'tors/d'tors/assign op?
 		// Copy and swap idiom: http://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom
 		fsm() = default;
 		fsm(const fsm& toCopy);
