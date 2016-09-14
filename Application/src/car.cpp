@@ -135,7 +135,7 @@ void jw::car::generateForce(sf::Time period)
 	{
 		// accelerate
 		sf::Vector2f trajectoryForCurrentStep = velocity * period.asSeconds();
-		sf::Vector2f idealForce = vectorToTarget - trajectoryForCurrentStep;
+		sf::Vector2f idealForce = (vectorToTarget - trajectoryForCurrentStep) / period.asSeconds();	// HACK something to do with removing the time component of the "force"... iunno
 
 		if (length(idealForce) <= maxEngineForce)
 		{
