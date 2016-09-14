@@ -79,7 +79,6 @@ namespace UnitTests
 
 		TEST_METHOD(end)
 		{
-			// TODO const and normal
 			jw::graph<std::string, char> testGraph;
 
 			testGraph.insertNode(1, "one");

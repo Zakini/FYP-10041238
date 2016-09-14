@@ -33,7 +33,10 @@ jw::fsm::fsm(const fsm& toCopy) : initialStateId(toCopy.initialStateId)
 		}
 	}
 
-	// TODO _currentState and possibleTransitions
+	// copy other bits
+	this->currentStateId = toCopy.currentStateId;
+	this->_currentState = this->fsmGraph.nodeAt(this->currentStateId);
+	this->possibleTransitions = &this->fsmGraph.edgesAt(this->currentStateId);
 }
 
 jw::fsm::fsm(fsm&& toMove) : fsm()

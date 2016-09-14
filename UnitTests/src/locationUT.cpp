@@ -45,7 +45,6 @@ namespace UnitTests
 
 		TEST_METHOD(depth)
 		{
-			// TODO
 			jw::location testLocation;
 
 			Assert::IsTrue(testLocation.depth() == 1);

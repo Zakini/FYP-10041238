@@ -25,7 +25,6 @@ void jw::carFsm::travelling::update(sf::Time period)
 {
 	targetCar.generateForce(period);
 
-	// TODO move to arrived state?
 	// check if reached current step of path
 	int targetLocationId = targetCar._currentPath.front();
 	sf::Vector2f targetPosition = targetCar.pather->getLocationPosition(targetLocationId);

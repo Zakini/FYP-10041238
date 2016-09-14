@@ -25,7 +25,6 @@ namespace jw
 
 		world(shared_ptr<graph_type> p_worldGraph);
 
-		// TODO move... somewhere...
 		static graph_type* loadWorld(string filepath);
 		static graph_type* loadWorld(nlohmann::json mapJson);
 
@@ -33,7 +32,7 @@ namespace jw
 		void draw(sf::RenderWindow& renderTarget);	// POSSIBLE UT?
 
 	private:
-		shared_ptr<graph_type> worldGraph;	// TODO const?
+		shared_ptr<graph_type> worldGraph;
 		set<gameObject*> worldObjects;
 	};
 }

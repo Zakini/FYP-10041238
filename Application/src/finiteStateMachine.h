@@ -48,7 +48,7 @@ namespace jw
 		void checkTransitions();
 
 		container_type fsmGraph;
-		int initialStateId;
+		int initialStateId, currentStateId;
 		state* _currentState;
 		transitions_container_type* possibleTransitions;
 	};

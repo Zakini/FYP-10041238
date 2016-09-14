@@ -138,7 +138,6 @@ namespace UnitTests
 
 		TEST_METHOD(generate)
 		{
-			// TODO dynamic casts don't throw
 			jw::car testCar(nullptr, 1, 2);
 			jw::fsm testFsm = jw::carFsm::generate(testCar);
 			jw::fsm::state_type testState;

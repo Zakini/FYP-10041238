@@ -20,7 +20,6 @@ namespace jw
 		friend bool operator<(const gameObject& lhs, const gameObject& rhs);
 
 	protected:
-		// TODO objects aren't being drawn in the right order
 		float _depth;	// higher numbers are "closer" to the screen
 	};
 }
