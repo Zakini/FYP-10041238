@@ -7,13 +7,17 @@
 
 using std::ifstream;
 using std::out_of_range;
+using jw::maths::length;
+using jw::maths::normalise;
+using jw::maths::angleBetween;
 
-// TODO make static?
 const float jw::car::defaultEngineForce = 100000.0f;
 const float jw::car::defaultBrakeForce = 200000.0f;
 const float jw::car::defaultMass = 1.0f;
 const sf::Vector2f jw::car::defaultRenderShape = { 4, 4 };
 const float defaultRenderDepth = 10.0f;
+
+const float gravitationalConstant = 9.81f;
 
 jw::car::car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId)
 	: _position(0, 0)
@@ -107,7 +111,7 @@ void jw::car::pathTo(int targetId)
 void jw::car::generateForce(sf::Time period)
 {
 	// Calculate force
-	sf::Vector2f outputForce;	// TODO rename
+	sf::Vector2f newForce;
 
 	float speed = length(velocity);
 	float currentStoppingDistance = std::pow(speed, 2) / (2 * maxBrakeForce);
@@ -124,7 +128,7 @@ void jw::car::generateForce(sf::Time period)
 			// decelerate
 			// negate direction for opposite braking force
 			sf::Vector2f direction = velocity / speed;
-			outputForce += -direction * maxBrakeForce;
+			newForce = -direction * maxBrakeForce;
 		}// else already stopped
 	}
 	else	// far from target
@@ -132,21 +136,30 @@ void jw::car::generateForce(sf::Time period)
 		// accelerate
 		sf::Vector2f trajectoryForCurrentStep = velocity * period.asSeconds();
 		sf::Vector2f idealForce = vectorToTarget - trajectoryForCurrentStep;
-		sf::Vector2f forceDirection = normalise(idealForce);
-		outputForce += forceDirection * maxEngineForce;
+
+		if (length(idealForce) <= maxEngineForce)
+		{
+			// accelerate gently if close to target
+			newForce = idealForce;
+		}
+		else
+		{
+			sf::Vector2f forceDirection = normalise(idealForce);
+			newForce = forceDirection * maxEngineForce;
+		}
 	}
 
 	// friction
 	const float frictionCoefficient = 0.3f;
-	sf::Vector2f friction = -velocity * (frictionCoefficient * mass * 10);	// mass * 10 = normal force
-	// TODO actually apply friction
+	// negate velocity for opposite force
+	sf::Vector2f friction = -velocity * (frictionCoefficient * mass * gravitationalConstant);	// mass * gravity = normal force
+	newForce += friction;
 
 	// Apply force
-	sf::Vector2f acceleration = outputForce / mass;
+	sf::Vector2f acceleration = newForce / mass;
 	sf::Vector2f newVelocity = velocity + (acceleration * period.asSeconds());
 
-	// TODO normalise first!
-	if (acos(dotProduct(velocity, newVelocity)) > 90)	// Car is completely stopping/turning around
+	if (angleBetween(velocity, newVelocity) > 90)	// Car is completely stopping/turning around
 	{
 		// full stop
 		velocity.x = 0;

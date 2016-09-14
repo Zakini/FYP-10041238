@@ -1,7 +1,10 @@
 #include "carFsm.h"
 #include "car.h"
+#include "vectorMaths.h"
 
 #include <SFML/System/Vector2.hpp>
+
+using jw::maths::length;
 
 void jw::carFsm::moveToHome::update(sf::Time period)
 {
@@ -45,21 +48,21 @@ jw::fsm jw::carFsm::generate(car& targetCar)
 {
 	fsm outputFsm;
 
-	outputFsm.addState(1, new nullState());
-	outputFsm.addState(2, new moveToHome(targetCar));
-	outputFsm.addState(3, new pathToWork(targetCar));
-	outputFsm.addState(4, new travelling(targetCar));
-	outputFsm.addState(5, new pathToHome(targetCar));
-	outputFsm.addState(6, new travelling(targetCar));
+	outputFsm.fsmState(1, new nullState());
+	outputFsm.fsmState(2, new moveToHome(targetCar));
+	outputFsm.fsmState(3, new pathToWork(targetCar));
+	outputFsm.fsmState(4, new travelling(targetCar));
+	outputFsm.fsmState(5, new pathToHome(targetCar));
+	outputFsm.fsmState(6, new travelling(targetCar));
 
-	outputFsm.addTransition(1, 2, new nullTransition());
-	outputFsm.addTransition(2, 3, new nullTransition());
-	outputFsm.addTransition(3, 4, new nullTransition());
-	outputFsm.addTransition(4, 5, new arrived(targetCar));
-	outputFsm.addTransition(5, 6, new nullTransition());
-	outputFsm.addTransition(6, 3, new arrived(targetCar));
+	outputFsm.fsmTransitions(1, 2, new nullTransition());
+	outputFsm.fsmTransitions(2, 3, new nullTransition());
+	outputFsm.fsmTransitions(3, 4, new nullTransition());
+	outputFsm.fsmTransitions(4, 5, new arrived(targetCar));
+	outputFsm.fsmTransitions(5, 6, new nullTransition());
+	outputFsm.fsmTransitions(6, 3, new arrived(targetCar));
 
-	outputFsm.setInitialState(1);
+	outputFsm.initialState(1);
 
 	return outputFsm;
 }

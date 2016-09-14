@@ -4,6 +4,8 @@
 #include "location.h"
 #include "vectorMaths.h"
 
+using jw::maths::length;
+
 namespace jw
 {
 	const float road::defaultRenderDepth = 0.0f;

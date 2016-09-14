@@ -102,7 +102,7 @@ namespace UnitTests
 				}
 			}
 
-			Assert::IsTrue(true);	// pass
+			// test passed if you get here
 		}
 
 		TEST_METHOD(arrived)
@@ -147,14 +147,14 @@ namespace UnitTests
 			// state 1
 
 			// check exists
-			try { testState = testFsm.getState(1); }
+			try { testState = testFsm.fsmState(1); }
 			catch (...)	{ Assert::Fail(); }
 
 			// and is a nullState
 			if (dynamic_cast<jw::nullState*>(testState) == nullptr) Assert::Fail();
 
 			// and it has a transition to state 2
-			testTransitions = testFsm.getTransitionsFromState(1);
+			testTransitions = testFsm.fsmTransitions(1);
 
 			try { testTransitions.at(2); }
 			catch (...) { Assert::Fail(); }
@@ -162,14 +162,14 @@ namespace UnitTests
 			// state 2
 
 			// check exists
-			try { testState = testFsm.getState(2); }
+			try { testState = testFsm.fsmState(2); }
 			catch (...) { Assert::Fail(); }
 
 			// and is a moveToHome
 			if (dynamic_cast<jw::carFsm::moveToHome*>(testState) == nullptr) Assert::Fail();
 
 			// and it has a transition to state 3
-			testTransitions = testFsm.getTransitionsFromState(2);
+			testTransitions = testFsm.fsmTransitions(2);
 
 			try { testTransitions.at(3); }
 			catch (...) { Assert::Fail(); }
@@ -177,14 +177,14 @@ namespace UnitTests
 			// state 3
 
 			// check exists
-			try { testState = testFsm.getState(3); }
+			try { testState = testFsm.fsmState(3); }
 			catch (...) { Assert::Fail(); }
 
 			// and is a pathToWork
 			if (dynamic_cast<jw::carFsm::pathToWork*>(testState) == nullptr) Assert::Fail();
 
 			// and it has a transition to state 4
-			testTransitions = testFsm.getTransitionsFromState(3);
+			testTransitions = testFsm.fsmTransitions(3);
 
 			try { testTransitions.at(4); }
 			catch (...) { Assert::Fail(); }
@@ -192,14 +192,14 @@ namespace UnitTests
 			// state 4
 
 			// check exists
-			try { testState = testFsm.getState(4); }
+			try { testState = testFsm.fsmState(4); }
 			catch (...) { Assert::Fail(); }
 
 			// and is a travelling
 			if (dynamic_cast<jw::carFsm::travelling*>(testState) == nullptr) Assert::Fail();
 
 			// and it has a transition to state 5
-			testTransitions = testFsm.getTransitionsFromState(4);
+			testTransitions = testFsm.fsmTransitions(4);
 
 			try { testTransitions.at(5); }
 			catch (...) { Assert::Fail(); }
@@ -207,14 +207,14 @@ namespace UnitTests
 			// state 5
 
 			// check exists
-			try { testState = testFsm.getState(5); }
+			try { testState = testFsm.fsmState(5); }
 			catch (...) { Assert::Fail(); }
 
 			// and is a pathToHome
 			if (dynamic_cast<jw::carFsm::pathToHome*>(testState) == nullptr) Assert::Fail();
 
 			// and it has a transition to state 6
-			testTransitions = testFsm.getTransitionsFromState(5);
+			testTransitions = testFsm.fsmTransitions(5);
 
 			try { testTransitions.at(6); }
 			catch (...) { Assert::Fail(); }
@@ -222,20 +222,20 @@ namespace UnitTests
 			// state 6
 
 			// check exists
-			try { testState = testFsm.getState(6); }
+			try { testState = testFsm.fsmState(6); }
 			catch (...) { Assert::Fail(); }
 
 			// and is a travelling
 			if (dynamic_cast<jw::carFsm::travelling*>(testState) == nullptr) Assert::Fail();
 
 			// and it has a transition to state 3
-			testTransitions = testFsm.getTransitionsFromState(6);
+			testTransitions = testFsm.fsmTransitions(6);
 
 			try { testTransitions.at(3); }
 			catch (...) { Assert::Fail(); }
 
 			// check initial state is 1
-			Assert::IsTrue(testFsm.getInitialState() == 1);
+			Assert::IsTrue(testFsm.initialState() == 1);
 		}
 	};
 }

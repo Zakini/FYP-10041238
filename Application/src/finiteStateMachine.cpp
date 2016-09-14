@@ -77,7 +77,7 @@ void jw::fsm::update(sf::Time period)
 	_currentState->update(period);
 }
 
-jw::state* jw::fsm::getState(int stateId)
+jw::state* jw::fsm::fsmState(int stateId)
 {
 	return fsmGraph.nodeAt(stateId);	// POSSIBLE clone?
 }
@@ -87,7 +87,7 @@ jw::state* jw::fsm::currentState()
 	return _currentState;
 }
 
-jw::fsm::transitions_container_type jw::fsm::getTransitionsFromState(int stateId)
+jw::fsm::transitions_container_type jw::fsm::fsmTransitions(int stateId)
 {
 	return fsmGraph.edgesAt(stateId);	// POSSIBLE clone?
 }
@@ -97,23 +97,23 @@ jw::fsm::transitions_container_type jw::fsm::currentPossibleTransitions()
 	return *possibleTransitions;
 }
 
-int jw::fsm::getInitialState()
+int jw::fsm::initialState()
 {
 	return initialStateId;
 }
 
-void jw::fsm::addState(int id, state_type newNode)
+void jw::fsm::fsmState(int id, state_type newNode)
 {
 	fsmGraph.insertNode(id, newNode);
-	setInitialState(id);
+	initialState(id);
 }
 
-void jw::fsm::addTransition(int fromId, int toId, transition_type newTransition)
+void jw::fsm::fsmTransitions(int fromId, int toId, transition_type newTransition)
 {
 	fsmGraph.insertEdge(fromId, toId, newTransition);
 }
 
-void jw::fsm::setInitialState(int id)
+void jw::fsm::initialState(int id)
 {
 	initialStateId = id;
 }

@@ -16,10 +16,10 @@ namespace UnitTests
 
 			jw::state* expectedState = new jw::nullState();
 			jw::transition* expectedTransition = new jw::nullTransition();
-			testFsm.addState(1, expectedState);
-			testFsm.addState(2, new jw::nullState());
-			testFsm.addTransition(1, 2, expectedTransition);
-			testFsm.setInitialState(1);
+			testFsm.fsmState(1, expectedState);
+			testFsm.fsmState(2, new jw::nullState());
+			testFsm.fsmTransitions(1, 2, expectedTransition);
+			testFsm.initialState(1);
 
 			testFsm.initialise();
 
@@ -32,10 +32,10 @@ namespace UnitTests
 			jw::fsm testFsm;
 
 			jw::state* expectedState = new jw::nullState();
-			testFsm.addState(1, new jw::nullState());
-			testFsm.addState(2, expectedState);
-			testFsm.addTransition(1, 2, new jw::nullTransition());
-			testFsm.setInitialState(1);
+			testFsm.fsmState(1, new jw::nullState());
+			testFsm.fsmState(2, expectedState);
+			testFsm.fsmTransitions(1, 2, new jw::nullTransition());
+			testFsm.initialState(1);
 
 			testFsm.initialise();
 			testFsm.update(sf::Time());	// zero time, null states/transitions do nothing anyway
@@ -49,9 +49,9 @@ namespace UnitTests
 			jw::fsm testFsm;
 
 			jw::state* expectedState = new jw::nullState();
-			testFsm.addState(1, expectedState);
+			testFsm.fsmState(1, expectedState);
 
-			Assert::IsTrue(testFsm.getState(1) == expectedState);
+			Assert::IsTrue(testFsm.fsmState(1) == expectedState);
 		}
 
 		TEST_METHOD(addGetTransition)
@@ -59,20 +59,20 @@ namespace UnitTests
 			jw::fsm testFsm;
 
 			jw::transition* expectedTransition = new jw::nullTransition();
-			testFsm.addState(1, new jw::nullState());
-			testFsm.addState(2, new jw::nullState());
-			testFsm.addTransition(1, 2, expectedTransition);
+			testFsm.fsmState(1, new jw::nullState());
+			testFsm.fsmState(2, new jw::nullState());
+			testFsm.fsmTransitions(1, 2, expectedTransition);
 
-			Assert::IsTrue(testFsm.getTransitionsFromState(1).at(2) == expectedTransition);
+			Assert::IsTrue(testFsm.fsmTransitions(1).at(2) == expectedTransition);
 		}
 
 		TEST_METHOD(setGetInitialState)
 		{
 			jw::fsm testFsm;
 
-			testFsm.setInitialState(1);
+			testFsm.initialState(1);
 
-			Assert::IsTrue(testFsm.getInitialState() == 1);
+			Assert::IsTrue(testFsm.initialState() == 1);
 		}
 	};
 }

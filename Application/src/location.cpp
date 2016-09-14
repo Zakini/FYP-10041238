@@ -3,6 +3,8 @@
 #include <typeinfo>
 #include "vectorMaths.h"
 
+using jw::maths::length;
+
 const float defaultRenderDepth = 1.0f;
 
 namespace jw
