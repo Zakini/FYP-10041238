@@ -2,7 +2,7 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include "SFML/System/Vector2.hpp"
+#include <SFML/System/Vector2.hpp>
 
 namespace jw
 {
@@ -29,7 +29,7 @@ namespace jw
 		template<typename T>
 		T angleBetween(sf::Vector2<T> v, sf::Vector2<T> w)
 		{
-			return acos(dotProduct(normalise(v), normalise(w))) * 180.0f / M_PI;
+			return T(acos(dotProduct(normalise(v), normalise(w))) * 180.0f / M_PI);
 		}
 	}
 }

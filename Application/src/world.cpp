@@ -80,7 +80,13 @@ namespace jw
 			road roadEdge(source, dest);
 			bool bidirectional = roadJson.at(bidirectionalKey);
 
-			outputGraph->insertEdge(sourceId, destId, roadEdge, bidirectional);
+			outputGraph->insertEdge(sourceId, destId, roadEdge);
+
+			if (bidirectional)
+			{
+				roadEdge.flip();
+				outputGraph->insertEdge(destId, sourceId, roadEdge);
+			}
 		}
 
 		return outputGraph;

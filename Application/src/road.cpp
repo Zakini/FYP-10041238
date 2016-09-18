@@ -3,16 +3,41 @@
 #include <typeinfo>
 #include "location.h"
 #include "vectorMaths.h"
+#include <utility>
 
 using jw::maths::length;
+using jw::maths::normalise;
 
 namespace jw
 {
 	const float road::defaultRenderDepth = 0.0f;
+	const float road::renderOffset = 3.0f;
+
+	road::road(location* p_from, location* p_to)
+		: _from(p_from)
+		, _to(p_to)
+		, fromPosition()
+		, toPosition()
+		, gameObject(defaultRenderDepth)
+	{
+		if (_from == nullptr || _to == nullptr) return;
+
+		calcPositions();
+
+		renderShape.lineVector(fromPosition, toPosition);
+		renderShape.thickness(4.0f);
+	}
 
 	float road::cost()
 	{
-		return from->pathingHeuristic(to);
+		return _from->pathingHeuristic(_to);
+	}
+
+	void road::flip()
+	{
+		std::swap(_from, _to);
+		calcPositions();
+		renderShape.lineVector(fromPosition, toPosition);
 	}
 
 	void road::update(sf::Time timeSinceLastFrame)
@@ -21,25 +46,29 @@ namespace jw
 
 	void road::draw(sf::RenderWindow& renderTarget)
 	{
-		// Mostly copied from https://github.com/SFML/SFML/wiki/Source:-Line-segment-with-thickness
-		// POSSIBLE Move to a LineShape class?
-
-		sf::Vector2f targetVector = to->position() - from->position();
-		sf::Vector2f unitVector = targetVector / length(targetVector);
-		sf::Vector2f perpendicularVector(-unitVector.y, unitVector.x);
-
-		sf::Vector2f offset = (lineThickness / 2.0f) * perpendicularVector;
-
-		renderShape[0].position = from->position() + offset;
-		renderShape[1].position = to->position() + offset;
-		renderShape[2].position = to->position() - offset;
-		renderShape[3].position = from->position() - offset;
-
-		for (int i = 0; i < renderShape.getVertexCount(); i++)
-		{
-			renderShape[i].color = sf::Color::Red;
-		}
-
 		renderTarget.draw(renderShape);
+	}
+
+	location* road::from()
+	{
+		return _from;
+	}
+
+	location* road::to()
+	{
+		return _to;
+	}
+
+	void road::calcPositions()
+	{
+		fromPosition = _from->position();
+		toPosition = _to->position();
+
+		Vector2f unitLineVector = normalise(toPosition - fromPosition);
+		Vector2f perpendicular(-unitLineVector.y, unitLineVector.x);	// points left
+		Vector2f leftOffset = perpendicular * renderOffset;
+
+		fromPosition += leftOffset;
+		toPosition += leftOffset;
 	}
 }

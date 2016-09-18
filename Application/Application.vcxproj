@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="lib\SFML-2.3.2-custom\lineShape.cpp" />
     <ClCompile Include="src\car.cpp" />
     <ClCompile Include="src\carFsm.cpp" />
     <ClCompile Include="src\finiteStateMachine.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="src\world.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="lib\SFML-2.3.2-custom\lineShape.h" />
     <ClInclude Include="src\car.h" />
     <ClInclude Include="src\carFsm.h" />
     <ClInclude Include="src\finiteStateMachine.h" />

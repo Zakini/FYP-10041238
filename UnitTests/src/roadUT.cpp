@@ -26,5 +26,38 @@ namespace UnitTests
 
 			Assert::IsTrue(testRoad.depth() == 0);
 		}
+
+		TEST_METHOD(flip)
+		{
+			sf::Vector2f fromVector(1, 1);
+			sf::Vector2f toVector(2, 2);
+
+			jw::location from(fromVector);
+			jw::location to(toVector);
+
+			jw::road testRoad(&from, &to);
+			testRoad.flip();
+
+			Assert::IsTrue(*testRoad.from() == toVector);
+			Assert::IsTrue(*testRoad.to() == fromVector);
+		}
+
+		TEST_METHOD(from)
+		{
+			jw::location fromLocation(sf::Vector2f(1, 1));
+			jw::location toLocation(sf::Vector2f(2, 2));
+			jw::road testRoad(&fromLocation, &toLocation);
+
+			Assert::IsTrue(testRoad.from() == &fromLocation);
+		}
+
+		TEST_METHOD(to)
+		{
+			jw::location fromLocation(sf::Vector2f(1, 1));
+			jw::location toLocation(sf::Vector2f(2, 2));
+			jw::road testRoad(&fromLocation, &toLocation);
+
+			Assert::IsTrue(testRoad.to() == &toLocation);
+		}
 	};
 }
