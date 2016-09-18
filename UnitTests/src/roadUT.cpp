@@ -59,5 +59,15 @@ namespace UnitTests
 
 			Assert::IsTrue(testRoad.to() == &toLocation);
 		}
+	
+		TEST_METHOD(startPosition)
+		{
+			Assert::Fail();
+		}
+
+		TEST_METHOD(endPosition)
+		{
+			Assert::Fail();
+		}
 	};
 }

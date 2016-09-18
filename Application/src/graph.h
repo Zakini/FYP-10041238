@@ -30,6 +30,7 @@ namespace jw
 		value_type& at(id_type targetId);
 		node_type& nodeAt(id_type targetId);
 		edge_container_type& edgesAt(id_type targetId);
+		// TODO edgeBetween(from, to) ?
 
 		// Meta
 		int size();

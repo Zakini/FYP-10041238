@@ -117,7 +117,7 @@ void jw::car::generateForce(sf::Time period)
 	float currentStoppingDistance = std::pow(speed, 2) / (2 * maxBrakeForce);
 
 	int targetLocationId = _currentPath.front();
-	sf::Vector2f targetPosition = pather->getLocationPosition(targetLocationId);
+	sf::Vector2f targetPosition = pather->getRoadEndPosition(currentLocationID, targetLocationId);
 	sf::Vector2f vectorToTarget = targetPosition - _position;
 	float distanceFromTarget = length(vectorToTarget);
 	
@@ -156,6 +156,7 @@ void jw::car::generateForce(sf::Time period)
 	newForce += friction;
 
 	// Apply force
+	// TODO separate again
 	sf::Vector2f acceleration = newForce / mass;
 	sf::Vector2f newVelocity = velocity + (acceleration * period.asSeconds());
 

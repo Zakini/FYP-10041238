@@ -72,6 +72,11 @@ namespace jw
 		return targetGraph->nodeAt(id).position();
 	}
 
+	sf::Vector2f pathEngine::getRoadEndPosition(int fromId, int toId)
+	{
+		return targetGraph->edgesAt(fromId).at(toId).endPosition();
+	}
+
 	bool pathEngine::comparePriority::operator()(pathingTuple a, pathingTuple b)
 	{
 		return a.priority > b.priority;

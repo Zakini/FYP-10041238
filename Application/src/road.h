@@ -19,15 +19,17 @@ namespace jw
 		virtual void draw(sf::RenderWindow& renderTarget) override;	// POSSIBLE UT?
 
 		// Accessors
+		sf::Vector2f startPosition() { return _startPosition; }
+		sf::Vector2f endPosition() { return _endPosition; }
 		// Only added for UTs
-		location* from();
-		location* to();
+		location* from() { return _from; }
+		location* to() { return _to; }
 
 	private:
 		void calcPositions();
 
 		location* _from, * _to;
-		sf::Vector2f fromPosition, toPosition;
+		sf::Vector2f _startPosition, _endPosition;
 		lineShape renderShape;
 
 		const static float defaultRenderDepth;

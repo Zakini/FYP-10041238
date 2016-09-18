@@ -27,7 +27,7 @@ void jw::carFsm::travelling::update(sf::Time period)
 
 	// check if reached current step of path
 	int targetLocationId = targetCar._currentPath.front();
-	sf::Vector2f targetPosition = targetCar.pather->getLocationPosition(targetLocationId);
+	sf::Vector2f targetPosition = targetCar.pather->getRoadEndPosition(targetCar.currentLocationID, targetLocationId);
 	float distanceFromTarget = length(targetCar._position - targetPosition);
 	float currentSpeed = length(targetCar.velocity);
 	if (distanceFromTarget <= arrivalThreshold && currentSpeed < 1)

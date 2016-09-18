@@ -30,6 +30,7 @@ namespace jw
 
 		deque<int> findPath(int fromId, int toId);
 		sf::Vector2f getLocationPosition(int id);
+		sf::Vector2f getRoadEndPosition(int fromId, int toId);
 
 	private:
 		shared_ptr<graph_type> targetGraph;

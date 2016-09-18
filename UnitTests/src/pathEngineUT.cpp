@@ -241,5 +241,10 @@ namespace UnitTests
 
 			Assert::IsTrue(testPather.getLocationPosition(1) == sf::Vector2f(10, -3));
 		}
+	
+		TEST_METHOD(getRoadEndPosition)
+		{
+			Assert::Fail();
+		}
 	};
 }
