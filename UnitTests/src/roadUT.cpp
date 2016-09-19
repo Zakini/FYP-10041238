@@ -3,6 +3,7 @@
 #include <SFML/System/Vector2.hpp>
 #include "../../Application/src/road.h"
 #include "../../Application/src/location.h"
+#include "../../Application/src/vectorMaths.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -60,14 +61,22 @@ namespace UnitTests
 			Assert::IsTrue(testRoad.to() == &toLocation);
 		}
 	
-		TEST_METHOD(startPosition)
+		TEST_METHOD(startEndPosition)
 		{
-			Assert::Fail();
-		}
+			sf::Vector2f fromPosition(0, 0);
+			sf::Vector2f toPosition(5, 0);
+			jw::location fromLocation(fromPosition);
+			jw::location toLocation(toPosition);
+			jw::road testRoad(&fromLocation, &toLocation);
 
-		TEST_METHOD(endPosition)
-		{
-			Assert::Fail();
+			sf::Vector2f roadVector = toPosition - fromPosition;
+			sf::Vector2f unitPerpendicular = jw::maths::normalise(sf::Vector2f(-roadVector.y, roadVector.x));
+
+			sf::Vector2f expectedStart = fromPosition + unitPerpendicular * 3.0f;
+			sf::Vector2f expectedEnd = toPosition + unitPerpendicular * 3.0f;
+
+			Assert::IsTrue(testRoad.startPosition() == expectedStart);
+			Assert::IsTrue(testRoad.endPosition() == expectedEnd);
 		}
 	};
 }

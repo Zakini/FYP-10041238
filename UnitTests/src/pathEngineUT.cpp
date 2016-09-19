@@ -244,7 +244,12 @@ namespace UnitTests
 	
 		TEST_METHOD(getRoadEndPosition)
 		{
-			Assert::Fail();
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "pather-test2.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
+
+			Assert::IsTrue(testPather.getRoadEndPosition(1, 2) == testGraph->edgesAt(1).at(2).endPosition());
+			Assert::IsTrue(testPather.getRoadEndPosition(2, 1) == testGraph->edgesAt(2).at(1).endPosition());
 		}
 	};
 }
