@@ -55,7 +55,7 @@ namespace jw
 		_endPosition = _to->position();
 
 		Vector2f unitLineVector = normalise(_endPosition - _startPosition);
-		Vector2f perpendicular(-unitLineVector.y, unitLineVector.x);	// points left
+		Vector2f perpendicular(unitLineVector.y, -unitLineVector.x);	// points left
 		Vector2f leftOffset = perpendicular * renderOffset;
 
 		_startPosition += leftOffset;

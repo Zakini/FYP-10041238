@@ -108,27 +108,25 @@ void jw::car::pathTo(int targetId)
 }
 
 // Move to target, aim to be stationary on arrival
-void jw::car::generateForce(sf::Time period)
+sf::Vector2f jw::car::generateForce(sf::Vector2f target, sf::Time period)
 {
 	// Calculate force
-	sf::Vector2f newForce;
+	sf::Vector2f force;
 
 	float speed = length(velocity);
 	float currentStoppingDistance = std::pow(speed, 2) / (2 * maxBrakeForce);
 
-	int targetLocationId = _currentPath.front();
-	sf::Vector2f targetPosition = pather->getRoadEndPosition(currentLocationID, targetLocationId);
-	sf::Vector2f vectorToTarget = targetPosition - _position;
+	sf::Vector2f vectorToTarget = target - _position;
 	float distanceFromTarget = length(vectorToTarget);
 	
-	if (distanceFromTarget <= currentStoppingDistance || distanceFromTarget <= carFsm::arrivalThreshold)
+	if (distanceFromTarget <= currentStoppingDistance || distanceFromTarget <= carFsm::arrivalDistanceThreshold)
 	{
 		if (speed > 0)
 		{
 			// decelerate
 			// negate direction for opposite braking force
 			sf::Vector2f direction = velocity / speed;
-			newForce = -direction * maxBrakeForce;
+			force = -direction * maxBrakeForce;
 		}// else already stopped
 	}
 	else	// far from target
@@ -140,12 +138,12 @@ void jw::car::generateForce(sf::Time period)
 		if (length(idealForce) <= maxEngineForce)
 		{
 			// accelerate gently if close to target
-			newForce = idealForce;
+			force = idealForce;
 		}
 		else
 		{
 			sf::Vector2f forceDirection = normalise(idealForce);
-			newForce = forceDirection * maxEngineForce;
+			force = forceDirection * maxEngineForce;
 		}
 	}
 
@@ -153,11 +151,14 @@ void jw::car::generateForce(sf::Time period)
 	const float frictionCoefficient = 0.3f;
 	// negate velocity for opposite force
 	sf::Vector2f friction = -velocity * (frictionCoefficient * mass * gravitationalConstant);	// mass * gravity = normal force
-	newForce += friction;
+	force += friction;
 
-	// Apply force
-	// TODO separate again
-	sf::Vector2f acceleration = newForce / mass;
+	return force;
+}
+
+void jw::car::applyForce(sf::Vector2f force, sf::Time period)
+{
+	sf::Vector2f acceleration = force / mass;
 	sf::Vector2f newVelocity = velocity + (acceleration * period.asSeconds());
 
 	if (angleBetween(velocity, newVelocity) > 90)	// Car is completely stopping/turning around

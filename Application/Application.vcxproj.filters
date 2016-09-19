@@ -92,5 +92,11 @@
     <ClInclude Include="lib\SFML-2.3.2-custom\lineShape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\priorityGraph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

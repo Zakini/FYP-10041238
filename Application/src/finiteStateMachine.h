@@ -1,9 +1,12 @@
 #pragma once
 
-#include "graph.h"
+#include "priorityGraph.h"
 #include "state.h"
 #include "transition.h"
 #include <SFML/System/Time.hpp>
+#include <utility>
+
+using std::pair;
 
 namespace jw
 {
@@ -13,7 +16,8 @@ namespace jw
 	public:
 		using state_type = state*;
 		using transition_type = transition*;
-		using container_type = graph<state_type, transition_type>;
+		using transition_key = pair<int, int>;	// <priority/order, target id>
+		using container_type = priorityGraph<state_type, transition_type>;
 		using transitions_container_type = container_type::edge_container_type;
 
 		// POSSIBLE UT c'tors/d'tors/assign op?
@@ -40,6 +44,7 @@ namespace jw
 		// Modifiers
 		void fsmState(int id, state_type newNode);
 		void fsmTransitions(int fromId, int toId, transition_type newTransition);
+		void fsmTransitions(int fromId, int toId, transition_type newTransition, int priority);
 		void initialState(int id);
 
 	private:

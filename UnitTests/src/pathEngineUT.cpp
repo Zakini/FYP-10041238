@@ -242,6 +242,16 @@ namespace UnitTests
 			Assert::IsTrue(testPather.getLocationPosition(1) == sf::Vector2f(10, -3));
 		}
 	
+		TEST_METHOD(getRoadStartPosition)
+		{
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "pather-test2.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
+
+			Assert::IsTrue(testPather.getRoadStartPosition(1, 2) == testGraph->edgesAt(1).at(2).startPosition());
+			Assert::IsTrue(testPather.getRoadStartPosition(2, 1) == testGraph->edgesAt(2).at(1).startPosition());
+		}
+
 		TEST_METHOD(getRoadEndPosition)
 		{
 			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "pather-test2.json");

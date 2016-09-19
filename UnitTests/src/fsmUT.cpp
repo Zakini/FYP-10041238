@@ -18,13 +18,13 @@ namespace UnitTests
 			jw::transition* expectedTransition = new jw::nullTransition();
 			testFsm.fsmState(1, expectedState);
 			testFsm.fsmState(2, new jw::nullState());
-			testFsm.fsmTransitions(1, 2, expectedTransition);
+			testFsm.fsmTransitions(1, 2, expectedTransition, 1);
 			testFsm.initialState(1);
 
 			testFsm.initialise();
 
 			Assert::IsTrue(testFsm.currentState() == expectedState);
-			Assert::IsTrue(testFsm.currentPossibleTransitions().at(2) == expectedTransition);
+			Assert::IsTrue(testFsm.currentPossibleTransitions().at(std::make_pair(1, 2)) == expectedTransition);
 		}
 
 		TEST_METHOD(updateGetCurrent)
@@ -61,9 +61,10 @@ namespace UnitTests
 			jw::transition* expectedTransition = new jw::nullTransition();
 			testFsm.fsmState(1, new jw::nullState());
 			testFsm.fsmState(2, new jw::nullState());
-			testFsm.fsmTransitions(1, 2, expectedTransition);
+			testFsm.fsmTransitions(1, 2, expectedTransition, 1);
 
-			Assert::IsTrue(testFsm.fsmTransitions(1).at(2) == expectedTransition);
+			Assert::IsTrue(testFsm.fsmTransitions(1).at(std::make_pair(1, 2)) == expectedTransition);
+			Assert::Fail();	// TODO test multiple priorities + auto priorities
 		}
 
 		TEST_METHOD(setGetInitialState)

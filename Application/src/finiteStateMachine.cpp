@@ -1,9 +1,9 @@
 #include "finiteStateMachine.h"
 
 #include <stdexcept>
-#include <utility>
 
 using std::domain_error;
+using std::make_pair;
 
 jw::fsm::fsm(const fsm& toCopy) : initialStateId(toCopy.initialStateId)
 {
@@ -26,10 +26,11 @@ jw::fsm::fsm(const fsm& toCopy) : initialStateId(toCopy.initialStateId)
 
 		for (auto& idTransitionPair : currentTransitions)
 		{
-			int currentToId = idTransitionPair.first;
+			int currentToId = idTransitionPair.first.second;
+			int currentEdgePriority = idTransitionPair.first.first;
 			transition* currentTransition = idTransitionPair.second;
 
-			thisGraph.insertEdge(currentFromId, currentToId, currentTransition->clone());
+			thisGraph.insertEdge(currentFromId, currentToId, currentTransition->clone(), currentEdgePriority);
 		}
 	}
 
@@ -116,6 +117,11 @@ void jw::fsm::fsmTransitions(int fromId, int toId, transition_type newTransition
 	fsmGraph.insertEdge(fromId, toId, newTransition);
 }
 
+void jw::fsm::fsmTransitions(int fromId, int toId, transition_type newTransition, int priority)
+{
+	fsmGraph.insertEdge(fromId, toId, newTransition, priority);
+}
+
 void jw::fsm::initialState(int id)
 {
 	initialStateId = id;
@@ -136,7 +142,7 @@ void jw::fsm::checkTransitions()
 {
 	for (auto& currentTransitionPair : *possibleTransitions)
 	{
-		int possibleNewState = currentTransitionPair.first;
+		int possibleNewState = currentTransitionPair.first.second;
 		transition* currentTransition = currentTransitionPair.second;
 
 		if (currentTransition->changeState())

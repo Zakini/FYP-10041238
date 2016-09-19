@@ -25,8 +25,12 @@ namespace jw
 		friend class carFsm::moveToHome;
 		friend class carFsm::pathToHome;
 		friend class carFsm::pathToWork;
-		friend class carFsm::travelling;
+		friend class carFsm::enterRoad;
+		friend class carFsm::followRoad;
+		friend class carFsm::updatePath;
 		friend class carFsm::arrived;
+		friend class carFsm::atRoadStart;
+		friend class carFsm::atRoadEnd;
 
 		car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId);
 
@@ -49,7 +53,8 @@ namespace jw
 
 	private:
 		// POSSIBLE separate for UTs?
-		void generateForce(sf::Time period);
+		sf::Vector2f generateForce(sf::Vector2f target, sf::Time period);
+		void applyForce(sf::Vector2f force, sf::Time period);
 
 		sf::Vector2f _position;
 		int currentLocationID;

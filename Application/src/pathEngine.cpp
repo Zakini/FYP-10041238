@@ -67,12 +67,17 @@ namespace jw
 		return deque<int>();
 	}
 
-	sf::Vector2f pathEngine::getLocationPosition(int id)
+	Vector2f pathEngine::getLocationPosition(int id)
 	{
 		return targetGraph->nodeAt(id).position();
 	}
 
-	sf::Vector2f pathEngine::getRoadEndPosition(int fromId, int toId)
+	Vector2f pathEngine::getRoadStartPosition(int fromId, int toId)
+	{
+		return targetGraph->edgesAt(fromId).at(toId).startPosition();
+	}
+
+	Vector2f pathEngine::getRoadEndPosition(int fromId, int toId)
 	{
 		return targetGraph->edgesAt(fromId).at(toId).endPosition();
 	}

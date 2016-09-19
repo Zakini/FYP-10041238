@@ -18,6 +18,7 @@ using std::make_pair;
 using std::set;
 using std::greater;
 using std::shared_ptr;
+using sf::Vector2f;
 
 namespace jw
 {
@@ -29,8 +30,9 @@ namespace jw
 		pathEngine(shared_ptr<graph_type> p_targetGraph) : targetGraph(p_targetGraph) {}
 
 		deque<int> findPath(int fromId, int toId);
-		sf::Vector2f getLocationPosition(int id);
-		sf::Vector2f getRoadEndPosition(int fromId, int toId);
+		Vector2f getLocationPosition(int id);
+		Vector2f getRoadStartPosition(int fromId, int toId);
+		Vector2f getRoadEndPosition(int fromId, int toId);
 
 	private:
 		shared_ptr<graph_type> targetGraph;
