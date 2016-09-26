@@ -21,20 +21,18 @@ void jw::carFsm::pathToWork::update(sf::Time period)
 	targetCar.pathTo(targetCar.workLocation());
 }
 
-void jw::carFsm::enterRoad::update(sf::Time period)
+void jw::carFsm::targetRoadStart::update(sf::Time period)
 {
-	int targetLocationId = targetCar._currentPath.front();
-	sf::Vector2f targetPosition = targetCar.pather->getRoadStartPosition(targetCar.currentLocationID, targetLocationId);
-	sf::Vector2f force = targetCar.generateForce(targetPosition, period);
-	targetCar.applyForce(force, period);
+	int targetLocationId = targetCar.currentPath().front();
+	sf::Vector2f target = targetCar.pather->getRoadStartPosition(targetCar.currentLocationID, targetLocationId);
+	targetCar.targetPosition(target);
 }
 
-void jw::carFsm::followRoad::update(sf::Time period)
+void jw::carFsm::targetRoadEnd::update(sf::Time period)
 {
-	int targetLocationId = targetCar._currentPath.front();
-	sf::Vector2f targetPosition = targetCar.pather->getRoadEndPosition(targetCar.currentLocationID, targetLocationId);
-	sf::Vector2f force = targetCar.generateForce(targetPosition, period);
-	targetCar.applyForce(force, period);
+	int targetLocationId = targetCar.currentPath().front();
+	sf::Vector2f target = targetCar.pather->getRoadEndPosition(targetCar.currentLocationID, targetLocationId);
+	targetCar.targetPosition(target);
 }
 
 void jw::carFsm::updatePath::update(sf::Time period)
@@ -56,24 +54,11 @@ bool jw::carFsm::arrived::changeState()
 	return targetCar._currentPath.empty();
 }
 
-bool jw::carFsm::atRoadStart::changeState()
+bool jw::carFsm::atTarget::changeState()
 {
-	int targetLocationId = targetCar._currentPath.front();
-	sf::Vector2f targetPosition = targetCar.pather->getRoadStartPosition(targetCar.currentLocationID, targetLocationId);
+	if (targetCar._targetPosition == nullptr) return false;
 
-	float distanceFromTarget = length(targetCar._position - targetPosition);
-	float currentSpeed = length(targetCar.velocity);
-
-	if (distanceFromTarget <= arrivalDistanceThreshold && currentSpeed < arrivalSpeedThreshold) return true;
-	else return false;
-}
-
-bool jw::carFsm::atRoadEnd::changeState()
-{
-	int targetLocationId = targetCar._currentPath.front();
-	sf::Vector2f targetPosition = targetCar.pather->getRoadEndPosition(targetCar.currentLocationID, targetLocationId);
-
-	float distanceFromTarget = length(targetCar._position - targetPosition);
+	float distanceFromTarget = length(targetCar._position - *targetCar._targetPosition);
 	float currentSpeed = length(targetCar.velocity);
 
 	if (distanceFromTarget <= arrivalDistanceThreshold && currentSpeed < arrivalSpeedThreshold) return true;
@@ -84,29 +69,30 @@ jw::fsm jw::carFsm::generate(car& targetCar)
 {
 	fsm outputFsm;
 
+	// TODO put nullStates after targetStates? no need to repeatedly set target
 	outputFsm.fsmState( 1, new nullState());
 	outputFsm.fsmState( 2, new moveToHome(targetCar));
 	outputFsm.fsmState( 3, new pathToWork(targetCar));
-	outputFsm.fsmState( 4, new enterRoad(targetCar));
-	outputFsm.fsmState( 5, new followRoad(targetCar));
+	outputFsm.fsmState( 4, new targetRoadStart(targetCar));
+	outputFsm.fsmState( 5, new targetRoadEnd(targetCar));
 	outputFsm.fsmState( 6, new updatePath(targetCar));
 	outputFsm.fsmState( 7, new pathToHome(targetCar));
-	outputFsm.fsmState( 8, new enterRoad(targetCar));
-	outputFsm.fsmState( 9, new followRoad(targetCar));
+	outputFsm.fsmState( 8, new targetRoadStart(targetCar));
+	outputFsm.fsmState( 9, new targetRoadEnd(targetCar));
 	outputFsm.fsmState(10, new updatePath(targetCar));
 
-	outputFsm.fsmTransitions( 1,  2, new nullTransition());
-	outputFsm.fsmTransitions( 2,  3, new nullTransition());
-	outputFsm.fsmTransitions( 3,  4, new nullTransition());
-	outputFsm.fsmTransitions( 4,  5, new atRoadStart(targetCar));
-	outputFsm.fsmTransitions( 5,  6, new atRoadEnd(targetCar));
-	outputFsm.fsmTransitions( 6,  7, new arrived(targetCar));
-	outputFsm.fsmTransitions( 6,  4, new nullTransition());
-	outputFsm.fsmTransitions( 7,  8, new nullTransition());
-	outputFsm.fsmTransitions( 8,  9, new atRoadStart(targetCar));
-	outputFsm.fsmTransitions( 9, 10, new atRoadEnd(targetCar));
-	outputFsm.fsmTransitions(10,  3, new arrived(targetCar));
-	outputFsm.fsmTransitions(10,  8, new nullTransition());
+	outputFsm.fsmTransition( 1,  2, new nullTransition());
+	outputFsm.fsmTransition( 2,  3, new nullTransition());
+	outputFsm.fsmTransition( 3,  4, new nullTransition());
+	outputFsm.fsmTransition( 4,  5, new atTarget(targetCar));
+	outputFsm.fsmTransition( 5,  6, new atTarget(targetCar));
+	outputFsm.fsmTransition( 6,  7, new arrived(targetCar));
+	outputFsm.fsmTransition( 6,  4, new nullTransition());
+	outputFsm.fsmTransition( 7,  8, new nullTransition());
+	outputFsm.fsmTransition( 8,  9, new atTarget(targetCar));
+	outputFsm.fsmTransition( 9, 10, new atTarget(targetCar));
+	outputFsm.fsmTransition(10,  3, new arrived(targetCar));
+	outputFsm.fsmTransition(10,  8, new nullTransition());
 
 	outputFsm.initialState(1);
 

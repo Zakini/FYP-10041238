@@ -45,15 +45,18 @@ namespace UnitTests
 			Assert::IsTrue(testGraph.edgesAt(2).at(1) == 'a');
 		}
 
-		TEST_METHOD(size)
+		TEST_METHOD(sizeAndEmpty)
 		{
 			jw::graph<std::string, char> testGraph;
+
+			Assert::IsTrue(testGraph.empty());
 
 			testGraph.insertNode(1, "one");
 			testGraph.insertNode(2, "two");
 			testGraph.insertNode(3, "three");
 
 			Assert::IsTrue(testGraph.size() == 3);
+			Assert::IsFalse(testGraph.empty());
 		}
 
 		TEST_METHOD(begin)

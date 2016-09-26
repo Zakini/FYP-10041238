@@ -167,6 +167,7 @@
     <ClCompile Include="src\graphUT.cpp" />
     <ClCompile Include="src\locationUT.cpp" />
     <ClCompile Include="src\pathEngineUT.cpp" />
+    <ClCompile Include="src\priorityGraphUT.cpp" />
     <ClCompile Include="src\roadUT.cpp" />
     <ClCompile Include="src\vectorMathsUT.cpp" />
     <ClCompile Include="src\worldUT.cpp" />

@@ -14,7 +14,7 @@ namespace jw
 	// ### Declaration ###
 	// ###################
 	template<typename node, typename edge>
-	class graph : graphInterface<node, edge>
+	class graph : public graphInterface<node, edge>
 	{
 	public:
 		// POSSIBLE make edges a separate adjacency matrix?

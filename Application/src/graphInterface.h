@@ -16,6 +16,7 @@ namespace jw
 
 		// Meta
 		virtual int size() = 0;
+		virtual bool empty() { return size() == 0; }
 
 		// Modifiers
 		virtual void insertNode(node_id_type id, node_type newNode) = 0;

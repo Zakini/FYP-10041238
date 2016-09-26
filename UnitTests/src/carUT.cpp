@@ -121,6 +121,15 @@ namespace UnitTests
 			Assert::IsTrue(testCar.currentPath() == expectedPath);
 		}
 		
+		TEST_METHOD(getSetTarget)
+		{
+			jw::car testCar(nullptr, 1, 2, jw::fsm());
+			sf::Vector2f targetPosition(5, 3);
+
+			testCar.targetPosition(targetPosition);
+			Assert::IsTrue(testCar.targetPosition() == targetPosition);
+		}
+
 		TEST_METHOD(depth)
 		{
 			jw::car testCar(nullptr, 1, 2);

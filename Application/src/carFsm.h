@@ -69,23 +69,23 @@ namespace jw
 			virtual void update(sf::Time period) override;
 		};
 
-		class enterRoad : public carState
+		class targetRoadStart : public carState
 		{
 		public:
-			enterRoad(car& targetCar) : carState(targetCar) {}
+			targetRoadStart(car& targetCar) : carState(targetCar) {}
 
 			// Inherited via carState
-			virtual enterRoad* clone() override { return new enterRoad(*this); }
+			virtual targetRoadStart* clone() override { return new targetRoadStart(*this); }
 			virtual void update(sf::Time period) override;
 		};
 
-		class followRoad : public carState
+		class targetRoadEnd : public carState
 		{
 		public:
-			followRoad(car& targetCar) : carState(targetCar) {}
+			targetRoadEnd(car& targetCar) : carState(targetCar) {}
 
 			// Inherited via carState
-			virtual followRoad* clone() override { return new followRoad(*this); }
+			virtual targetRoadEnd* clone() override { return new targetRoadEnd(*this); }
 			virtual void update(sf::Time period) override;
 		};
 
@@ -109,23 +109,13 @@ namespace jw
 			virtual bool changeState() override;
 		};
 
-		class atRoadStart : public carTransition
+		class atTarget : public carTransition
 		{
 		public:
-			atRoadStart(car& targetCar) : carTransition(targetCar) {}
+			atTarget(car& targetCar) : carTransition(targetCar) {}
 
 			// Inherited via transition
-			virtual atRoadStart* clone() override { return new atRoadStart(*this); }
-			virtual bool changeState() override;
-		};
-
-		class atRoadEnd : public carTransition
-		{
-		public:
-			atRoadEnd(car& targetCar) : carTransition(targetCar) {}
-
-			// Inherited via transition
-			virtual atRoadEnd* clone() override { return new atRoadEnd(*this); }
+			virtual atTarget* clone() override { return new atTarget(*this); }
 			virtual bool changeState() override;
 		};
 

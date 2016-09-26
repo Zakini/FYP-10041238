@@ -18,7 +18,7 @@ namespace UnitTests
 			jw::transition* expectedTransition = new jw::nullTransition();
 			testFsm.fsmState(1, expectedState);
 			testFsm.fsmState(2, new jw::nullState());
-			testFsm.fsmTransitions(1, 2, expectedTransition, 1);
+			testFsm.fsmTransition(1, 2, expectedTransition, 1);
 			testFsm.initialState(1);
 
 			testFsm.initialise();
@@ -34,7 +34,7 @@ namespace UnitTests
 			jw::state* expectedState = new jw::nullState();
 			testFsm.fsmState(1, new jw::nullState());
 			testFsm.fsmState(2, expectedState);
-			testFsm.fsmTransitions(1, 2, new jw::nullTransition());
+			testFsm.fsmTransition(1, 2, new jw::nullTransition());
 			testFsm.initialState(1);
 
 			testFsm.initialise();
@@ -58,13 +58,18 @@ namespace UnitTests
 		{
 			jw::fsm testFsm;
 
-			jw::transition* expectedTransition = new jw::nullTransition();
+			jw::transition* expectedTransition1 = new jw::nullTransition();
+			jw::transition* expectedTransition2 = new jw::nullTransition();
+			jw::transition* expectedTransition3 = new jw::nullTransition();
 			testFsm.fsmState(1, new jw::nullState());
 			testFsm.fsmState(2, new jw::nullState());
-			testFsm.fsmTransitions(1, 2, expectedTransition, 1);
+			testFsm.fsmTransition(1, 2, expectedTransition1);		// auto priority 1
+			testFsm.fsmTransition(1, 2, expectedTransition2);		// auto priority 2
+			testFsm.fsmTransition(1, 2, expectedTransition3, 5);	// forced priority 5
 
-			Assert::IsTrue(testFsm.fsmTransitions(1).at(std::make_pair(1, 2)) == expectedTransition);
-			Assert::Fail();	// TODO test multiple priorities + auto priorities
+			Assert::IsTrue(testFsm.fsmTransition(1, 2, 1) == expectedTransition1);
+			Assert::IsTrue(testFsm.fsmTransition(1, 2, 2) == expectedTransition2);
+			Assert::IsTrue(testFsm.fsmTransition(1, 2, 5) == expectedTransition3);
 		}
 
 		TEST_METHOD(setGetInitialState)
@@ -74,6 +79,16 @@ namespace UnitTests
 			testFsm.initialState(1);
 
 			Assert::IsTrue(testFsm.initialState() == 1);
+		}
+	
+		TEST_METHOD(size)
+		{
+			jw::fsm testFsm;
+
+			testFsm.fsmState(1, new jw::nullState());
+			testFsm.fsmState(2, new jw::nullState());
+
+			Assert::IsTrue(testFsm.size() == 2);
 		}
 	};
 }

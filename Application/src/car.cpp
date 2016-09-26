@@ -19,7 +19,7 @@ const float defaultRenderDepth = 10.0f;
 
 const float gravitationalConstant = 9.81f;
 
-jw::car::car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId)
+jw::car::car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId, fsm carController)
 	: _position(0, 0)
 	, currentLocationID(0)
 	, velocity(0, 0)
@@ -30,7 +30,9 @@ jw::car::car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId)
 	, homeLocationId(p_homeLocationId)
 	, workLocationId(p_workLocationId)
 	, pather(p_pather)
-	, controller(carFsm::generate(*this))
+	, _currentPath()
+	, _targetPosition(nullptr)
+	, controller(carController)
 	, gameObject(defaultRenderDepth)
 {
 	renderShape.setOrigin(renderShape.getSize() / 2.0f);
@@ -86,6 +88,8 @@ void jw::car::update(sf::Time timeSinceLastFrame)
 {
 	controller.update(timeSinceLastFrame);
 
+	moveTowardTarget(timeSinceLastFrame);
+
 	renderShape.setPosition(_position);
 }
 
@@ -105,6 +109,14 @@ void jw::car::pathTo(int targetId)
 	}
 
 	_currentPath = newPath;
+}
+
+void jw::car::moveTowardTarget(sf::Time period)
+{
+	if (!_targetPosition) return;
+
+	sf::Vector2f force = generateForce(*_targetPosition, period);
+	applyForce(force, period);
 }
 
 // Move to target, aim to be stationary on arrival

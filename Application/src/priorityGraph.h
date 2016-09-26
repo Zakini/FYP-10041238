@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <map>
 #include <algorithm>
+#include <utility>
 
 // TODO UT
 namespace jw
@@ -27,7 +28,8 @@ namespace jw
 		value_type& at(node_id_type targetId);
 		virtual node_type& nodeAt(node_id_type targetId) override;
 		edge_container_type& edgesAt(node_id_type targetId);
-		// TODO edgeBetween(from, to) ?
+		edge_type& edgeBetween(node_id_type from, node_id_type to);
+		edge_type& edgeBetween(node_id_type from, node_id_type to, priority_type edgePriority);
 
 		// Meta
 		virtual int size() override;
@@ -63,6 +65,18 @@ namespace jw
 	typename priorityGraph<node, edge>::edge_container_type& priorityGraph<node, edge>::edgesAt(node_id_type targetId)
 	{
 		return at(targetId).second;
+	}
+
+	template<typename node, typename edge>
+	typename priorityGraph<node, edge>::edge_type& priorityGraph<node, edge>::edgeBetween(node_id_type from, node_id_type to)
+	{
+		return edgesAt(from).begin()->second;	// highest priority edge
+	}
+
+	template<typename node, typename edge>
+	typename priorityGraph<node, edge>::edge_type& priorityGraph<node, edge>::edgeBetween(node_id_type from, node_id_type to, priority_type edgePriority)
+	{
+		return edgesAt(from).at(std::make_pair(edgePriority, to));
 	}
 
 	template<typename node, typename edge>

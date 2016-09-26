@@ -70,7 +70,7 @@ namespace UnitTests
 			jw::road testRoad(&fromLocation, &toLocation);
 
 			sf::Vector2f roadVector = toPosition - fromPosition;
-			sf::Vector2f unitPerpendicular = jw::maths::normalise(sf::Vector2f(-roadVector.y, roadVector.x));
+			sf::Vector2f unitPerpendicular = jw::maths::normalise(sf::Vector2f(roadVector.y, -roadVector.x));
 
 			sf::Vector2f expectedStart = fromPosition + unitPerpendicular * 3.0f;
 			sf::Vector2f expectedEnd = toPosition + unitPerpendicular * 3.0f;

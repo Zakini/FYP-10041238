@@ -22,17 +22,19 @@ namespace jw
 	class car : public gameObject
 	{
 	public:
+		// TODO remove all friends!
 		friend class carFsm::moveToHome;
 		friend class carFsm::pathToHome;
 		friend class carFsm::pathToWork;
-		friend class carFsm::enterRoad;
-		friend class carFsm::followRoad;
+		friend class carFsm::targetRoadStart;
+		friend class carFsm::targetRoadEnd;
 		friend class carFsm::updatePath;
 		friend class carFsm::arrived;
-		friend class carFsm::atRoadStart;
-		friend class carFsm::atRoadEnd;
+		friend class carFsm::atTarget;
 
-		car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId);
+		car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId)
+			: car(p_pather, p_homeLocationId, p_workLocationId, carFsm::generate(*this)) {}
+		car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId, fsm carController);
 
 		static vector<car*> loadCars(string filepath, pathEngine* pather);
 		static vector<car*> loadCars(nlohmann::json carsJson, pathEngine* pather);
@@ -49,9 +51,12 @@ namespace jw
 		virtual void update(sf::Time timeSinceLastFrame) override;	// POSSIBLE UT?
 		virtual void draw(sf::RenderWindow& renderTarget) override;	// POSSIBLE UT?
 
+		void targetPosition(sf::Vector2f target) { _targetPosition = new sf::Vector2f(target); }
+		sf::Vector2f targetPosition() { return *_targetPosition; }	// TODO this can throw, is that OK?
 		void pathTo(int targetId);
 
 	private:
+		void moveTowardTarget(sf::Time period);
 		// POSSIBLE separate for UTs?
 		sf::Vector2f generateForce(sf::Vector2f target, sf::Time period);
 		void applyForce(sf::Vector2f force, sf::Time period);
@@ -66,6 +71,7 @@ namespace jw
 		int homeLocationId, workLocationId;
 		pathEngine* pather;
 		deque<int> _currentPath;
+		sf::Vector2f* _targetPosition;
 		fsm controller;
 
 		static const float defaultEngineForce;

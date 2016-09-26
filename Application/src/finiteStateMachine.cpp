@@ -36,8 +36,17 @@ jw::fsm::fsm(const fsm& toCopy) : initialStateId(toCopy.initialStateId)
 
 	// copy other bits
 	this->currentStateId = toCopy.currentStateId;
-	this->_currentState = this->fsmGraph.nodeAt(this->currentStateId);
-	this->possibleTransitions = &this->fsmGraph.edgesAt(this->currentStateId);
+
+	if (toCopy._currentState != nullptr)
+	{
+		this->_currentState = this->fsmGraph.nodeAt(this->currentStateId);
+		this->possibleTransitions = &this->fsmGraph.edgesAt(this->currentStateId);
+	}
+	else
+	{
+		this->_currentState = nullptr;
+		this->possibleTransitions = nullptr;
+	}
 }
 
 jw::fsm::fsm(fsm&& toMove) : fsm()
@@ -69,12 +78,15 @@ jw::fsm& jw::fsm::operator=(fsm assignFrom)
 
 void jw::fsm::initialise()
 {
+	if (fsmGraph.empty()) return;
+
 	_currentState = fsmGraph.nodeAt(initialStateId);
 	possibleTransitions = &fsmGraph.edgesAt(initialStateId);
 }
 
 void jw::fsm::update(sf::Time period)
 {
+	if (fsmGraph.empty()) return;
 	if (_currentState == nullptr) throw domain_error("fsm.update called before fsm.initialise");
 
 	checkTransitions();
@@ -91,9 +103,9 @@ jw::state* jw::fsm::currentState()
 	return _currentState;
 }
 
-jw::fsm::transitions_container_type jw::fsm::fsmTransitions(int stateId)
+jw::fsm::transition_type jw::fsm::fsmTransition(int fromId, int toId, int transitionPriority)
 {
-	return fsmGraph.edgesAt(stateId);	// POSSIBLE clone?
+	return fsmGraph.edgeBetween(fromId, toId, transitionPriority);
 }
 
 jw::fsm::transitions_container_type jw::fsm::currentPossibleTransitions()
@@ -112,12 +124,12 @@ void jw::fsm::fsmState(int id, state_type newNode)
 	initialState(id);
 }
 
-void jw::fsm::fsmTransitions(int fromId, int toId, transition_type newTransition)
+void jw::fsm::fsmTransition(int fromId, int toId, transition_type newTransition)
 {
 	fsmGraph.insertEdge(fromId, toId, newTransition);
 }
 
-void jw::fsm::fsmTransitions(int fromId, int toId, transition_type newTransition, int priority)
+void jw::fsm::fsmTransition(int fromId, int toId, transition_type newTransition, int priority)
 {
 	fsmGraph.insertEdge(fromId, toId, newTransition, priority);
 }

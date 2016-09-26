@@ -33,18 +33,21 @@ namespace jw
 		void initialise();
 		void update(sf::Time period);
 
+		// Meta
+		int size() { return fsmGraph.size(); }
+
 		// Access
 		// Added only for UTs
 		state_type fsmState(int stateId);
 		state_type currentState();
-		transitions_container_type fsmTransitions(int stateId);
+		transition_type fsmTransition(int fromId, int toId, int transitionPriority);
 		transitions_container_type currentPossibleTransitions();
 		int initialState();
 
 		// Modifiers
 		void fsmState(int id, state_type newNode);
-		void fsmTransitions(int fromId, int toId, transition_type newTransition);
-		void fsmTransitions(int fromId, int toId, transition_type newTransition, int priority);
+		void fsmTransition(int fromId, int toId, transition_type newTransition);
+		void fsmTransition(int fromId, int toId, transition_type newTransition, int priority);
 		void initialState(int id);
 
 	private:
