@@ -23,8 +23,8 @@ namespace UnitTests
 			std::string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test1.json";
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
-			jw::pathEngine testPather(testGraphSp);
-			std::vector<jw::car*> testCars = jw::car::loadCars(carJsonFilePath, &testPather);
+			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
+			std::vector<jw::car*> testCars = jw::car::loadCars(carJsonFilePath, testPather);
 
 			// Assert car 0's home is 1
 			Assert::IsTrue(testCars[0]->homeLocation() == 1);
@@ -42,12 +42,12 @@ namespace UnitTests
 			std::string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test1.json";
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
-			jw::pathEngine testPather(testGraphSp);
+			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
 			nlohmann::json testJson;
 
 			testFile >> testJson;
 
-			std::vector<jw::car*> testCars = jw::car::loadCars(testJson, &testPather);
+			std::vector<jw::car*> testCars = jw::car::loadCars(testJson, testPather);
 
 			// Assert car 0's home is 1
 			Assert::IsTrue(testCars[0]->homeLocation() == 1);
@@ -79,9 +79,9 @@ namespace UnitTests
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			jw::pathEngine testPather(testGraphSp);
+			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(&testPather, 1, 2);
+			jw::car testCar(testPather, 1, 2);
 
 			testCar.currentLocation(2);
 
@@ -112,9 +112,9 @@ namespace UnitTests
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			jw::pathEngine testPather(testGraphSp);
+			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(&testPather, 1, 2);
+			jw::car testCar(testPather, 1, 2);
 
 			testCar.currentLocation(2);
 
@@ -127,9 +127,9 @@ namespace UnitTests
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			jw::pathEngine testPather(testGraphSp);
+			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(&testPather, 1, 2);
+			jw::car testCar(testPather, 1, 2);
 
 			testCar.currentLocation(1);
 			testCar.pathTo(2);
@@ -149,11 +149,11 @@ namespace UnitTests
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			jw::pathEngine testPather(testGraphSp);
+			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(&testPather, 1, 2);
+			jw::car testCar(testPather, 1, 2);
 
-			Assert::IsTrue(testCar.pather() == &testPather);
+			Assert::IsTrue(testCar.pather() == testPather);
 		}
 
 		TEST_METHOD(getSetTarget)

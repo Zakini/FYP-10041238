@@ -9,9 +9,9 @@
 #include <SFML/System/Clock.hpp>
 #include "../../Application/src/finiteStateMachine.h"
 #include <stdexcept>
+#include <memory>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using std::out_of_range;
 
 namespace UnitTests
 {
@@ -24,14 +24,14 @@ namespace UnitTests
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			jw::pathEngine pather(testGraphSp);
+			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(&pather, 1, 2, jw::fsm());
+			jw::car testCar(pather, 1, 2, jw::fsm());
 			jw::carFsm::moveToHome testState(testCar);
 
 			testState.update(sf::seconds(0));	// move should be instantaneous
 
-			Assert::IsTrue(testCar.position() == pather.getLocationPosition(1));
+			Assert::IsTrue(testCar.position() == pather->getLocationPosition(1));
 			Assert::IsTrue(testCar.currentLocation() == 1);
 		}
 
@@ -41,9 +41,9 @@ namespace UnitTests
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			jw::pathEngine pather(testGraphSp);
+			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(&pather, 1, 2, jw::fsm());
+			jw::car testCar(pather, 1, 2, jw::fsm());
 			jw::carFsm::pathToHome testState(testCar);
 
 			testCar.currentLocation(2);			// move to non-home location
@@ -61,9 +61,9 @@ namespace UnitTests
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			jw::pathEngine pather(testGraphSp);
+			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(&pather, 1, 2, jw::fsm());
+			jw::car testCar(pather, 1, 2, jw::fsm());
 			jw::carFsm::pathToWork testState(testCar);
 
 			testCar.currentLocation(1);			// move to non-work location
@@ -81,10 +81,10 @@ namespace UnitTests
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			jw::pathEngine pather(testGraphSp);
+			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(&pather, 1, 2, jw::fsm());
-			testCar.targetPosition(pather.getRoadEndPosition(1, 2));
+			jw::car testCar(pather, 1, 2, jw::fsm());
+			testCar.targetPosition(pather->getRoadEndPosition(1, 2));
 			jw::carFsm::targetRoadStart testState(testCar);
 
 			testCar.currentLocation(1);	// move to non-work location
@@ -92,7 +92,7 @@ namespace UnitTests
 
 			testState.update(sf::seconds(0));	// not dependent on world time
 
-			Assert::IsTrue(testCar.targetPosition() == pather.getRoadStartPosition(1, 2));
+			Assert::IsTrue(testCar.targetPosition() == pather->getRoadStartPosition(1, 2));
 		}
 
 		TEST_METHOD(targetRoadEnd)
@@ -101,10 +101,10 @@ namespace UnitTests
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			jw::pathEngine pather(testGraphSp);
+			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(&pather, 1, 2, jw::fsm());
-			testCar.targetPosition(pather.getRoadEndPosition(1, 2));
+			jw::car testCar(pather, 1, 2, jw::fsm());
+			testCar.targetPosition(pather->getRoadEndPosition(1, 2));
 			jw::carFsm::targetRoadEnd testState(testCar);
 
 			testCar.currentLocation(1);	// move to non-work location
@@ -112,7 +112,7 @@ namespace UnitTests
 
 			testState.update(sf::seconds(0));	// not dependent on world time
 
-			Assert::IsTrue(testCar.targetPosition() == pather.getRoadEndPosition(1, 2));
+			Assert::IsTrue(testCar.targetPosition() == pather->getRoadEndPosition(1, 2));
 		}
 
 		TEST_METHOD(updatePath)
@@ -121,12 +121,12 @@ namespace UnitTests
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			jw::pathEngine pather(testGraphSp);
+			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(&pather, 1, 2, jw::fsm());
+			jw::car testCar(pather, 1, 2, jw::fsm());
 			testCar.currentLocation(1);
 			testCar.pathTo(2);
-			testCar.targetPosition(pather.getRoadEndPosition(1, 2));
+			testCar.targetPosition(pather->getRoadEndPosition(1, 2));
 
 			deque<int> initialPath = testCar.currentPath();
 			jw::carFsm::atTarget setupTransition(testCar);
@@ -159,11 +159,11 @@ namespace UnitTests
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			jw::pathEngine pather(testGraphSp);
+			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(&pather, 1, 2, jw::fsm());
+			jw::car testCar(pather, 1, 2, jw::fsm());
 			testCar.currentLocation(1);
-			testCar.targetPosition(pather.getRoadEndPosition(1, 2));
+			testCar.targetPosition(pather->getRoadEndPosition(1, 2));
 			jw::carFsm::arrived testState(testCar);
 
 			sf::Clock timer;	// start
@@ -188,10 +188,10 @@ namespace UnitTests
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
-			jw::pathEngine pather(testGraphSp);
+			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(&pather, 1, 2, jw::fsm());
-			testCar.targetPosition(pather.getRoadEndPosition(1, 2));
+			jw::car testCar(pather, 1, 2, jw::fsm());
+			testCar.targetPosition(pather->getRoadEndPosition(1, 2));
 			testCar.currentLocation(1);
 			jw::carFsm::atTarget testState(testCar);
 

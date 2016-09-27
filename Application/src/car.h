@@ -12,22 +12,24 @@
 #include "finiteStateMachine.h"
 #include "carFsm.h"
 #include "vectorMaths.h"
+#include <memory>
 
 using std::vector;
 using std::deque;
 using std::string;
+using std::shared_ptr;
 
 namespace jw
 {
 	class car : public gameObject
 	{
 	public:
-		car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId)
+		car(shared_ptr<pathEngine> p_pather, int p_homeLocationId, int p_workLocationId)
 			: car(p_pather, p_homeLocationId, p_workLocationId, carFsm::generate(*this)) {}
-		car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId, fsm carController);
+		car(shared_ptr<pathEngine> p_pather, int p_homeLocationId, int p_workLocationId, fsm carController);
 
-		static vector<car*> loadCars(string filepath, pathEngine* pather);
-		static vector<car*> loadCars(nlohmann::json carsJson, pathEngine* pather);
+		static vector<car*> loadCars(string filepath, shared_ptr<pathEngine> pather);
+		static vector<car*> loadCars(nlohmann::json carsJson, shared_ptr<pathEngine> pather);
 
 		// most of these were only added for tests, get rid for release?
 		int homeLocation() { return homeLocationId; }
@@ -38,7 +40,7 @@ namespace jw
 		void currentLocation(int locationId);
 		deque<int> currentPath() { return _currentPath; }
 		void popStepFromPath();
-		pathEngine* pather() { return _pather; }
+		shared_ptr<pathEngine> pather() { return _pather; }
 
 		// Inherited via gameObject
 		virtual void update(sf::Time timeSinceLastFrame) override;	// POSSIBLE UT?
@@ -62,7 +64,7 @@ namespace jw
 		const float maxBrakeForce;
 		sf::RectangleShape renderShape;
 		int homeLocationId, workLocationId;
-		pathEngine* _pather;	// TODO shared_ptr?
+		shared_ptr<pathEngine> _pather;
 		deque<int> _currentPath;
 		sf::Vector2f* _targetPosition;
 		fsm controller;

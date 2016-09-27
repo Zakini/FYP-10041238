@@ -19,7 +19,7 @@ const float defaultRenderDepth = 10.0f;
 
 const float gravitationalConstant = 9.81f;
 
-jw::car::car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId, fsm carController)
+jw::car::car(shared_ptr<pathEngine> p_pather, int p_homeLocationId, int p_workLocationId, fsm carController)
 	: _position(0, 0)
 	, currentLocationID(0)
 	, _velocity(0, 0)
@@ -41,7 +41,7 @@ jw::car::car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId, f
 	controller.initialise();
 }
 
-vector<jw::car*> jw::car::loadCars(string filepath, pathEngine* pather)
+vector<jw::car*> jw::car::loadCars(string filepath, shared_ptr<pathEngine> pather)
 {
 	ifstream carFile(filepath);
 	nlohmann::json carJson;
@@ -51,7 +51,7 @@ vector<jw::car*> jw::car::loadCars(string filepath, pathEngine* pather)
 	return loadCars(carJson, pather);
 }
 
-vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson, pathEngine* pather)
+vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson, shared_ptr<pathEngine> pather)
 {
 	const string carsKey = "cars";
 	const string homeKey = "home";

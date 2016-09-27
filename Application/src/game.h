@@ -25,7 +25,7 @@ namespace jw
 	private:
 		sf::RenderWindow gameWindow;
 		world gameWorld;
-		pathEngine pather;
+		shared_ptr<pathEngine> pather;
 		vector<gameObject*> entities;
 		sf::Clock frameTimer;
 

@@ -10,11 +10,11 @@ namespace jw
 	game::game(shared_ptr<world::graph_type> gameWorldGraph)
 		: gameWindow(sf::VideoMode(800, 600), "FYP - 10041238", sf::Style::Close | sf::Style::Titlebar)
 		, gameWorld(gameWorldGraph)
-		, pather(gameWorldGraph)
+		, pather(make_shared<pathEngine>(gameWorldGraph))
 		, entities()
 		, frameTimer()
 	{
-		auto cars = car::loadCars(carsJsonPath, &pather);
+		auto cars = car::loadCars(carsJsonPath, pather);
 		entities.assign(cars.begin(), cars.end());
 	}
 
