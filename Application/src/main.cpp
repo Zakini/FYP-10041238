@@ -2,6 +2,7 @@
 
 // ###############################
 // ### TODO const-correctness! ###
+// ### TODO updatable class?   ###
 // ###############################
 
 int main(int argc, char** argv)

@@ -11,14 +11,16 @@
 #include "gameObject.h"
 #include "pathEngine.h"
 #include <memory>
+#include <SFML/Graphics/Drawable.hpp>
 
 using std::string;
 using std::set;
 using std::shared_ptr;
+using sf::Drawable;
 
 namespace jw
 {
-	class world
+	class world : public Drawable
 	{
 	public:
 		using graph_type = graph<location, road>;
@@ -29,10 +31,12 @@ namespace jw
 		static graph_type* loadWorld(nlohmann::json mapJson);
 
 		void update(sf::Time timeSinceLastFrame);	// POSSIBLE UT?
-		void draw(sf::RenderWindow& renderTarget);	// POSSIBLE UT?
 
 	private:
 		shared_ptr<graph_type> worldGraph;
 		set<gameObject*> worldObjects;
+
+		// Inherited via Drawable
+		virtual void draw(RenderTarget& target, RenderStates states) const override;	// POSSIBLE UT?
 	};
 }

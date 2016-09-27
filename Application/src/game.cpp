@@ -72,11 +72,11 @@ namespace jw
 	{
 		gameWindow.clear();
 
-		gameWorld.draw(gameWindow);
+		gameWindow.draw(gameWorld);
 
 		for (auto entity : entities)
 		{
-			entity->draw(gameWindow);
+			gameWindow.draw(*entity);
 		}
 
 		gameWindow.display();

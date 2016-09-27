@@ -3,24 +3,30 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Time.hpp>
 #include <set>
+#include <SFML/Graphics/Drawable.hpp>
 
 using std::set;
+using sf::Drawable;
+using sf::RenderTarget;
+using sf::RenderStates;
 
 namespace jw
 {
-	class gameObject
+	class gameObject : public Drawable
 	{
 	public:
 		gameObject(float p_depth) : _depth(p_depth) {}
 
 		// TODO inherit from SFML class for these? (e.g. Drawable)
 		virtual void update(sf::Time timeSinceLastFrame) = 0;
-		virtual void draw(sf::RenderWindow& renderTarget) = 0;	// POSSIBLE change to sf::RenderTarget?
 		virtual float depth() { return _depth; }
 
 		friend bool operator<(const gameObject& lhs, const gameObject& rhs);
 
 	protected:
 		float _depth;	// higher numbers are "closer" to the screen
+
+		// Inherited via Drawable
+		virtual void draw(RenderTarget& target, RenderStates states) const override = 0;
 	};
 }

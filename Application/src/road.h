@@ -16,7 +16,6 @@ namespace jw
 
 		// Inherited via gameObject
 		virtual void update(sf::Time timeSinceLastFrame) override;	// POSSIBLE UT?
-		virtual void draw(sf::RenderWindow& renderTarget) override;	// POSSIBLE UT?
 
 		// Accessors
 		sf::Vector2f startPosition() { return _startPosition; }
@@ -34,5 +33,8 @@ namespace jw
 
 		const static float defaultRenderDepth;
 		const static float renderOffset;
+
+		// Inherited via gameObject
+		virtual void draw(RenderTarget& target, RenderStates states) const override;	// POSSIBLE UT?
 	};
 }

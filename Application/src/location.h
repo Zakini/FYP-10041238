@@ -19,7 +19,6 @@ namespace jw
 
 		// Inherited from gameObject
 		virtual void update(sf::Time timeSinceLastFrame) override;	// POSSIBLE UT?
-		virtual void draw(sf::RenderWindow& renderTarget) override;	// POSSIBLE UT?
 
 		friend bool operator==(const location& lhs, const location& rhs);
 		friend bool operator<(const location& lhs, const location& rhs);	// Purely for std::map<location, road>. Done lexicographically (x then y).
@@ -27,5 +26,8 @@ namespace jw
 	private:
 		sf::Vector2f _position;	// POSSIBLE 3D vector?
 		sf::CircleShape renderShape;
+
+		// Inherited via gameObject
+		virtual void draw(RenderTarget & target, RenderStates states) const override;	// POSSIBLE UT?
 	};
 }

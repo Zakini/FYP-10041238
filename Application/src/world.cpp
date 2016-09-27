@@ -100,11 +100,11 @@ namespace jw
 		}
 	}
 
-	void world::draw(sf::RenderWindow& renderTarget)
+	void world::draw(RenderTarget& target, RenderStates states) const
 	{
 		for (auto worldObj : worldObjects)
 		{
-			worldObj->draw(renderTarget);
+			target.draw(*worldObj);
 		}
 	}
 }

@@ -38,9 +38,9 @@ namespace jw
 		renderShape.setPosition(_position);
 	}
 
-	void location::draw(sf::RenderWindow& renderTarget)
+	void location::draw(RenderTarget& target, RenderStates states) const
 	{
-		renderTarget.draw(renderShape);
+		target.draw(renderShape);
 	}
 
 	bool operator==(const location& lhs, const location& rhs)

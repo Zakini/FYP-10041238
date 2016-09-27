@@ -99,9 +99,9 @@ void jw::car::update(sf::Time timeSinceLastFrame)
 	renderShape.setPosition(_position);
 }
 
-void jw::car::draw(sf::RenderWindow& renderTarget)
+void jw::car::draw(RenderTarget& target, RenderStates states) const
 {
-	renderTarget.draw(renderShape);
+	target.draw(renderShape);
 }
 
 sf::Vector2f jw::car::targetPosition() const

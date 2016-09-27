@@ -44,7 +44,6 @@ namespace jw
 
 		// Inherited via gameObject
 		virtual void update(sf::Time timeSinceLastFrame) override;	// POSSIBLE UT?
-		virtual void draw(sf::RenderWindow& renderTarget) override;	// POSSIBLE UT?
 
 		void targetPosition(sf::Vector2f target) { _targetPosition = new sf::Vector2f(target); }
 		sf::Vector2f targetPosition() const;
@@ -55,6 +54,9 @@ namespace jw
 		// POSSIBLE separate for UTs?
 		sf::Vector2f generateForce(sf::Vector2f target, sf::Time period);
 		void applyForce(sf::Vector2f force, sf::Time period);
+
+		// Inherited via gameObject
+		virtual void draw(RenderTarget & target, RenderStates states) const override;	// POSSIBLE UT?
 
 		sf::Vector2f _position;
 		int currentLocationID;
@@ -73,5 +75,6 @@ namespace jw
 		static const float defaultBrakeForce;
 		static const float defaultMass;
 		static const sf::Vector2f defaultRenderShape;
+
 	};
 }

@@ -44,9 +44,9 @@ namespace jw
 	{
 	}
 
-	void road::draw(sf::RenderWindow& renderTarget)
+	void road::draw(RenderTarget& target, RenderStates states) const
 	{
-		renderTarget.draw(renderShape);
+		target.draw(renderShape);
 	}
 
 	void road::calcPositions()
