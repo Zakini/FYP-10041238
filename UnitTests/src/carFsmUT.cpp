@@ -215,202 +215,106 @@ namespace UnitTests
 		{
 			jw::car testCar(nullptr, 1, 2);
 			jw::fsm testFsm = jw::carFsm::generate(testCar);
-			jw::fsm::state_type testState;
-			jw::fsm::transition_type testTransition;
 
 			// ###############
 			// ### state 1 ###
 			// ###############
 
-			// check exists
-			try { testState = testFsm.fsmState(1); }
-			catch (...)	{ Assert::Fail(); }
-
-			// and is a nullState
-			if (dynamic_cast<jw::nullState*>(testState) == nullptr) Assert::Fail();
-
-			// and it has a transition to state 2, priority 1
-			try { testTransition = testFsm.fsmTransition(1, 2, 1); }
-			catch (...) { Assert::Fail(); }
-
-			// and it is a nullTransition
-			if (dynamic_cast<jw::nullTransition*>(testTransition) == nullptr) Assert::Fail();
+			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 1));
+			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 1, 2, 1));
 
 			// ###############
 			// ### state 2 ###
 			// ###############
 
-			// check exists
-			try { testState = testFsm.fsmState(2); }
-			catch (...) { Assert::Fail(); }
-
-			// and is a moveToHome
-			if (dynamic_cast<jw::carFsm::moveToHome*>(testState) == nullptr) Assert::Fail();
-
-			// and it has a transition to state 3, priority 1
-			try { testTransition = testFsm.fsmTransition(2, 3, 1); }
-			catch (...) { Assert::Fail(); }
-
-			// and it is a nullTransition
-			if (dynamic_cast<jw::nullTransition*>(testTransition) == nullptr) Assert::Fail();
+			Assert::IsTrue(checkStateType<jw::carFsm::moveToHome>(testFsm, 2));
+			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 2, 3, 1));
 
 			// ###############
 			// ### state 3 ###
 			// ###############
 
-			// check exists
-			try { testState = testFsm.fsmState(3); }
-			catch (...) { Assert::Fail(); }
-
-			// and is a pathToWork
-			if (dynamic_cast<jw::carFsm::pathToWork*>(testState) == nullptr) Assert::Fail();
-
-			// and it has a transition to state 4, priority 1
-			try { testTransition = testFsm.fsmTransition(3, 4, 1); }
-			catch (...) { Assert::Fail(); }
-
-			// and it is a nullTransition
-			if (dynamic_cast<jw::nullTransition*>(testTransition) == nullptr) Assert::Fail();
+			Assert::IsTrue(checkStateType<jw::carFsm::pathToWork>(testFsm, 3));
+			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 3, 4, 1));
 
 			// ###############
 			// ### state 4 ###
 			// ###############
 
-			// check exists
-			try { testState = testFsm.fsmState(4); }
-			catch (...) { Assert::Fail(); }
-
-			// and is a targetRoadStart
-			if (dynamic_cast<jw::carFsm::targetRoadStart*>(testState) == nullptr) Assert::Fail();
-
-			// and it has a transition to state 5, priority 1
-			try { testTransition = testFsm.fsmTransition(4, 5, 1); }
-			catch (...) { Assert::Fail(); }
-
-			// and it is an atTarget
-			if (dynamic_cast<jw::carFsm::atTarget*>(testTransition) == nullptr) Assert::Fail();
+			Assert::IsTrue(checkStateType<jw::carFsm::targetRoadStart>(testFsm, 4));
+			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 4, 5, 1));
 
 			// ###############
 			// ### state 5 ###
 			// ###############
 
-			// check exists
-			try { testState = testFsm.fsmState(5); }
-			catch (...) { Assert::Fail(); }
-
-			// and is a targetRoadEnd
-			if (dynamic_cast<jw::carFsm::targetRoadEnd*>(testState) == nullptr) Assert::Fail();
-
-			// and it has a transition to state 6, priority 1
-			try { testTransition = testFsm.fsmTransition(5, 6, 1); }
-			catch (...) { Assert::Fail(); }
-
-			// and it is an atTarget
-			if (dynamic_cast<jw::carFsm::atTarget*>(testTransition) == nullptr) Assert::Fail();
+			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 5));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::atTarget>(testFsm, 5, 6, 1));
 
 			// ###############
 			// ### state 6 ###
 			// ###############
 
-			// check exists
-			try { testState = testFsm.fsmState(6); }
-			catch (...) { Assert::Fail(); }
-
-			// and is an updatePath
-			if (dynamic_cast<jw::carFsm::updatePath*>(testState) == nullptr) Assert::Fail();
-
-			// and it has a transition to state 7, priority 1
-			try { testTransition = testFsm.fsmTransition(6, 7, 1); }
-			catch (...) { Assert::Fail(); }
-
-			// and it is an arrived
-			if (dynamic_cast<jw::carFsm::arrived*>(testTransition) == nullptr) Assert::Fail();
-
-			// and it has a transition to state 4, priority 2
-			try { testTransition = testFsm.fsmTransition(6, 4, 2); }
-			catch (...) { Assert::Fail(); }
-
-			// and it is a nullTransition
-			if (dynamic_cast<jw::nullTransition*>(testTransition) == nullptr) Assert::Fail();
+			Assert::IsTrue(checkStateType<jw::carFsm::targetRoadEnd>(testFsm, 6));
+			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 6, 7, 1));
 
 			// ###############
 			// ### state 7 ###
 			// ###############
 
-			// check exists
-			try { testState = testFsm.fsmState(7); }
-			catch (...) { Assert::Fail(); }
-
-			// and it is a pathToHome
-			if (dynamic_cast<jw::carFsm::pathToHome*>(testState) == nullptr) Assert::Fail();
-
-			// and it has a transition to state 8, priority 1
-			try { testTransition = testFsm.fsmTransition(7, 8, 1); }
-			catch (...) { Assert::Fail(); }
-
-			// and it is a nullTransition
-			if (dynamic_cast<jw::nullTransition*>(testTransition) == nullptr) Assert::Fail();
+			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 7));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::atTarget>(testFsm, 7, 8, 1));
 
 			// ###############
 			// ### state 8 ###
 			// ###############
 
-			// check exists
-			try { testState = testFsm.fsmState(8); }
-			catch (...) { Assert::Fail(); }
-
-			// and it is a targetRoadStart
-			if (dynamic_cast<jw::carFsm::targetRoadStart*>(testState) == nullptr) Assert::Fail();
-
-			// and it has a transition to state 9, priority 1
-			try { testTransition = testFsm.fsmTransition(8, 9, 1); }
-			catch (...) { Assert::Fail(); }
-
-			// and it is an atTarget
-			if (dynamic_cast<jw::carFsm::atTarget*>(testTransition) == nullptr) Assert::Fail();
+			Assert::IsTrue(checkStateType<jw::carFsm::updatePath>(testFsm, 8));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::arrived>(testFsm, 8, 9, 1));
+			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 8, 4, 2));
 
 			// ###############
 			// ### state 9 ###
 			// ###############
 
-			// check exists
-			try { testState = testFsm.fsmState(9); }
-			catch (...) { Assert::Fail(); }
-
-			// and it is a targetEndRoad
-			if (dynamic_cast<jw::carFsm::targetRoadEnd*>(testState) == nullptr) Assert::Fail();
-
-			// and it has a transition to state 10, priority 1
-			try { testTransition = testFsm.fsmTransition(9, 10, 1); }
-			catch (...) { Assert::Fail(); }
-
-			// and it is an atTarget
-			if (dynamic_cast<jw::carFsm::atTarget*>(testTransition) == nullptr) Assert::Fail();
+			Assert::IsTrue(checkStateType<jw::carFsm::pathToHome>(testFsm, 9));
+			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 9, 10, 1));
 
 			// ################
 			// ### state 10 ###
 			// ################
 
-			// check exists
-			try { testState = testFsm.fsmState(10); }
-			catch (...) { Assert::Fail(); }
+			Assert::IsTrue(checkStateType<jw::carFsm::targetRoadStart>(testFsm, 10));
+			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 10, 11, 1));
 
-			// and it is a updatePath
-			if (dynamic_cast<jw::carFsm::updatePath*>(testState) == nullptr) Assert::Fail();
+			// ################
+			// ### state 11 ###
+			// ################
 
-			// and it has a transition to state 3, priority 1
-			try { testTransition = testFsm.fsmTransition(10, 3, 1); }
-			catch (...) { Assert::Fail(); }
+			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 11));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::atTarget>(testFsm, 11, 12, 1));
 
-			// and it is an arrived
-			if (dynamic_cast<jw::carFsm::arrived*>(testTransition) == nullptr) Assert::Fail();
+			// ################
+			// ### state 12 ###
+			// ################
 
-			// and it has a transition to state 8, priority 2
-			try { testTransition = testFsm.fsmTransition(10, 8, 2); }
-			catch (...) { Assert::Fail(); }
+			Assert::IsTrue(checkStateType<jw::carFsm::targetRoadEnd>(testFsm, 12));
+			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 12, 13, 1));
 
-			// and it is a nullTransition
-			if (dynamic_cast<jw::nullTransition*>(testTransition) == nullptr) Assert::Fail();
+			// ################
+			// ### state 13 ###
+			// ################
+
+			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 13));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::atTarget>(testFsm, 13, 14, 1));
+
+			// ################
+			// ### state 14 ###
+			// ################
+
+			Assert::IsTrue(checkStateType<jw::carFsm::updatePath>(testFsm, 14));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::arrived>(testFsm, 14, 3, 1));
+			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 14, 10, 2));
 
 			// #############
 			// ### other ###
@@ -419,8 +323,25 @@ namespace UnitTests
 			// check initial state is 1
 			Assert::IsTrue(testFsm.initialState() == 1);
 
-			// check there is only 10 states
-			Assert::IsTrue(testFsm.size() == 10);
+			// check there is only 14 states
+			Assert::IsTrue(testFsm.size() == 14);
+		}
+	
+	private:
+		template<typename ST>
+		static bool checkStateType(jw::fsm& targetFsm, int stateToCheck)
+		{
+			jw::state* testState = targetFsm.fsmState(stateToCheck);
+
+			return dynamic_cast<ST*>(testState) != nullptr;
+		}
+
+		template<typename TT>
+		static bool checkTransitionType(jw::fsm& targetFsm, int transitionFrom, int transitionTo, int transitionPriority)
+		{
+			jw::transition* testTransition = targetFsm.fsmTransition(transitionFrom, transitionTo, transitionPriority);
+
+			return dynamic_cast<TT*>(testTransition) != nullptr;
 		}
 	};
 }

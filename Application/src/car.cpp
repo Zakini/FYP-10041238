@@ -172,7 +172,6 @@ sf::Vector2f jw::car::generateForce(sf::Vector2f target, sf::Time period)
 		}
 	}
 
-	// TODO should this be applied in applyForce after calculating new velocity?
 	// friction
 	const float frictionCoefficient = 0.3f;
 	// negate velocity for opposite force

@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <utility>
 
-// TODO UT
 namespace jw
 {
 	template<typename node, typename edge>
