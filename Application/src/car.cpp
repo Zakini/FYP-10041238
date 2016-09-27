@@ -22,14 +22,14 @@ const float gravitationalConstant = 9.81f;
 jw::car::car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId, fsm carController)
 	: _position(0, 0)
 	, currentLocationID(0)
-	, velocity(0, 0)
+	, _velocity(0, 0)
 	, mass(defaultMass)
 	, maxEngineForce(defaultEngineForce)
 	, maxBrakeForce(defaultBrakeForce)
 	, renderShape(defaultRenderShape)
 	, homeLocationId(p_homeLocationId)
 	, workLocationId(p_workLocationId)
-	, pather(p_pather)
+	, _pather(p_pather)
 	, _currentPath()
 	, _targetPosition(nullptr)
 	, controller(carController)
@@ -72,16 +72,22 @@ vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson, pathEngine* pather)
 void jw::car::currentLocation(int locationId)
 {
 	// check location exists (throws if invalid)
-	sf::Vector2f newPosition = pather->getLocationPosition(locationId);
+	sf::Vector2f newPosition = _pather->getLocationPosition(locationId);
 
 	// set new values
 	currentLocationID = locationId;
 	_position = newPosition;
 
 	// reset values that might be invalid now
-	velocity.x = 0;
-	velocity.y = 0;
+	_velocity.x = 0;
+	_velocity.y = 0;
 	_currentPath.clear();
+}
+
+void jw::car::popStepFromPath()
+{
+	currentLocationID = _currentPath.front();
+	_currentPath.pop_front();
 }
 
 void jw::car::update(sf::Time timeSinceLastFrame)
@@ -98,9 +104,16 @@ void jw::car::draw(sf::RenderWindow& renderTarget)
 	renderTarget.draw(renderShape);
 }
 
+sf::Vector2f jw::car::targetPosition() const
+{
+	if (_targetPosition == nullptr) throw out_of_range("target position not set");
+
+	return *_targetPosition;
+}
+
 void jw::car::pathTo(int targetId)
 {
-	deque<int> newPath = pather->findPath(currentLocationID, targetId);
+	deque<int> newPath = _pather->findPath(currentLocationID, targetId);
 
 	if (!_currentPath.empty())
 	{
@@ -125,7 +138,7 @@ sf::Vector2f jw::car::generateForce(sf::Vector2f target, sf::Time period)
 	// Calculate force
 	sf::Vector2f force;
 
-	float speed = length(velocity);
+	float speed = length(_velocity);
 	float currentStoppingDistance = std::pow(speed, 2) / (2 * maxBrakeForce);
 
 	sf::Vector2f vectorToTarget = target - _position;
@@ -137,14 +150,14 @@ sf::Vector2f jw::car::generateForce(sf::Vector2f target, sf::Time period)
 		{
 			// decelerate
 			// negate direction for opposite braking force
-			sf::Vector2f direction = velocity / speed;
+			sf::Vector2f direction = _velocity / speed;
 			force = -direction * maxBrakeForce;
 		}// else already stopped
 	}
 	else	// far from target
 	{
 		// accelerate
-		sf::Vector2f trajectoryForCurrentStep = velocity * period.asSeconds();
+		sf::Vector2f trajectoryForCurrentStep = _velocity * period.asSeconds();
 		sf::Vector2f idealForce = (vectorToTarget - trajectoryForCurrentStep) / period.asSeconds();	// HACK something to do with removing the time component of the "force"... iunno
 
 		if (length(idealForce) <= maxEngineForce)
@@ -159,10 +172,11 @@ sf::Vector2f jw::car::generateForce(sf::Vector2f target, sf::Time period)
 		}
 	}
 
+	// TODO should this be applied in applyForce after calculating new velocity?
 	// friction
 	const float frictionCoefficient = 0.3f;
 	// negate velocity for opposite force
-	sf::Vector2f friction = -velocity * (frictionCoefficient * mass * gravitationalConstant);	// mass * gravity = normal force
+	sf::Vector2f friction = -_velocity * (frictionCoefficient * mass * gravitationalConstant);	// mass * gravity = normal force
 	force += friction;
 
 	return force;
@@ -171,18 +185,18 @@ sf::Vector2f jw::car::generateForce(sf::Vector2f target, sf::Time period)
 void jw::car::applyForce(sf::Vector2f force, sf::Time period)
 {
 	sf::Vector2f acceleration = force / mass;
-	sf::Vector2f newVelocity = velocity + (acceleration * period.asSeconds());
+	sf::Vector2f newVelocity = _velocity + (acceleration * period.asSeconds());
 
-	if (angleBetween(velocity, newVelocity) > 90)	// Car is completely stopping/turning around
+	if (angleBetween(_velocity, newVelocity) > 90)	// Car is completely stopping/turning around
 	{
 		// full stop
-		velocity.x = 0;
-		velocity.y = 0;
+		_velocity.x = 0;
+		_velocity.y = 0;
 	}
 	else
 	{
-		velocity = newVelocity;
+		_velocity = newVelocity;
 	}
 
-	_position += velocity * period.asSeconds();
+	_position += _velocity * period.asSeconds();
 }

@@ -8,6 +8,7 @@
 #include "../../Application/src/pathEngine.h"
 #include <fstream>
 #include "../../Application/lib/json-master/src/json.hpp"
+#include <stdexcept>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -87,6 +88,24 @@ namespace UnitTests
 			Assert::IsTrue(testCar.position() == sf::Vector2f(3, 4));
 		}
 
+		TEST_METHOD(getVelocity)
+		{
+			jw::car testCar(nullptr, 1, 2, jw::fsm());
+			sf::Vector2f targetPosition(10000, 0);
+			testCar.targetPosition(targetPosition);
+
+			// TODO get rid of magic numbers, use getters
+			sf::Time updateLength = sf::milliseconds(10);
+			sf::Vector2f expectedDirection = jw::maths::normalise(targetPosition);
+			sf::Vector2f expectedForce = 100000.0f * expectedDirection;	// no friction since car is not moving yet
+			sf::Vector2f expectedAcceleration = expectedForce / 1.0f;
+			sf::Vector2f expectedVelocity = expectedAcceleration * updateLength.asSeconds();
+
+			testCar.update(updateLength);
+
+			Assert::IsTrue(testCar.velocity() == expectedVelocity);
+		}
+
 		TEST_METHOD(getSetCurrentLocationId)
 		{
 			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json";
@@ -102,7 +121,7 @@ namespace UnitTests
 			Assert::IsTrue(testCar.currentLocation() == 2);
 		}
 	
-		TEST_METHOD(pathToAndGetPath)
+		TEST_METHOD(pathToUpdateAndGetPath)
 		{
 			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json";
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
@@ -115,16 +134,35 @@ namespace UnitTests
 			testCar.currentLocation(1);
 			testCar.pathTo(2);
 
-			deque<int> expectedPath;
-			expectedPath.push_back(2);	// maybe use more complicated map for a longer route?
+			deque<int> expectedPath1, expectedPath2;
+			expectedPath1.push_back(2);	// maybe use more complicated map for a longer route?
 
-			Assert::IsTrue(testCar.currentPath() == expectedPath);
+			Assert::IsTrue(testCar.currentPath() == expectedPath1);
+			testCar.popStepFromPath();
+			Assert::IsTrue(testCar.currentPath() == expectedPath2);
+			Assert::IsTrue(testCar.currentLocation() == 2);
 		}
 		
+		TEST_METHOD(getPather)
+		{
+			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test1.json";
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+
+			jw::pathEngine testPather(testGraphSp);
+
+			jw::car testCar(&testPather, 1, 2);
+
+			Assert::IsTrue(testCar.pather() == &testPather);
+		}
+
 		TEST_METHOD(getSetTarget)
 		{
 			jw::car testCar(nullptr, 1, 2, jw::fsm());
 			sf::Vector2f targetPosition(5, 3);
+			
+			auto testFunction = [testCar] { return testCar.targetPosition(); };
+			Assert::ExpectException<std::out_of_range>(testFunction);
 
 			testCar.targetPosition(targetPosition);
 			Assert::IsTrue(testCar.targetPosition() == targetPosition);

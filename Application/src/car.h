@@ -22,16 +22,6 @@ namespace jw
 	class car : public gameObject
 	{
 	public:
-		// TODO remove all friends!
-		friend class carFsm::moveToHome;
-		friend class carFsm::pathToHome;
-		friend class carFsm::pathToWork;
-		friend class carFsm::targetRoadStart;
-		friend class carFsm::targetRoadEnd;
-		friend class carFsm::updatePath;
-		friend class carFsm::arrived;
-		friend class carFsm::atTarget;
-
 		car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId)
 			: car(p_pather, p_homeLocationId, p_workLocationId, carFsm::generate(*this)) {}
 		car(pathEngine* p_pather, int p_homeLocationId, int p_workLocationId, fsm carController);
@@ -43,16 +33,19 @@ namespace jw
 		int homeLocation() { return homeLocationId; }
 		int workLocation() { return workLocationId; }
 		sf::Vector2f position() { return _position; }
+		sf::Vector2f velocity() { return _velocity; }
 		int currentLocation() { return currentLocationID; }
 		void currentLocation(int locationId);
 		deque<int> currentPath() { return _currentPath; }
+		void popStepFromPath();
+		pathEngine* pather() { return _pather; }
 
 		// Inherited via gameObject
 		virtual void update(sf::Time timeSinceLastFrame) override;	// POSSIBLE UT?
 		virtual void draw(sf::RenderWindow& renderTarget) override;	// POSSIBLE UT?
 
 		void targetPosition(sf::Vector2f target) { _targetPosition = new sf::Vector2f(target); }
-		sf::Vector2f targetPosition() { return *_targetPosition; }	// TODO this can throw, is that OK?
+		sf::Vector2f targetPosition() const;
 		void pathTo(int targetId);
 
 	private:
@@ -63,13 +56,13 @@ namespace jw
 
 		sf::Vector2f _position;
 		int currentLocationID;
-		sf::Vector2f velocity;
+		sf::Vector2f _velocity;
 		float mass;
 		const float maxEngineForce;
 		const float maxBrakeForce;
 		sf::RectangleShape renderShape;
 		int homeLocationId, workLocationId;
-		pathEngine* pather;
+		pathEngine* _pather;	// TODO shared_ptr?
 		deque<int> _currentPath;
 		sf::Vector2f* _targetPosition;
 		fsm controller;

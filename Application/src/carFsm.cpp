@@ -3,8 +3,10 @@
 #include "vectorMaths.h"
 
 #include <SFML/System/Vector2.hpp>
+#include <stdexcept>
 
 using jw::maths::length;
+using std::out_of_range;
 
 void jw::carFsm::moveToHome::update(sf::Time period)
 {
@@ -24,42 +26,44 @@ void jw::carFsm::pathToWork::update(sf::Time period)
 void jw::carFsm::targetRoadStart::update(sf::Time period)
 {
 	int targetLocationId = targetCar.currentPath().front();
-	sf::Vector2f target = targetCar.pather->getRoadStartPosition(targetCar.currentLocationID, targetLocationId);
+	sf::Vector2f target = targetCar.pather()->getRoadStartPosition(targetCar.currentLocation(), targetLocationId);
 	targetCar.targetPosition(target);
 }
 
 void jw::carFsm::targetRoadEnd::update(sf::Time period)
 {
 	int targetLocationId = targetCar.currentPath().front();
-	sf::Vector2f target = targetCar.pather->getRoadEndPosition(targetCar.currentLocationID, targetLocationId);
+	sf::Vector2f target = targetCar.pather()->getRoadEndPosition(targetCar.currentLocation(), targetLocationId);
 	targetCar.targetPosition(target);
 }
 
 void jw::carFsm::updatePath::update(sf::Time period)
 {
-	int targetLocationId = targetCar._currentPath.front();
-	sf::Vector2f targetPosition = targetCar.pather->getRoadEndPosition(targetCar.currentLocationID, targetLocationId);
-	float distanceFromTarget = length(targetCar._position - targetPosition);
-	float currentSpeed = length(targetCar.velocity);
+	int targetLocationId = targetCar.currentPath().front();
+	sf::Vector2f targetPosition = targetCar.pather()->getRoadEndPosition(targetCar.currentLocation(), targetLocationId);
+	float distanceFromTarget = length(targetCar.position() - targetPosition);
+	float currentSpeed = length(targetCar.velocity());
 	if (distanceFromTarget <= arrivalDistanceThreshold && currentSpeed < arrivalSpeedThreshold)
 	{
-		targetCar.currentLocationID = targetLocationId;
-		targetCar._currentPath.pop_front();
+		targetCar.popStepFromPath();
 	}
 }
 
 bool jw::carFsm::arrived::changeState()
 {
 	// if path is empty, we've popped off the target location, so we must have arrived!
-	return targetCar._currentPath.empty();
+	return targetCar.currentPath().empty();
 }
 
 bool jw::carFsm::atTarget::changeState()
 {
-	if (targetCar._targetPosition == nullptr) return false;
+	sf::Vector2f targetPosition;
 
-	float distanceFromTarget = length(targetCar._position - *targetCar._targetPosition);
-	float currentSpeed = length(targetCar.velocity);
+	try { targetPosition = targetCar.targetPosition(); }
+	catch (out_of_range oor) { return false; }
+
+	float distanceFromTarget = length(targetCar.position() - targetPosition);
+	float currentSpeed = length(targetCar.velocity());
 
 	if (distanceFromTarget <= arrivalDistanceThreshold && currentSpeed < arrivalSpeedThreshold) return true;
 	else return false;
