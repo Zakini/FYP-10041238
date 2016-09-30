@@ -49,5 +49,15 @@ namespace UnitTests
 
 			Assert::IsTrue(testLocation.depth() == 1);
 		}
+
+		TEST_METHOD(addRoad)
+		{
+			Assert::Fail();
+		}
+
+		TEST_METHOD(getRenderRadius)
+		{
+			Assert::Fail();
+		}
 	};
 }

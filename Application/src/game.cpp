@@ -30,10 +30,8 @@ namespace jw
 
 		while (gameWindow.isOpen())
 		{
-			update(frameTimer.getElapsedTime());
+			update(frameTimer.restart());
 			draw();
-
-			frameTimer.restart();
 		}
 
 		return 0;

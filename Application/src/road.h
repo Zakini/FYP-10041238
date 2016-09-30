@@ -6,6 +6,8 @@
 
 namespace jw
 {
+	class location;
+
 	class road : public gameObject
 	{
 	public:

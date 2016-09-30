@@ -31,7 +31,7 @@ namespace jw
 		value_type& at(node_id_type targetId);
 		virtual node_type& nodeAt(node_id_type targetId) override;
 		edge_container_type& edgesAt(node_id_type targetId);
-		// TODO edgeBetween(from, to) ?
+		edge_type& edgeBetween(node_id_type fromId, node_id_type toId);
 
 		// Meta
 		virtual int size() override;
@@ -69,6 +69,12 @@ namespace jw
 	typename graph<node, edge>::edge_container_type& graph<node, edge>::edgesAt(node_id_type targetId)
 	{
 		return at(targetId).second;
+	}
+
+	template<typename node, typename edge>
+	typename graph<node, edge>::edge_type& graph<node, edge>::edgeBetween(node_id_type fromId, node_id_type toId)
+	{
+		return edgesAt(fromId).at(toId);
 	}
 
 	template<typename node, typename edge>

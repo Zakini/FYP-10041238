@@ -43,6 +43,8 @@ namespace UnitTests
 
 			Assert::IsTrue(testGraph.edgesAt(1).at(2) == 'a');
 			Assert::IsTrue(testGraph.edgesAt(2).at(1) == 'a');
+
+			Assert::Fail();	// TODO edgeBetween test
 		}
 
 		TEST_METHOD(sizeAndEmpty)

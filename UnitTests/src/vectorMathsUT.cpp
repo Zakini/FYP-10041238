@@ -70,5 +70,15 @@ namespace UnitTests
 
 			Assert::IsTrue(round(jw::maths::angleBetween(testVector1, testVector2)) == 156);
 		}
+
+		TEST_METHOD(circleLineFirstIntersection)
+		{
+			Assert::Fail();
+		}
+
+		TEST_METHOD(leftPerpendicular)
+		{
+			Assert::Fail();
+		}
 	};
 }

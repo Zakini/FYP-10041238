@@ -13,7 +13,7 @@ using jw::maths::angleBetween;
 
 const float jw::car::defaultEngineForce = 100000.0f;
 const float jw::car::defaultBrakeForce = 200000.0f;
-const float jw::car::defaultMass = 1.0f;
+const float jw::car::defaultMass = 1500.0f;
 const sf::Vector2f jw::car::defaultRenderShape = { 4, 4 };
 const float defaultRenderDepth = 10.0f;
 

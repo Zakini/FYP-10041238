@@ -7,6 +7,8 @@
 
 using jw::maths::length;
 using jw::maths::normalise;
+using jw::maths::circleLineFirstIntersection;
+using jw::maths::leftPerpendicular;
 
 namespace jw
 {
@@ -51,14 +53,20 @@ namespace jw
 
 	void road::calcPositions()
 	{
-		_startPosition = _from->position();
-		_endPosition = _to->position();
+		// get line between locations
+		Vector2f startLocation = _from->position();
+		Vector2f endLocation = _to->position();
 
-		Vector2f unitLineVector = normalise(_endPosition - _startPosition);
-		Vector2f perpendicular(unitLineVector.y, -unitLineVector.x);	// points left
+		// offset
+		Vector2f unitLineVector = normalise(endLocation - startLocation);
+		Vector2f perpendicular = leftPerpendicular(unitLineVector);
 		Vector2f leftOffset = perpendicular * renderOffset;
 
-		_startPosition += leftOffset;
-		_endPosition += leftOffset;
+		Vector2f tempStartPosition = startLocation + leftOffset;
+		Vector2f tempEndPosition = endLocation + leftOffset;
+
+		// shorten
+		_startPosition = circleLineFirstIntersection(tempEndPosition, tempStartPosition, startLocation, _from->renderRadius());
+		_endPosition = circleLineFirstIntersection(tempStartPosition, tempEndPosition, endLocation, _to->renderRadius());
 	}
 }

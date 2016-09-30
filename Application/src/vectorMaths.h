@@ -3,6 +3,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <SFML/System/Vector2.hpp>
+#include <stdexcept>
 
 namespace jw
 {
@@ -30,6 +31,43 @@ namespace jw
 		T angleBetween(sf::Vector2<T> v, sf::Vector2<T> w)
 		{
 			return T(acos(dotProduct(normalise(v), normalise(w))) * 180.0f / M_PI);
+		}
+
+		// See: http://stackoverflow.com/a/1088058/5073239
+		template<typename T>
+		sf::Vector2<T> circleLineFirstIntersection(sf::Vector2<T> lineStart, sf::Vector2<T> lineEnd, sf::Vector2<T> centre, T radius)
+		{
+			sf::Vector2<T> intersection;
+
+			sf::Vector2<T> unitLineVector = normalise(lineEnd - lineStart);				// D
+			float projectionLength = dotProduct(unitLineVector, centre - lineStart);	// t
+			Vector2f projectionPoint = projectionLength * unitLineVector + lineStart;	// E
+			float projectionDistance = length(projectionPoint - centre);
+
+			if (projectionDistance < radius)
+			{
+				// 2 intersection points (but we only care about the first one)
+				float projectionToEdgeDistance = sqrt(radius * radius - projectionDistance * projectionDistance);
+				intersection = (projectionLength - projectionToEdgeDistance) * unitLineVector + lineStart;
+			}
+			else if (projectionDistance == radius)
+			{
+				// 1 intersection point
+				intersection = projectionPoint;
+			}
+			else
+			{
+				// line does not intersect circle
+				throw std::invalid_argument("line does not intersect circle");
+			}
+
+			return intersection;
+		}
+
+		template<typename T>
+		sf::Vector2<T> leftPerpendicular(sf::Vector2<T> v)
+		{
+			return sf::Vector2<T>(v.y, -v.x);
 		}
 	}
 }

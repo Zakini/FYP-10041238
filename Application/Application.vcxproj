@@ -159,6 +159,7 @@
     <ClCompile Include="src\finiteStateMachine.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\gameObject.cpp" />
+    <ClCompile Include="src\junctionController.cpp" />
     <ClCompile Include="src\location.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\pathEngine.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\graph.h" />
     <ClInclude Include="src\graphInterface.h" />
+    <ClInclude Include="src\junctionController.h" />
     <ClInclude Include="src\location.h" />
     <ClInclude Include="src\pathEngine.h" />
     <ClInclude Include="src\priorityGraph.h" />

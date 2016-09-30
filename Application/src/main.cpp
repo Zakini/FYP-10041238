@@ -3,6 +3,8 @@
 // ###############################
 // ### TODO const-correctness! ###
 // ### TODO updatable class?   ###
+// ### TODO style clean up     ###
+// ### TODO #include clean up  ###
 // ###############################
 
 int main(int argc, char** argv)

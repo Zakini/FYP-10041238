@@ -2,8 +2,11 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <fstream>
+#include <map>
+#include "junctionController.h"
 
 using std::ifstream;
+using std::map;
 
 namespace jw
 {
@@ -41,9 +44,16 @@ namespace jw
 		const string xKey = "x";
 		const string zKey = "z";
 		const string idKey = "id";
+		const string junctionBehaviourKey = "behaviour";
 		const string fromKey = "from";
 		const string toKey = "to";
 		const string bidirectionalKey = "bidirectional";
+
+		const map<string, junctionController::behaviour> behaviourLookup =
+		{
+			{ "none", junctionController::behaviour::none }
+		,	{ "cycle", junctionController::behaviour::cycle }
+		};
 
 		graph_type* outputGraph = new graph_type();
 		
@@ -59,16 +69,18 @@ namespace jw
 			outputGraph->insertNode(sourceId, newLocation);
 		}
 
-		for (auto& locationJson : mapJson[junctionsKey])
+		for (auto& junctionJson : mapJson[junctionsKey])
 		{
-			nlohmann::json positionJson = locationJson.at(positionKey);
+			nlohmann::json positionJson = junctionJson.at(positionKey);
 			sf::Vector2f position;
 			position.x = positionJson.at(xKey);
 			position.y = positionJson.at(zKey);
-			int sourceId = locationJson.at(idKey);
+			int sourceId = junctionJson.at(idKey);
+			string behaviourString = junctionJson.at(junctionBehaviourKey);
+			junctionController::behaviour junctionBehaviour = behaviourLookup.at(behaviourString);
 
-			location newLocation(position);
-			outputGraph->insertNode(sourceId, newLocation);
+			location newJunction(position, junctionBehaviour);
+			outputGraph->insertNode(sourceId, newJunction);
 		}
 
 		for (auto& roadJson : mapJson[roadsKey])
@@ -81,11 +93,13 @@ namespace jw
 			bool bidirectional = roadJson.at(bidirectionalKey);
 
 			outputGraph->insertEdge(sourceId, destId, roadEdge);
+			dest->addRoad(&outputGraph->edgeBetween(sourceId, destId));
 
 			if (bidirectional)
 			{
 				roadEdge.flip();
 				outputGraph->insertEdge(destId, sourceId, roadEdge);
+				source->addRoad(&outputGraph->edgeBetween(destId, sourceId));
 			}
 		}
 
