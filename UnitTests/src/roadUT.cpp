@@ -70,10 +70,13 @@ namespace UnitTests
 			jw::road testRoad(&fromLocation, &toLocation);
 
 			sf::Vector2f roadVector = toPosition - fromPosition;
-			sf::Vector2f unitPerpendicular = jw::maths::normalise(sf::Vector2f(roadVector.y, -roadVector.x));
+			sf::Vector2f unitPerpendicular = jw::maths::normalise(jw::maths::leftPerpendicular(roadVector));
 
-			sf::Vector2f expectedStart = fromPosition + unitPerpendicular * 3.0f;
-			sf::Vector2f expectedEnd = toPosition + unitPerpendicular * 3.0f;
+			sf::Vector2f offsetStart = fromPosition + unitPerpendicular * 3.0f;
+			sf::Vector2f offsetEnd = toPosition + unitPerpendicular * 3.0f;
+
+			sf::Vector2f expectedStart = jw::maths::circleLineFirstIntersection(offsetEnd, offsetStart, fromPosition, fromLocation.renderRadius());
+			sf::Vector2f expectedEnd = jw::maths::circleLineFirstIntersection(offsetStart, offsetEnd, toPosition, toLocation.renderRadius());
 
 			Assert::IsTrue(testRoad.startPosition() == expectedStart);
 			Assert::IsTrue(testRoad.endPosition() == expectedEnd);

@@ -13,12 +13,15 @@ namespace jw
 		enum signalState { stop, prepareToGo, go, stopIfAble };
 		static const int signalStateCount;
 
-		junctionController(behaviour p_controllerBehaviour);
+		junctionController(behaviour p_controllerBehaviour = none);
 
 		void update(sf::Time period);
-		void setJunctionCount(int newCount);
 
 		const std::map<int, signalState>& getState();
+		int getJunctionCount() { return junctionCount; }
+		sf::Time getLightChangeDelay() { return lightChangeDelay; }
+		void setJunctionCount(int newCount);
+		const std::vector<std::vector<int>>& getLightSequence() { return lightSequence; }
 
 	private:
 		behaviour controllerBehaviour;

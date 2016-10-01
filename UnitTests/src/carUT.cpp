@@ -94,11 +94,10 @@ namespace UnitTests
 			sf::Vector2f targetPosition(10000, 0);
 			testCar.targetPosition(targetPosition);
 
-			// TODO get rid of magic numbers, use getters
 			sf::Time updateLength = sf::milliseconds(10);
 			sf::Vector2f expectedDirection = jw::maths::normalise(targetPosition);
-			sf::Vector2f expectedForce = 100000.0f * expectedDirection;	// no friction since car is not moving yet
-			sf::Vector2f expectedAcceleration = expectedForce / 1.0f;
+			sf::Vector2f expectedForce = testCar.getMaxEngineForce() * expectedDirection;	// no friction since car is not moving yet
+			sf::Vector2f expectedAcceleration = expectedForce / testCar.getMass();
 			sf::Vector2f expectedVelocity = expectedAcceleration * updateLength.asSeconds();
 
 			testCar.update(updateLength);
@@ -173,6 +172,15 @@ namespace UnitTests
 			jw::car testCar(nullptr, 1, 2);
 
 			Assert::IsTrue(testCar.depth() == 10);
+		}
+
+		TEST_METHOD(maxForces)
+		{
+			jw::car testCar(nullptr, 1, 2);
+
+			Assert::IsTrue(testCar.getMaxEngineForce() == 100000.0f);
+			Assert::IsTrue(testCar.getMaxBrakeForce() == 200000.0f);
+			Assert::IsTrue(testCar.getMass() == 1500.0f);
 		}
 	};
 }

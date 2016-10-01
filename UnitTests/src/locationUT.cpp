@@ -50,14 +50,27 @@ namespace UnitTests
 			Assert::IsTrue(testLocation.depth() == 1);
 		}
 
-		TEST_METHOD(addRoad)
+		TEST_METHOD(addGetRoad)
 		{
-			Assert::Fail();
+			jw::location testLocation;
+
+			Assert::IsTrue(testLocation.getInboundRoads() == std::vector<jw::road*>());
+
+			std::vector<jw::road*> testRoads = { new jw::road(), new jw::road(), new jw::road() };
+
+			for (auto testRoad : testRoads)
+			{
+				testLocation.addRoad(testRoad);
+			}
+
+			Assert::IsTrue(testLocation.getInboundRoads() == testRoads);
 		}
 
 		TEST_METHOD(getRenderRadius)
 		{
-			Assert::Fail();
+			jw::location testLocation(sf::Vector2f(1, 2), jw::junctionController::behaviour::none, 6.0f);
+
+			Assert::IsTrue(testLocation.renderRadius() == 6.0f);
 		}
 	};
 }

@@ -41,6 +41,9 @@ namespace jw
 		deque<int> currentPath() { return _currentPath; }
 		void popStepFromPath();
 		shared_ptr<pathEngine> pather() { return _pather; }
+		float getMass() { return mass; }
+		float getMaxEngineForce() { return maxEngineForce; }
+		float getMaxBrakeForce() { return maxBrakeForce; }
 
 		// Inherited via gameObject
 		virtual void update(sf::Time timeSinceLastFrame) override;	// POSSIBLE UT?

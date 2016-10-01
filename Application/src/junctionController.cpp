@@ -15,7 +15,7 @@ jw::junctionController::junctionController(behaviour p_controllerBehaviour)
 
 void jw::junctionController::update(sf::Time period)
 {
-	// TODO
+	if (controllerBehaviour == none) return;
 
 	// check if it's time to change the lights
 	timeSinceLastLightChange += period;
@@ -51,7 +51,7 @@ void jw::junctionController::update(sf::Time period)
 void jw::junctionController::setJunctionCount(int newCount)
 {
 	junctionCount = newCount;
-	if (junctionCount > 0) buildSequence();
+	buildSequence();
 
 	for (int i = 0; i < junctionCount; i++)
 	{
@@ -82,5 +82,6 @@ void jw::junctionController::buildSequence()
 		break;
 	}
 
-	currentSequenceStep = lightSequence.end() - 1;
+	currentSequenceStep = lightSequence.end();
+	if (lightSequence.size() > 0) currentSequenceStep -= 1;
 }

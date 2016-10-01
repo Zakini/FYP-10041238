@@ -73,12 +73,21 @@ namespace UnitTests
 
 		TEST_METHOD(circleLineFirstIntersection)
 		{
-			Assert::Fail();
+			sf::Vector2f lineStart(1, 2);
+			sf::Vector2f lineEnd(11, 2);
+			sf::Vector2f circleCentre(10, 5);
+			float circleRadius = 5;
+
+			sf::Vector2f expectedIntersectionPoint(6, 2);
+
+			Assert::IsTrue(jw::maths::circleLineFirstIntersection(lineStart, lineEnd, circleCentre, circleRadius) == expectedIntersectionPoint);
 		}
 
 		TEST_METHOD(leftPerpendicular)
 		{
-			Assert::Fail();
+			sf::Vector2f initialVector(6, 3);
+
+			Assert::IsTrue(jw::maths::leftPerpendicular(initialVector) == sf::Vector2f(initialVector.y, -initialVector.x));
 		}
 	};
 }

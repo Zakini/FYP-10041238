@@ -40,14 +40,14 @@ namespace jw
 			sf::Vector2<T> intersection;
 
 			sf::Vector2<T> unitLineVector = normalise(lineEnd - lineStart);				// D
-			float projectionLength = dotProduct(unitLineVector, centre - lineStart);	// t
-			Vector2f projectionPoint = projectionLength * unitLineVector + lineStart;	// E
-			float projectionDistance = length(projectionPoint - centre);
+			T projectionLength = dotProduct(unitLineVector, centre - lineStart);	// t
+			sf::Vector2<T> projectionPoint = projectionLength * unitLineVector + lineStart;	// E
+			T projectionDistance = length(projectionPoint - centre);
 
 			if (projectionDistance < radius)
 			{
 				// 2 intersection points (but we only care about the first one)
-				float projectionToEdgeDistance = sqrt(radius * radius - projectionDistance * projectionDistance);
+				T projectionToEdgeDistance = sqrt(radius * radius - projectionDistance * projectionDistance);
 				intersection = (projectionLength - projectionToEdgeDistance) * unitLineVector + lineStart;
 			}
 			else if (projectionDistance == radius)
@@ -67,6 +67,7 @@ namespace jw
 		template<typename T>
 		sf::Vector2<T> leftPerpendicular(sf::Vector2<T> v)
 		{
+			// TODO this points right, but lets me move roads to the left... what?
 			return sf::Vector2<T>(v.y, -v.x);
 		}
 	}

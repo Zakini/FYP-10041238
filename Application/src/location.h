@@ -21,6 +21,7 @@ namespace jw
 		void position(sf::Vector2f newPosition);
 		void addRoad(road* newRoad);
 		float renderRadius() { return renderShape.getRadius(); }
+		const std::vector<road*>& getInboundRoads() { return inboundRoads; }
 
 		float pathingHeuristic(location* target);
 
