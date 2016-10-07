@@ -30,7 +30,7 @@ namespace jw
 		car(shared_ptr<pathEngine> p_pather, int p_homeLocationId, int p_workLocationId)
 			: car(p_pather, p_homeLocationId, p_workLocationId, carFsm::generate(*this)) {}
 		car(shared_ptr<pathEngine> p_pather, int p_homeLocationId, int p_workLocationId, fsm carController);
-		// TODO destructor
+		~car();
 
 		static vector<car*> loadCars(string filepath, shared_ptr<pathEngine> pather);
 		static vector<car*> loadCars(nlohmann::json carsJson, shared_ptr<pathEngine> pather);
@@ -71,7 +71,6 @@ namespace jw
 
 		// physics
 		sf::Vector2f _position;
-		int previousLocationId, currentLocationId;
 		sf::Vector2f _velocity;
 		float mass;
 		const float maxEngineForce;
@@ -81,6 +80,7 @@ namespace jw
 		sf::RectangleShape renderShape;
 
 		// pathing
+		int previousLocationId, currentLocationId;
 		int homeLocationId, workLocationId;
 		shared_ptr<pathEngine> _pather;
 		deque<int> _currentPath;

@@ -23,13 +23,13 @@ const float gravitationalConstant = 9.81f;
 
 jw::car::car(shared_ptr<pathEngine> p_pather, int p_homeLocationId, int p_workLocationId, fsm carController)
 	: _position(0, 0)
-	, currentLocationId(0)
-	, previousLocationId(0)
 	, _velocity(0, 0)
 	, mass(defaultMass)
 	, maxEngineForce(defaultEngineForce)
 	, maxBrakeForce(defaultBrakeForce)
 	, renderShape(defaultRenderShape)
+	, previousLocationId(0)
+	, currentLocationId(0)
 	, homeLocationId(p_homeLocationId)
 	, workLocationId(p_workLocationId)
 	, _pather(p_pather)
@@ -44,6 +44,13 @@ jw::car::car(shared_ptr<pathEngine> p_pather, int p_homeLocationId, int p_workLo
 	renderShape.setFillColor(sf::Color::Green);
 
 	controller.initialise();
+}
+
+jw::car::~car()
+{
+	delete _targetPosition;
+	delete incomingTrafficLightPosition;
+	delete incomingTrafficLightState;
 }
 
 vector<jw::car*> jw::car::loadCars(string filepath, shared_ptr<pathEngine> pather)
