@@ -182,5 +182,101 @@ namespace UnitTests
 			Assert::IsTrue(testCar.getMaxBrakeForce() == 200000.0f);
 			Assert::IsTrue(testCar.getMass() == 1500.0f);
 		}
+	
+		TEST_METHOD(isAtTarget)
+		{
+			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json";
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+
+			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
+
+			jw::car testCar(testPather, 1, 2);
+
+			testCar.currentLocation(2);
+			testCar.targetPosition(sf::Vector2f(0, 0));
+
+			Assert::IsFalse(testCar.isAtTarget());
+
+			testCar.targetPosition(sf::Vector2f(3, 4));
+
+			Assert::IsTrue(testCar.isAtTarget());
+		}
+
+		TEST_METHOD(isAtPosition)
+		{
+			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json";
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+
+			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
+
+			jw::car testCar(testPather, 1, 2);
+
+			Assert::IsFalse(testCar.isAtPosition(sf::Vector2f(3, 4)));
+
+			testCar.currentLocation(2);
+
+			Assert::IsTrue(testCar.isAtPosition(sf::Vector2f(3, 4)));
+		}
+
+		TEST_METHOD(checkEnvironment)
+		{
+			// TODO cars
+
+			// traffic lights
+			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test3.json";
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+
+			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
+			std::pair<const sf::Vector2f*, const jw::junctionController::signalState*> trafficLightPerceptions;
+
+			// light ahead, not moving towards it
+			jw::car testCar1(testPather, 1, 2, jw::fsm());
+			testCar1.currentLocation(1);
+			testCar1.pathTo(2);
+			testCar1.update(sf::seconds(1));
+
+			trafficLightPerceptions = testCar1.getTrafficLightPerception();
+
+			Assert::IsTrue(*trafficLightPerceptions.first == testPather->getRoadEndPosition(1, 4));
+			Assert::IsTrue(trafficLightPerceptions.second == nullptr);
+
+			// light ahead, moving towards it
+			jw::car testCar2(testPather, 1, 2, jw::fsm());
+			testCar2.currentLocation(1);
+			testCar2.pathTo(2);
+			testCar2.targetPosition(testPather->getRoadEndPosition(1, 4));
+			testCar2.update(sf::seconds(1));
+
+			trafficLightPerceptions = testCar2.getTrafficLightPerception();
+
+			Assert::IsTrue(*trafficLightPerceptions.first == testPather->getRoadEndPosition(testCar2.currentLocation(), testCar2.currentPath().front()));
+			Assert::IsTrue(*trafficLightPerceptions.second == jw::junctionController::signalState::stop);
+
+			// no light ahead, not moving towards it
+			jw::car testCar3(testPather, 1, 2, jw::fsm());
+			testCar3.currentLocation(1);
+			testCar3.pathTo(3);
+			testCar3.update(sf::seconds(1));
+
+			trafficLightPerceptions = testCar3.getTrafficLightPerception();
+
+			Assert::IsTrue(trafficLightPerceptions.first == nullptr);
+			Assert::IsTrue(trafficLightPerceptions.second == nullptr);
+
+			// no light ahead, moving towards it
+			jw::car testCar4(testPather, 1, 2, jw::fsm());
+			testCar4.currentLocation(1);
+			testCar4.pathTo(3);
+			testCar4.targetPosition(testPather->getRoadEndPosition(testCar2.currentLocation(), testCar2.currentPath().front()));
+			testCar4.update(sf::seconds(1));
+
+			trafficLightPerceptions = testCar4.getTrafficLightPerception();
+
+			Assert::IsTrue(trafficLightPerceptions.first == nullptr);
+			Assert::IsTrue(trafficLightPerceptions.second == nullptr);
+		}
 	};
 }

@@ -10,6 +10,7 @@
 #include "road.h"
 #include "SFML/System/Vector2.hpp"
 #include <memory>
+#include "junctionController.h"
 
 using std::deque;
 using std::priority_queue;
@@ -30,9 +31,12 @@ namespace jw
 		pathEngine(shared_ptr<graph_type> p_targetGraph) : targetGraph(p_targetGraph) {}
 
 		deque<int> findPath(int fromId, int toId);
+
 		Vector2f getLocationPosition(int id);
+		bool isLocationTrafficControlled(int id);
 		Vector2f getRoadStartPosition(int fromId, int toId);
 		Vector2f getRoadEndPosition(int fromId, int toId);
+		junctionController::signalState getSignalAtRoadEnd(int fromId, int toId);
 
 	private:
 		shared_ptr<graph_type> targetGraph;

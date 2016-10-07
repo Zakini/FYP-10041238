@@ -72,5 +72,27 @@ namespace UnitTests
 
 			Assert::IsTrue(testLocation.renderRadius() == 6.0f);
 		}
+
+		TEST_METHOD(isJunctionControlled)
+		{
+			jw::location testLocation1(sf::Vector2f(1, 1), jw::junctionController::behaviour::none);
+			jw::location testLocation2(sf::Vector2f(10, 10), jw::junctionController::behaviour::cycle);
+
+			Assert::IsFalse(testLocation1.isControlledJunction());
+			Assert::IsTrue(testLocation2.isControlledJunction());
+		}
+
+		TEST_METHOD(getSignalAtRoad)
+		{
+			jw::location testLocation1(sf::Vector2f(1, 1), jw::junctionController::behaviour::none);
+			jw::location testLocation2(sf::Vector2f(10, 10), jw::junctionController::behaviour::cycle);
+			jw::road testRoad(&testLocation1, &testLocation2);
+
+			testLocation1.addRoad(&testRoad);
+			testLocation2.addRoad(&testRoad);
+
+			Assert::IsTrue(testLocation1.getSignalAtRoad(&testRoad) == jw::junctionController::signalState::go);
+			Assert::IsTrue(testLocation2.getSignalAtRoad(&testRoad) == jw::junctionController::signalState::stop);
+		}
 	};
 }

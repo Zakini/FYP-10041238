@@ -11,9 +11,6 @@ namespace jw
 
 	namespace carFsm
 	{
-		const float arrivalDistanceThreshold = 0.1f;	// POSSIBLE make configurable?
-		const float arrivalSpeedThreshold = 1.0f;
-
 		class carState : public state
 		{
 		public:

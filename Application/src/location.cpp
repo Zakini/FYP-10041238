@@ -2,6 +2,7 @@
 
 #include <typeinfo>
 #include "vectorMaths.h"
+#include <algorithm>
 
 using jw::maths::length;
 using jw::maths::normalise;
@@ -58,6 +59,14 @@ namespace jw
 
 			controller->setJunctionCount(inboundRoads.size());
 		}
+	}
+
+	junctionController::signalState location::getSignalAtRoad(road* from)
+	{
+		if (!isControlledJunction()) return junctionController::signalState::go;
+
+		int roadId = std::find(inboundRoads.begin(), inboundRoads.end(), from) - inboundRoads.begin();
+		return controller->getState().at(roadId);
 	}
 
 	float location::pathingHeuristic(location* target)

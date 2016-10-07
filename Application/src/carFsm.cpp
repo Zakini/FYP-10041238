@@ -39,11 +39,7 @@ void jw::carFsm::targetRoadEnd::update(sf::Time period)
 
 void jw::carFsm::updatePath::update(sf::Time period)
 {
-	int targetLocationId = targetCar.currentPath().front();
-	sf::Vector2f targetPosition = targetCar.pather()->getRoadEndPosition(targetCar.currentLocation(), targetLocationId);
-	float distanceFromTarget = length(targetCar.position() - targetPosition);
-	float currentSpeed = length(targetCar.velocity());
-	if (distanceFromTarget <= arrivalDistanceThreshold && currentSpeed < arrivalSpeedThreshold)
+	if (targetCar.isAtTarget())
 	{
 		targetCar.popStepFromPath();
 	}
@@ -57,16 +53,7 @@ bool jw::carFsm::arrived::changeState()
 
 bool jw::carFsm::atTarget::changeState()
 {
-	sf::Vector2f targetPosition;
-
-	try { targetPosition = targetCar.targetPosition(); }
-	catch (out_of_range oor) { return false; }
-
-	float distanceFromTarget = length(targetCar.position() - targetPosition);
-	float currentSpeed = length(targetCar.velocity());
-
-	if (distanceFromTarget <= arrivalDistanceThreshold && currentSpeed < arrivalSpeedThreshold) return true;
-	else return false;
+	return targetCar.isAtTarget();
 }
 
 jw::fsm jw::carFsm::generate(car& targetCar)

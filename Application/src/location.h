@@ -22,6 +22,8 @@ namespace jw
 		void addRoad(road* newRoad);
 		float renderRadius() { return renderShape.getRadius(); }
 		const std::vector<road*>& getInboundRoads() { return inboundRoads; }
+		junctionController::signalState getSignalAtRoad(road* from);
+		bool isControlledJunction() { return controller != nullptr; }
 
 		float pathingHeuristic(location* target);
 
@@ -35,7 +37,7 @@ namespace jw
 		sf::Vector2f _position;	// POSSIBLE 3D vector?
 		sf::CircleShape renderShape;
 		std::vector<sf::CircleShape> trafficLightShapes;
-		std::vector<road*> inboundRoads;
+		std::vector<road*> inboundRoads;	// TODO store fromIds?
 		junctionController* controller;
 		static const float lightRenderOffset;
 

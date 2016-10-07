@@ -72,6 +72,11 @@ namespace jw
 		return targetGraph->nodeAt(id).position();
 	}
 
+	bool pathEngine::isLocationTrafficControlled(int id)
+	{
+		return targetGraph->nodeAt(id).isControlledJunction();
+	}
+
 	Vector2f pathEngine::getRoadStartPosition(int fromId, int toId)
 	{
 		return targetGraph->edgesAt(fromId).at(toId).startPosition();
@@ -80,6 +85,12 @@ namespace jw
 	Vector2f pathEngine::getRoadEndPosition(int fromId, int toId)
 	{
 		return targetGraph->edgesAt(fromId).at(toId).endPosition();
+	}
+
+	junctionController::signalState pathEngine::getSignalAtRoadEnd(int fromId, int toId)
+	{
+		location& endLocation = targetGraph->nodeAt(toId);
+		return endLocation.getSignalAtRoad(&targetGraph->edgeBetween(fromId, toId));
 	}
 
 	bool pathEngine::comparePriority::operator()(pathingTuple a, pathingTuple b)

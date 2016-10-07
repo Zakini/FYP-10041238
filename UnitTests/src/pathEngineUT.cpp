@@ -261,5 +261,25 @@ namespace UnitTests
 			Assert::IsTrue(testPather.getRoadEndPosition(1, 2) == testGraph->edgesAt(1).at(2).endPosition());
 			Assert::IsTrue(testPather.getRoadEndPosition(2, 1) == testGraph->edgesAt(2).at(1).endPosition());
 		}
+		
+		TEST_METHOD(isLocationTrafficControlled)
+		{
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "pather-test3.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
+
+			Assert::IsFalse(testPather.isLocationTrafficControlled(1));
+			Assert::IsTrue(testPather.isLocationTrafficControlled(2));
+		}
+
+		TEST_METHOD(getSignalAtRoadEnd)
+		{
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "pather-test3.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
+
+			Assert::IsTrue(testPather.getSignalAtRoadEnd(1, 2) == jw::junctionController::signalState::stop);
+			Assert::IsTrue(testPather.getSignalAtRoadEnd(2, 1) == jw::junctionController::signalState::go);
+		}
 	};
 }
