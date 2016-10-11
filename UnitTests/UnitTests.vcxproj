@@ -163,6 +163,8 @@
   <ItemGroup>
     <ClCompile Include="src\carFsmUT.cpp" />
     <ClCompile Include="src\carUT.cpp" />
+    <ClCompile Include="src\collidableUT.cpp" />
+    <ClCompile Include="src\collisionDetectorUT.cpp" />
     <ClCompile Include="src\fsmUT.cpp" />
     <ClCompile Include="src\graphUT.cpp" />
     <ClCompile Include="src\junctionControllerUT.cpp" />

@@ -70,5 +70,12 @@ namespace jw
 			// TODO this points right, but lets me move roads to the left... what?
 			return sf::Vector2<T>(v.y, -v.x);
 		}
+
+		// not actually defined in 2D, just returns the magnitude of the new 3D vector
+		template<typename T>
+		T crossProduct(sf::Vector2<T> a, sf::Vector2<T> b)
+		{
+			return a.x * b.y - a.y * b.x;
+		}
 	}
 }

@@ -156,6 +156,8 @@
     <ClCompile Include="lib\SFML-2.3.2-custom\lineShape.cpp" />
     <ClCompile Include="src\car.cpp" />
     <ClCompile Include="src\carFsm.cpp" />
+    <ClCompile Include="src\collidable.cpp" />
+    <ClCompile Include="src\collisionDetector.cpp" />
     <ClCompile Include="src\finiteStateMachine.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\gameObject.cpp" />
@@ -170,6 +172,8 @@
     <ClInclude Include="lib\SFML-2.3.2-custom\lineShape.h" />
     <ClInclude Include="src\car.h" />
     <ClInclude Include="src\carFsm.h" />
+    <ClInclude Include="src\collidable.h" />
+    <ClInclude Include="src\collisionDetector.h" />
     <ClInclude Include="src\finiteStateMachine.h" />
     <ClInclude Include="src\gameObject.h" />
     <ClInclude Include="src\game.h" />

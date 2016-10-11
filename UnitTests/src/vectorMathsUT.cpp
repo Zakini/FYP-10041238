@@ -89,5 +89,14 @@ namespace UnitTests
 
 			Assert::IsTrue(jw::maths::leftPerpendicular(initialVector) == sf::Vector2f(initialVector.y, -initialVector.x));
 		}
+
+		TEST_METHOD(crossProduct)
+		{
+			sf::Vector2f a(-2, -10);
+			sf::Vector2f b(0, -10);
+			float expected = a.x * b.y - a.y * b.x;
+
+			Assert::IsTrue(jw::maths::crossProduct(a, b) == expected);
+		}
 	};
 }

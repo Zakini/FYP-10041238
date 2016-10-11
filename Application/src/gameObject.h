@@ -23,7 +23,7 @@ namespace jw
 		friend bool operator<(const gameObject& lhs, const gameObject& rhs);
 
 	protected:
-		float _depth;	// higher numbers are "closer" to the screen
+		float _depth;	// TODO get rid of data members?	// higher numbers are "closer" to the screen
 
 		// Inherited via Drawable
 		virtual void draw(RenderTarget& target, RenderStates states) const override = 0;
