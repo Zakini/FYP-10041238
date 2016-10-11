@@ -8,6 +8,7 @@
 #include "car.h"
 #include "pathEngine.h"
 #include <memory>
+#include "collisionDetector.h"
 
 using std::vector;
 using std::shared_ptr;
@@ -26,6 +27,7 @@ namespace jw
 		sf::RenderWindow gameWindow;
 		world gameWorld;
 		shared_ptr<pathEngine> pather;
+		shared_ptr<collisionDetector> cDetector;
 		vector<gameObject*> entities;
 		sf::Clock frameTimer;
 

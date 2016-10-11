@@ -15,6 +15,8 @@
 #include <memory>
 #include "junctionController.h"
 #include <utility>
+#include "collidable.h"
+#include "collisionDetector.h"
 
 using std::vector;
 using std::deque;
@@ -24,22 +26,22 @@ using std::pair;
 
 namespace jw
 {
-	class car : public gameObject
+	class car : public gameObject, public collidable
 	{
 	public:
-		car(shared_ptr<pathEngine> p_pather, int p_homeLocationId, int p_workLocationId)
-			: car(p_pather, p_homeLocationId, p_workLocationId, carFsm::generate(*this)) {}
-		car(shared_ptr<pathEngine> p_pather, int p_homeLocationId, int p_workLocationId, fsm carController);
+		car(shared_ptr<pathEngine> p_pather, shared_ptr<collisionDetector> p_carDetector, int p_homeLocationId, int p_workLocationId)
+			: car(p_pather, p_carDetector, p_homeLocationId, p_workLocationId, carFsm::generate(*this)) {}
+		car(shared_ptr<pathEngine> p_pather, shared_ptr<collisionDetector> p_carDetector, int p_homeLocationId, int p_workLocationId, fsm carController);
 		~car();
 
-		static vector<car*> loadCars(string filepath, shared_ptr<pathEngine> pather);
-		static vector<car*> loadCars(nlohmann::json carsJson, shared_ptr<pathEngine> pather);
+		static vector<car*> loadCars(string filepath, shared_ptr<pathEngine> pather, shared_ptr<collisionDetector> carDetector);
+		static vector<car*> loadCars(nlohmann::json carsJson, shared_ptr<pathEngine> pather, shared_ptr<collisionDetector> carDetector);
 
 		// most of these were only added for tests, get rid for release?
 		int homeLocation() { return homeLocationId; }
 		int workLocation() { return workLocationId; }
 		sf::Vector2f position() { return _position; }
-		sf::Vector2f velocity() { return _velocity; }
+		sf::Vector2f velocity() { return _velocity; }	// TODO remove
 		int currentLocation() { return currentLocationId; }
 		void currentLocation(int locationId);
 		deque<int> currentPath() { return _currentPath; }
@@ -54,6 +56,10 @@ namespace jw
 
 		// Inherited via gameObject
 		virtual void update(sf::Time timeSinceLastFrame) override;	// POSSIBLE UT?
+
+		// Inherited via collidable
+		virtual sf::FloatRect getBoundingBox() override { return renderShape.getGlobalBounds(); }
+		virtual sf::Vector2f getVelocity() override { return velocity(); }
 
 		void targetPosition(sf::Vector2f target) { _targetPosition = new sf::Vector2f(target); }
 		sf::Vector2f targetPosition() const;
@@ -92,6 +98,7 @@ namespace jw
 		// perceptions
 		sf::Vector2f* incomingTrafficLightPosition;
 		junctionController::signalState* incomingTrafficLightState;
+		shared_ptr<collisionDetector> carDetector;
 
 		static const float defaultEngineForce;
 		static const float defaultBrakeForce;

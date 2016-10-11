@@ -26,7 +26,7 @@ namespace UnitTests
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(pather, 1, 2, jw::fsm());
+			jw::car testCar(pather, nullptr, 1, 2, jw::fsm());
 			jw::carFsm::moveToHome testState(testCar);
 
 			testState.update(sf::seconds(0));	// move should be instantaneous
@@ -43,7 +43,7 @@ namespace UnitTests
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(pather, 1, 2, jw::fsm());
+			jw::car testCar(pather, nullptr, 1, 2, jw::fsm());
 			jw::carFsm::pathToHome testState(testCar);
 
 			testCar.currentLocation(2);			// move to non-home location
@@ -63,7 +63,7 @@ namespace UnitTests
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(pather, 1, 2, jw::fsm());
+			jw::car testCar(pather, nullptr, 1, 2, jw::fsm());
 			jw::carFsm::pathToWork testState(testCar);
 
 			testCar.currentLocation(1);			// move to non-work location
@@ -83,7 +83,7 @@ namespace UnitTests
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(pather, 1, 2, jw::fsm());
+			jw::car testCar(pather, nullptr, 1, 2, jw::fsm());
 			testCar.targetPosition(pather->getRoadEndPosition(1, 2));
 			jw::carFsm::targetRoadStart testState(testCar);
 
@@ -103,7 +103,7 @@ namespace UnitTests
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(pather, 1, 2, jw::fsm());
+			jw::car testCar(pather, nullptr, 1, 2, jw::fsm());
 			testCar.targetPosition(pather->getRoadEndPosition(1, 2));
 			jw::carFsm::targetRoadEnd testState(testCar);
 
@@ -123,7 +123,7 @@ namespace UnitTests
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(pather, 1, 2, jw::fsm());
+			jw::car testCar(pather, nullptr, 1, 2, jw::fsm());
 			testCar.currentLocation(1);
 			testCar.pathTo(2);
 			testCar.targetPosition(pather->getRoadEndPosition(1, 2));
@@ -161,7 +161,7 @@ namespace UnitTests
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(pather, 1, 2, jw::fsm());
+			jw::car testCar(pather, nullptr, 1, 2, jw::fsm());
 			testCar.currentLocation(1);
 			testCar.targetPosition(pather->getRoadEndPosition(1, 2));
 			jw::carFsm::arrived testState(testCar);
@@ -190,7 +190,7 @@ namespace UnitTests
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(pather, 1, 2, jw::fsm());
+			jw::car testCar(pather, nullptr, 1, 2, jw::fsm());
 			testCar.targetPosition(pather->getRoadEndPosition(1, 2));
 			testCar.currentLocation(1);
 			jw::carFsm::atTarget testState(testCar);
@@ -213,7 +213,7 @@ namespace UnitTests
 
 		TEST_METHOD(generate)
 		{
-			jw::car testCar(nullptr, 1, 2);
+			jw::car testCar(nullptr, nullptr, 1, 2);
 			jw::fsm testFsm = jw::carFsm::generate(testCar);
 
 			// ###############

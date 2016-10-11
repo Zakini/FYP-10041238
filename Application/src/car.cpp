@@ -21,7 +21,7 @@ const float jw::car::arrivalSpeedThreshold = 1.0f;
 
 const float gravitationalConstant = 9.81f;
 
-jw::car::car(shared_ptr<pathEngine> p_pather, int p_homeLocationId, int p_workLocationId, fsm carController)
+jw::car::car(shared_ptr<pathEngine> p_pather, shared_ptr<collisionDetector> p_carDetector, int p_homeLocationId, int p_workLocationId, fsm carController)
 	: _position(0, 0)
 	, _velocity(0, 0)
 	, mass(defaultMass)
@@ -38,6 +38,7 @@ jw::car::car(shared_ptr<pathEngine> p_pather, int p_homeLocationId, int p_workLo
 	, controller(carController)
 	, incomingTrafficLightPosition(nullptr)
 	, incomingTrafficLightState(nullptr)
+	, carDetector(p_carDetector)
 	, gameObject(defaultRenderDepth)
 {
 	renderShape.setOrigin(renderShape.getSize() / 2.0f);
@@ -53,17 +54,17 @@ jw::car::~car()
 	delete incomingTrafficLightState;
 }
 
-vector<jw::car*> jw::car::loadCars(string filepath, shared_ptr<pathEngine> pather)
+vector<jw::car*> jw::car::loadCars(string filepath, shared_ptr<pathEngine> pather, shared_ptr<collisionDetector> carDetector)
 {
 	ifstream carFile(filepath);
 	nlohmann::json carJson;
 
 	carFile >> carJson;
 
-	return loadCars(carJson, pather);
+	return loadCars(carJson, pather, carDetector);
 }
 
-vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson, shared_ptr<pathEngine> pather)
+vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson, shared_ptr<pathEngine> pather, shared_ptr<collisionDetector> carDetector)
 {
 	const string carsKey = "cars";
 	const string homeKey = "home";
@@ -73,7 +74,7 @@ vector<jw::car*> jw::car::loadCars(nlohmann::json carsJson, shared_ptr<pathEngin
 
 	for (auto& carJson : carsJson[carsKey])
 	{
-		car* newCar = new car(pather, carJson[homeKey], carJson[workKey]);
+		car* newCar = new car(pather, carDetector, carJson[homeKey], carJson[workKey]);
 		outputVector.push_back(newCar);
 	}
 

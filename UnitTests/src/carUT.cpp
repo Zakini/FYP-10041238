@@ -9,6 +9,7 @@
 #include <fstream>
 #include "../../Application/lib/json-master/src/json.hpp"
 #include <stdexcept>
+#include "../../Application/src/collisionDetector.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -24,7 +25,8 @@ namespace UnitTests
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
-			std::vector<jw::car*> testCars = jw::car::loadCars(carJsonFilePath, testPather);
+			auto testDetector = std::make_shared<jw::collisionDetector>();
+			std::vector<jw::car*> testCars = jw::car::loadCars(carJsonFilePath, testPather, testDetector);
 
 			// Assert car 0's home is 1
 			Assert::IsTrue(testCars[0]->homeLocation() == 1);
@@ -43,11 +45,12 @@ namespace UnitTests
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
+			auto testDetector = std::make_shared<jw::collisionDetector>();
 			nlohmann::json testJson;
 
 			testFile >> testJson;
 
-			std::vector<jw::car*> testCars = jw::car::loadCars(testJson, testPather);
+			std::vector<jw::car*> testCars = jw::car::loadCars(testJson, testPather, testDetector);
 
 			// Assert car 0's home is 1
 			Assert::IsTrue(testCars[0]->homeLocation() == 1);
@@ -61,14 +64,14 @@ namespace UnitTests
 	
 		TEST_METHOD(getHomeLocationId)
 		{
-			jw::car testCar(nullptr, 1, 2);	// nullptr is invalid but works for this test
+			jw::car testCar(nullptr, nullptr, 1, 2);	// nullptr is invalid but works for this test
 
 			Assert::IsTrue(testCar.homeLocation() == 1);
 		}
 
 		TEST_METHOD(getWorkLocationId)
 		{
-			jw::car testCar(nullptr, 1, 2);	// nullptr is invalid but works for this test
+			jw::car testCar(nullptr, nullptr, 1, 2);	// nullptr is invalid but works for this test
 
 			Assert::IsTrue(testCar.workLocation() == 2);
 		}
@@ -81,7 +84,7 @@ namespace UnitTests
 
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(testPather, 1, 2);
+			jw::car testCar(testPather, nullptr, 1, 2);
 
 			testCar.currentLocation(2);
 
@@ -90,7 +93,7 @@ namespace UnitTests
 
 		TEST_METHOD(getVelocity)
 		{
-			jw::car testCar(nullptr, 1, 2, jw::fsm());
+			jw::car testCar(nullptr, nullptr, 1, 2, jw::fsm());
 			sf::Vector2f targetPosition(10000, 0);
 			testCar.targetPosition(targetPosition);
 
@@ -113,7 +116,7 @@ namespace UnitTests
 
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(testPather, 1, 2);
+			jw::car testCar(testPather, nullptr, 1, 2);
 
 			testCar.currentLocation(2);
 
@@ -128,7 +131,7 @@ namespace UnitTests
 
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(testPather, 1, 2);
+			jw::car testCar(testPather, nullptr, 1, 2);
 
 			testCar.currentLocation(1);
 			testCar.pathTo(2);
@@ -150,14 +153,14 @@ namespace UnitTests
 
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(testPather, 1, 2);
+			jw::car testCar(testPather, nullptr, 1, 2);
 
 			Assert::IsTrue(testCar.pather() == testPather);
 		}
 
 		TEST_METHOD(getSetTarget)
 		{
-			jw::car testCar(nullptr, 1, 2, jw::fsm());
+			jw::car testCar(nullptr, nullptr, 1, 2, jw::fsm());
 			sf::Vector2f targetPosition(5, 3);
 			
 			auto testFunction = [testCar] { return testCar.targetPosition(); };
@@ -169,14 +172,14 @@ namespace UnitTests
 
 		TEST_METHOD(depth)
 		{
-			jw::car testCar(nullptr, 1, 2);
+			jw::car testCar(nullptr, nullptr, 1, 2);
 
 			Assert::IsTrue(testCar.depth() == 10);
 		}
 
 		TEST_METHOD(maxForces)
 		{
-			jw::car testCar(nullptr, 1, 2);
+			jw::car testCar(nullptr, nullptr, 1, 2);
 
 			Assert::IsTrue(testCar.getMaxEngineForce() == 100000.0f);
 			Assert::IsTrue(testCar.getMaxBrakeForce() == 200000.0f);
@@ -191,7 +194,7 @@ namespace UnitTests
 
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(testPather, 1, 2);
+			jw::car testCar(testPather, nullptr, 1, 2);
 
 			testCar.currentLocation(2);
 			testCar.targetPosition(sf::Vector2f(0, 0));
@@ -211,7 +214,7 @@ namespace UnitTests
 
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(testPather, 1, 2);
+			jw::car testCar(testPather, nullptr, 1, 2);
 
 			Assert::IsFalse(testCar.isAtPosition(sf::Vector2f(3, 4)));
 
@@ -233,7 +236,7 @@ namespace UnitTests
 			std::pair<const sf::Vector2f*, const jw::junctionController::signalState*> trafficLightPerceptions;
 
 			// light ahead, not moving towards it
-			jw::car testCar1(testPather, 1, 2, jw::fsm());
+			jw::car testCar1(testPather, nullptr, 1, 2, jw::fsm());
 			testCar1.currentLocation(1);
 			testCar1.pathTo(2);
 			testCar1.update(sf::seconds(1));
@@ -244,7 +247,7 @@ namespace UnitTests
 			Assert::IsTrue(trafficLightPerceptions.second == nullptr);
 
 			// light ahead, moving towards it
-			jw::car testCar2(testPather, 1, 2, jw::fsm());
+			jw::car testCar2(testPather, nullptr, 1, 2, jw::fsm());
 			testCar2.currentLocation(1);
 			testCar2.pathTo(2);
 			testCar2.targetPosition(testPather->getRoadEndPosition(1, 4));
@@ -256,7 +259,7 @@ namespace UnitTests
 			Assert::IsTrue(*trafficLightPerceptions.second == jw::junctionController::signalState::stop);
 
 			// no light ahead, not moving towards it
-			jw::car testCar3(testPather, 1, 2, jw::fsm());
+			jw::car testCar3(testPather, nullptr, 1, 2, jw::fsm());
 			testCar3.currentLocation(1);
 			testCar3.pathTo(3);
 			testCar3.update(sf::seconds(1));
@@ -267,7 +270,7 @@ namespace UnitTests
 			Assert::IsTrue(trafficLightPerceptions.second == nullptr);
 
 			// no light ahead, moving towards it
-			jw::car testCar4(testPather, 1, 2, jw::fsm());
+			jw::car testCar4(testPather, nullptr, 1, 2, jw::fsm());
 			testCar4.currentLocation(1);
 			testCar4.pathTo(3);
 			testCar4.targetPosition(testPather->getRoadEndPosition(testCar2.currentLocation(), testCar2.currentPath().front()));

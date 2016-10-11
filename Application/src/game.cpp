@@ -11,11 +11,17 @@ namespace jw
 		: gameWindow(sf::VideoMode(800, 600), "FYP - 10041238", sf::Style::Close | sf::Style::Titlebar)
 		, gameWorld(gameWorldGraph)
 		, pather(make_shared<pathEngine>(gameWorldGraph))
+		, cDetector(make_shared<collisionDetector>())
 		, entities()
 		, frameTimer()
 	{
-		auto cars = car::loadCars(carsJsonPath, pather);
+		auto cars = car::loadCars(carsJsonPath, pather, cDetector);
 		entities.assign(cars.begin(), cars.end());
+
+		for (collidable* car : cars)
+		{
+			cDetector->addCollisionTarget(car);
+		}
 	}
 
 	game* game::make_game()

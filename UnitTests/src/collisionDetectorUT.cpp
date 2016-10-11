@@ -31,6 +31,8 @@ namespace UnitTest
 			testDetector.addCollisionTarget(expectedResult[1]);
 
 			Assert::IsTrue(testDetector.getCollisionTargets() == expectedResult);
+
+			Assert::Fail();	// TODO assignCollisionTargets
 		}
 
 		TEST_METHOD(predictCollisionsNoTargets)
