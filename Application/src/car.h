@@ -37,11 +37,9 @@ namespace jw
 		static vector<car*> loadCars(string filepath, shared_ptr<pathEngine> pather, shared_ptr<collisionDetector> carDetector);
 		static vector<car*> loadCars(nlohmann::json carsJson, shared_ptr<pathEngine> pather, shared_ptr<collisionDetector> carDetector);
 
-		// most of these were only added for tests, get rid for release?
+		// POSSIBLE most of these were only added for tests, get rid for release?
 		int homeLocation() { return homeLocationId; }
 		int workLocation() { return workLocationId; }
-		sf::Vector2f position() { return _position; }
-		sf::Vector2f velocity() { return _velocity; }	// TODO remove
 		int currentLocation() { return currentLocationId; }
 		void currentLocation(int locationId);
 		deque<int> currentPath() { return _currentPath; }
@@ -58,8 +56,10 @@ namespace jw
 		virtual void update(sf::Time timeSinceLastFrame) override;	// POSSIBLE UT?
 
 		// Inherited via collidable
+		virtual sf::Vector2f getVelocity() override { return _velocity; }
+		virtual sf::Vector2f getHeading() override { return _heading; }
+		virtual sf::Vector2f getPosition() { return _position; }
 		virtual sf::FloatRect getBoundingBox() override { return renderShape.getGlobalBounds(); }
-		virtual sf::Vector2f getVelocity() override { return velocity(); }
 
 		void targetPosition(sf::Vector2f target) { _targetPosition = new sf::Vector2f(target); }
 		sf::Vector2f targetPosition() const;
@@ -78,6 +78,7 @@ namespace jw
 		// physics
 		sf::Vector2f _position;
 		sf::Vector2f _velocity;
+		sf::Vector2f _heading;
 		float mass;
 		const float maxEngineForce;
 		const float maxBrakeForce;
@@ -99,6 +100,7 @@ namespace jw
 		sf::Vector2f* incomingTrafficLightPosition;
 		junctionController::signalState* incomingTrafficLightState;
 		shared_ptr<collisionDetector> carDetector;
+		sf::Vector2f* safePositionBehindCarAhead;	// TODO rename
 
 		static const float defaultEngineForce;
 		static const float defaultBrakeForce;

@@ -3,16 +3,16 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/System/Time.hpp>
+#include "physicsObject.h"
 
 namespace jw
 {
-	class collidable	// TODO inherit from physics object class for velocity, position etc.?
+	class collidable : public physicsObject
 	{
 	public:
-		virtual bool collide(collidable& target);
+		virtual bool collide(collidable& target, float minDistance = 0.0f);
 		virtual std::pair<bool, sf::Vector2f> sweepCollide(collidable& target, sf::Time period, float minDistance = 0.0f);
 		virtual sf::FloatRect getBoundingBox() = 0;
-		virtual sf::Vector2f getVelocity() = 0;
 
 		static sf::FloatRect minkowskiDifference(sf::FloatRect a, sf::FloatRect b);
 		static float lineRectIntersection(sf::FloatRect rectangle, sf::Vector2f lineDirection, sf::Vector2f lineOrigin = { 0, 0 });

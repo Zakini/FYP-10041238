@@ -2,6 +2,7 @@
 #include "CppUnitTest.h"
 
 #include "../../Application/src/collidable.h"
+#include "../../Application/src/vectorMaths.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -9,8 +10,10 @@ namespace UnitTest
 {
 	struct testCollidable : public jw::collidable
 	{
+		virtual sf::Vector2f getPosition() override { return sf::Vector2f(boundingBox.left + boundingBox.width / 2, boundingBox.top + boundingBox.height / 2); }
 		virtual sf::FloatRect getBoundingBox() override { return boundingBox; }
 		virtual sf::Vector2f getVelocity() override { return velocity; }
+		virtual sf::Vector2f getHeading() override { return jw::maths::normalise(velocity); }
 
 		sf::FloatRect boundingBox;
 		sf::Vector2f velocity;
@@ -20,7 +23,7 @@ namespace UnitTest
 	{
 		TEST_METHOD(collideNoCollision)
 		{
-			testCollidable testObj1, testObj2;
+			testCollidable testObj1 = {}, testObj2 = {};
 			testObj1.boundingBox = sf::FloatRect(0, 0, 2, 2);
 			testObj2.boundingBox = sf::FloatRect(0, 3, 2, 2);
 
@@ -29,7 +32,7 @@ namespace UnitTest
 
 		TEST_METHOD(collideCollision)
 		{
-			testCollidable testObj1, testObj2;
+			testCollidable testObj1 = {}, testObj2 = {};
 			testObj1.boundingBox = sf::FloatRect(0, 0, 2, 2);
 			testObj2.boundingBox = sf::FloatRect(0, 1, 2, 2);
 
@@ -38,7 +41,7 @@ namespace UnitTest
 
 		TEST_METHOD(collideAlmostCollision)
 		{
-			testCollidable testObj1, testObj2;
+			testCollidable testObj1 = {}, testObj2 = {};
 			testObj1.boundingBox = sf::FloatRect(0, 0, 2, 2);
 			testObj2.boundingBox = sf::FloatRect(2.1f, 2.1f, 2, 2);
 
@@ -47,16 +50,23 @@ namespace UnitTest
 
 		TEST_METHOD(collideBarelyCollision)
 		{
-			testCollidable testObj1, testObj2;
+			testCollidable testObj1 = {}, testObj2 = {};
 			testObj1.boundingBox = sf::FloatRect(0, 0, 2, 2);
 			testObj2.boundingBox = sf::FloatRect(2, 2, 2, 2);
 
 			Assert::IsTrue(testObj2.collide(testObj1));
 		}
 
+		TEST_METHOD(collideSelf)
+		{
+			testCollidable testObj1 = {};
+
+			Assert::IsFalse(testObj1.collide(testObj1));
+		}
+
 		TEST_METHOD(sweepCollideNoMovement)
 		{
-			testCollidable testObj1, testObj2;
+			testCollidable testObj1 = {}, testObj2 = {};
 
 			testObj1.boundingBox = sf::FloatRect(1, 1, 2, 2);
 			testObj1.velocity = sf::Vector2f(0, 0);
@@ -70,7 +80,7 @@ namespace UnitTest
 
 		TEST_METHOD(sweepCollideNoCollision)
 		{
-			testCollidable testObj1, testObj2;
+			testCollidable testObj1 = {}, testObj2 = {};
 
 			testObj1.boundingBox = sf::FloatRect(1, 1, 2, 2);
 			testObj1.velocity = sf::Vector2f(1, 1);
@@ -84,7 +94,7 @@ namespace UnitTest
 
 		TEST_METHOD(sweepCollideAlmostNoCollision)
 		{
-			testCollidable testObj1, testObj2;
+			testCollidable testObj1 = {}, testObj2 = {};
 
 			testObj1.boundingBox = sf::FloatRect(1, 0, 2, 2);
 			testObj1.velocity = sf::Vector2f(2, 0);
@@ -98,7 +108,7 @@ namespace UnitTest
 
 		TEST_METHOD(sweepCollideBarelyCollision)
 		{
-			testCollidable testObj1, testObj2;
+			testCollidable testObj1 = {}, testObj2 = {};
 
 			testObj1.boundingBox = sf::FloatRect(1, 0, 2, 2);
 			testObj1.velocity = sf::Vector2f(2, 0);
@@ -113,7 +123,7 @@ namespace UnitTest
 
 		TEST_METHOD(sweepCollideCollision)
 		{
-			testCollidable testObj1, testObj2;
+			testCollidable testObj1 = {}, testObj2 = {};
 
 			testObj1.boundingBox = sf::FloatRect(0, 1, 2, 2);
 			testObj1.velocity = sf::Vector2f(0, 2);
@@ -128,7 +138,7 @@ namespace UnitTest
 
 		TEST_METHOD(sweepCollideCollisionWithMinDistance)
 		{
-			testCollidable testObj1, testObj2;
+			testCollidable testObj1 = {}, testObj2 = {};
 
 			testObj1.boundingBox = sf::FloatRect(0, 1, 2, 2);
 			testObj1.velocity = sf::Vector2f(0, 2);
@@ -143,7 +153,7 @@ namespace UnitTest
 
 		TEST_METHOD(sweepCollideDiagonalMiss)
 		{
-			testCollidable testObj1, testObj2;
+			testCollidable testObj1 = {}, testObj2 = {};
 
 			testObj1.boundingBox = sf::FloatRect(0, 2, 2, 2);
 			testObj1.velocity = sf::Vector2f(1, -1);
@@ -157,7 +167,7 @@ namespace UnitTest
 
 		TEST_METHOD(sweepCollideDiagonalCollision)
 		{
-			testCollidable testObj1, testObj2;
+			testCollidable testObj1 = {}, testObj2 = {};
 
 			testObj1.boundingBox = sf::FloatRect(0, 0, 2, 2);
 			testObj1.velocity = sf::Vector2f(1, 1);
@@ -168,6 +178,15 @@ namespace UnitTest
 
 			Assert::IsTrue(collisionResult.first);
 			Assert::IsTrue(collisionResult.second == sf::Vector2f(2, 2));
+		}
+
+		TEST_METHOD(sweepCollideSelf)
+		{
+			testCollidable testObj1 = {};
+
+			auto collisionResult = testObj1.sweepCollide(testObj1, sf::seconds(10));
+
+			Assert::IsFalse(collisionResult.first);
 		}
 
 		TEST_METHOD(minkowskiDifference)

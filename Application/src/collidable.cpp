@@ -7,9 +7,17 @@
 namespace jw
 {
 	// See: https://hamaluik.com/posts/simple-aabb-collision-using-minkowski-difference/
-	bool collidable::collide(collidable& target)
+	bool collidable::collide(collidable& target, float minDistance)
 	{
-		sf::FloatRect minkowskiRect = collidable::minkowskiDifference(this->getBoundingBox(), target.getBoundingBox());
+		if (&target == this) return false;	// can't collide with yourself!
+
+		sf::FloatRect targetBoundingBox = target.getBoundingBox();
+		targetBoundingBox.left -= minDistance;
+		targetBoundingBox.top -= minDistance;
+		targetBoundingBox.width += minDistance * 2;
+		targetBoundingBox.height += minDistance * 2;
+
+		sf::FloatRect minkowskiRect = collidable::minkowskiDifference(this->getBoundingBox(), targetBoundingBox);
 		return minkowskiRect.left <= 0 && minkowskiRect.top <= 0 && (minkowskiRect.left + minkowskiRect.width) >= 0 && (minkowskiRect.top + minkowskiRect.height) >= 0;
 	}
 
@@ -17,6 +25,9 @@ namespace jw
 	std::pair<bool, sf::Vector2f> collidable::sweepCollide(collidable& target, sf::Time period, float minDistance)
 	{
 		std::pair<bool, sf::Vector2f> collisionResult(false, sf::Vector2f());
+
+		if (&target == this) return collisionResult;	// can't collide with yourself!
+
 		sf::FloatRect targetBoundingBox = target.getBoundingBox();
 		targetBoundingBox.left -= minDistance;
 		targetBoundingBox.top -= minDistance;
@@ -24,7 +35,7 @@ namespace jw
 		targetBoundingBox.height += minDistance * 2;
 		sf::Vector2f targetCentre(targetBoundingBox.left + targetBoundingBox.width / 2, targetBoundingBox.top + targetBoundingBox.height / 2);
 
-		if (this->collide(target))	// already colliding
+		if (this->collide(target, minDistance))	// already colliding
 		{
 			collisionResult.first = true;
 			collisionResult.second = targetCentre;
@@ -113,86 +124,4 @@ namespace jw
 
 		return intersection;
 	}
-
-	// See: http://www.gamedev.net/page/resources/_/technical/game-programming/swept-aabb-collision-detection-and-response-r3084
-	//std::pair<bool,sf::Vector2f> collidable::sweepCollide(collidable& target, sf::Time period, float minDistance)
-	//{
-	//	std::pair<bool, sf::Vector2f> collisionResult(false, sf::Vector2f());
-
-	//	sf::Vector2f targetVelocity = target.getVelocity();
-	//	sf::Vector2f relativeTargetVelocity = targetVelocity - this->getVelocity();
-	//	sf::FloatRect thisBoundingBox = this->getBoundingBox();
-	//	sf::FloatRect targetBoundingBox = target.getBoundingBox();
-	//	sf::Vector2f targetCentre(targetBoundingBox.left + targetBoundingBox.width / 2, targetBoundingBox.top + targetBoundingBox.height / 2);
-
-	//	// calculate distances to collision
-	//	float entryDistX, entryDistY, exitDistX, exitDistY;
-
-	//	// target edge to this edge (with minDistance between them)
-	//	float leftToRightDist = (thisBoundingBox.left + thisBoundingBox.width) - targetBoundingBox.left - minDistance;
-	//	float rightToLeftDist = thisBoundingBox.left - (targetBoundingBox.left + targetBoundingBox.width) - minDistance;
-	//	float topToBottomDist = (thisBoundingBox.top + thisBoundingBox.height) - targetBoundingBox.top - minDistance;
-	//	float bottomToTopDist = thisBoundingBox.top - (targetBoundingBox.top + targetBoundingBox.height) - minDistance;
-
-	//	if (relativeTargetVelocity.x > 0)
-	//	{
-	//		entryDistX = rightToLeftDist;
-	//		exitDistX = leftToRightDist;
-	//	}
-	//	else
-	//	{
-	//		entryDistX = leftToRightDist;
-	//		exitDistX = rightToLeftDist;
-	//	}
-
-	//	if (relativeTargetVelocity.y > 0)
-	//	{
-	//		entryDistY = bottomToTopDist;
-	//		exitDistY = topToBottomDist;
-	//	}
-	//	else
-	//	{
-	//		entryDistY = topToBottomDist;
-	//		exitDistY = bottomToTopDist;
-	//	}
-
-	//	// calculate times to collision
-	//	float entryTimeX, entryTimeY, exitTimeX, exitTimeY;
-
-	//	if (relativeTargetVelocity.x == 0)
-	//	{
-	//		entryTimeX = -std::numeric_limits<float>::infinity();
-	//		exitTimeX = std::numeric_limits<float>::infinity();
-	//	}
-	//	else
-	//	{
-	//		entryTimeX = entryDistX / relativeTargetVelocity.x;
-	//		exitTimeX = exitDistX / relativeTargetVelocity.x;
-	//	}
-
-	//	if (relativeTargetVelocity.y == 0)
-	//	{
-	//		entryTimeY = -std::numeric_limits<float>::infinity();
-	//		exitTimeY = std::numeric_limits<float>::infinity();
-	//	}
-	//	else
-	//	{
-	//		entryTimeY = entryDistY / relativeTargetVelocity.y;
-	//		exitTimeY = exitDistY / relativeTargetVelocity.y;
-	//	}
-
-	//	// TODO are these needed?
-	//	float entryTime = std::max(entryTimeX, entryTimeY);
-	//	float exitTime = std::min(exitTimeX, exitTimeY);
-
-	//	// check if a collision occurred
-	//	if (entryTime <= exitTime && (entryTimeX >= 0 || entryTimeY >= 0) && (entryTimeX <= period.asSeconds() && entryTimeY <= period.asSeconds()))
-	//	{
-	//		collisionResult.first = true;
-	//		// position of target at time of collision
-	//		collisionResult.second = targetCentre + targetVelocity * entryTime;
-	//	}
-	//	
-	//	return collisionResult;
-	//}
 }

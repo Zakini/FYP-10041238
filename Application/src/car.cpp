@@ -39,6 +39,7 @@ jw::car::car(shared_ptr<pathEngine> p_pather, shared_ptr<collisionDetector> p_ca
 	, incomingTrafficLightPosition(nullptr)
 	, incomingTrafficLightState(nullptr)
 	, carDetector(p_carDetector)
+	, safePositionBehindCarAhead(nullptr)
 	, gameObject(defaultRenderDepth)
 {
 	renderShape.setOrigin(renderShape.getSize() / 2.0f);
@@ -158,10 +159,40 @@ void jw::car::pathTo(int targetId)
 
 void jw::car::checkEnvironment()
 {
-	// TODO find cars ahead
-	// TODO find cars behind
+	// ##################
+	// ### check cars ###
+	// ##################
 
-	// check traffic lights
+	safePositionBehindCarAhead = nullptr;
+
+	if (carDetector != nullptr)
+	{
+		sf::Time minTimeToFullStop = sf::seconds((-length(_velocity)) * (-(mass / maxBrakeForce)));
+
+		// TODO check they are actually ahead! the front car doesn't need to respond and it does currently!
+		// find cars ahead
+		auto carsAhead = carDetector->predictCollisions(*this, minTimeToFullStop, renderShape.getGlobalBounds().width,
+			[this](collidable* collidee)
+		{
+			return angleBetween(this->getHeading(), collidee->getPosition() - this->getPosition()) < 90;
+		});
+
+		if (carsAhead.size() > 0)
+		{
+			// store safe position behind closest car ahead temporarily
+			auto tempCarPosition = std::min_element(carsAhead.begin(), carsAhead.end(),
+				[](sf::Vector2f a, sf::Vector2f b) { return length(a) < length(b); });
+
+			safePositionBehindCarAhead = new Vector2f(*tempCarPosition);
+		}
+
+		// TODO find cars behind
+	}
+
+	// ############################
+	// ### check traffic lights ###
+	// ############################
+
 	// no incoming light or light is now behind us
 	if (incomingTrafficLightPosition == nullptr || angleBetween(_velocity, *incomingTrafficLightPosition - _position) > 90.0f)
 	{
@@ -200,31 +231,30 @@ void jw::car::moveTowardTarget(sf::Time period)
 
 	sf::Vector2f tempTarget = *_targetPosition;
 
-	if (incomingTrafficLightState != nullptr)
+	// car ahead, need to slow down
+	if (safePositionBehindCarAhead != nullptr)
 	{
-		if (false)	// TODO car ahead, need to slow down
-		{
-			// TODO target position just behind car
-		}
-		else if (*incomingTrafficLightState == junctionController::signalState::stop)	// light ahead is red
-		{
-			tempTarget = *incomingTrafficLightPosition;
-		}
-		else if (false)	// TODO if traffic light is stopIfAble, only stop if there are no cars close behind
-		{
+		tempTarget = *safePositionBehindCarAhead;
+	}
+	// light ahead is red
+	else if (incomingTrafficLightState != nullptr && *incomingTrafficLightState == junctionController::signalState::stop)
+	{
+		tempTarget = *incomingTrafficLightPosition;
+	}
+	else if (false)	// TODO if traffic light is stopIfAble, only stop if there are no cars close behind
+	{
 
-		}
-		else	// TODO if traffic light is go or prepareToGo, no need to stop completely, go through junction at certain speed
-		{
+	}
+	else	// TODO if traffic light is go or prepareToGo, no need to stop completely, go through junction at certain speed
+	{
 
-		}
-		
 	}
 
 	sf::Vector2f force = generateForce(tempTarget, period);
 	applyForce(force, period);
 }
 
+// TODO arc paths, rather than straight, when turning
 // Move to target, aim to be stationary on arrival
 sf::Vector2f jw::car::generateForce(sf::Vector2f target, sf::Time period)
 {
@@ -289,6 +319,11 @@ void jw::car::applyForce(sf::Vector2f force, sf::Time period)
 	{
 		_velocity = newVelocity;
 	}
+
+	if (length(_velocity) != 0)
+	{
+		_heading = normalise(_velocity);
+	}// else leave heading as it was
 
 	_position += _velocity * period.asSeconds();
 }

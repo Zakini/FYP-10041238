@@ -1,12 +1,24 @@
 #include "collisionDetector.h"
+#include "vectorMaths.h"
 
 namespace jw
 {
-	std::vector<sf::Vector2f> collisionDetector::predictCollisions(collidable& target, sf::Time period, float minDistance)
+	std::vector<sf::Vector2f> collisionDetector::predictCollisions(collidable& target, sf::Time period, float minDistance, collisionDetector::filter_type filterFunction)
 	{
 		std::vector<sf::Vector2f> collisionResults;
+		std::vector<collidable*> filteredTargets(collisionTargets.size());
 
-		for (collidable* collidee : collisionTargets)
+		if (filterFunction)
+		{
+			auto filteredTargetsEnd = std::copy_if(collisionTargets.begin(), collisionTargets.end(), filteredTargets.begin(), filterFunction);
+			filteredTargets.resize(std::distance(filteredTargets.begin(), filteredTargetsEnd));
+		}
+		else
+		{
+			filteredTargets = collisionTargets;
+		}
+
+		for (collidable* collidee : filteredTargets)
 		{
 			auto collisionResult = collidee->sweepCollide(target, period, minDistance);
 

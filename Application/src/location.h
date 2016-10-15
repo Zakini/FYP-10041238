@@ -15,7 +15,7 @@ namespace jw
 	class location : public gameObject
 	{
 	public:
-		location(sf::Vector2f p_position = {0, 0}, junctionController::behaviour junctionType = junctionController::behaviour::none, float shapeSize = 10.0f);
+		location(sf::Vector2f p_position = {0, 0}, junctionController::behaviour junctionType = junctionController::behaviour::none, float shapeSize = 15.0f);
 
 		sf::Vector2f position();
 		void position(sf::Vector2f newPosition);

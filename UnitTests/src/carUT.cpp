@@ -88,7 +88,7 @@ namespace UnitTests
 
 			testCar.currentLocation(2);
 
-			Assert::IsTrue(testCar.position() == sf::Vector2f(3, 4));
+			Assert::IsTrue(testCar.getPosition() == sf::Vector2f(3, 4));
 		}
 
 		TEST_METHOD(getVelocity)
@@ -105,7 +105,37 @@ namespace UnitTests
 
 			testCar.update(updateLength);
 
-			Assert::IsTrue(testCar.velocity() == expectedVelocity);
+			Assert::IsTrue(testCar.getVelocity() == expectedVelocity);
+		}
+
+		TEST_METHOD(getHeading)
+		{
+			jw::car testCar(nullptr, nullptr, 1, 2, jw::fsm());
+			sf::Vector2f targetPosition(10000, 0);
+			testCar.targetPosition(targetPosition);
+
+			testCar.update(sf::seconds(1));
+
+			Assert::IsTrue(testCar.getHeading() == sf::Vector2f(1, 0));
+
+			//float maxDeceleration = testCar.getMaxBrakeForce() / testCar.getMass();
+			//float currentSpeed = jw::maths::length(testCar.getVelocity());
+			//float closestStopDistance = (-(currentSpeed * currentSpeed)) / (2 * -maxDeceleration) * 2.0f;	// +100% buffer
+			//sf::Vector2f closestStopPosition = testCar.getPosition() + testCar.getHeading() * closestStopDistance;
+
+			testCar.targetPosition(testCar.getPosition());
+
+			//sf::Time minTimeToFullStop = sf::seconds((-currentSpeed) / (-(maxDeceleration * 2.0f)));	// +100% buffer
+			//sf::Time step = sf::milliseconds(10);
+
+			for (int i = 0; i < 1000; i++)
+			{
+				testCar.update(sf::milliseconds(10));
+				if (jw::maths::length(testCar.getVelocity()) == 0) break;
+			}
+
+			Assert::IsTrue(jw::maths::length(testCar.getVelocity()) == 0);	// setup has failed, not getHeading
+			Assert::IsTrue(testCar.getHeading() == sf::Vector2f(1, 0));
 		}
 
 		TEST_METHOD(getSetCurrentLocationId)
@@ -223,10 +253,8 @@ namespace UnitTests
 			Assert::IsTrue(testCar.isAtPosition(sf::Vector2f(3, 4)));
 		}
 
-		TEST_METHOD(checkEnvironment)
+		TEST_METHOD(checkEnvironmentLights)
 		{
-			// TODO cars
-
 			// traffic lights
 			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test3.json";
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
@@ -280,6 +308,13 @@ namespace UnitTests
 
 			Assert::IsTrue(trafficLightPerceptions.first == nullptr);
 			Assert::IsTrue(trafficLightPerceptions.second == nullptr);
+		}
+
+		TEST_METHOD(checkEnvironmentCarsAhead)
+		{
+			// TODO how will I do this?
+			// is this getting a bit far from a little unit test?
+			// are the tests of the collision detection system enough?
 		}
 	};
 }

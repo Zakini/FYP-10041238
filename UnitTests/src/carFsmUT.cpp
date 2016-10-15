@@ -31,7 +31,7 @@ namespace UnitTests
 
 			testState.update(sf::seconds(0));	// move should be instantaneous
 
-			Assert::IsTrue(testCar.position() == pather->getLocationPosition(1));
+			Assert::IsTrue(testCar.getPosition() == pather->getLocationPosition(1));
 			Assert::IsTrue(testCar.currentLocation() == 1);
 		}
 

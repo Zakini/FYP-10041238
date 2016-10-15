@@ -116,5 +116,8 @@
     <ClInclude Include="src\collidable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\physicsObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

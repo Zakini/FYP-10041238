@@ -13,7 +13,7 @@ using jw::maths::leftPerpendicular;
 namespace jw
 {
 	const float road::defaultRenderDepth = 0.0f;
-	const float road::renderOffset = 3.0f;
+	const float road::renderOffset = 5.0f;
 
 	road::road(location* p_from, location* p_to)
 		: _from(p_from)

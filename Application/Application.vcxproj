@@ -182,6 +182,7 @@
     <ClInclude Include="src\junctionController.h" />
     <ClInclude Include="src\location.h" />
     <ClInclude Include="src\pathEngine.h" />
+    <ClInclude Include="src\physicsObject.h" />
     <ClInclude Include="src\priorityGraph.h" />
     <ClInclude Include="src\road.h" />
     <ClInclude Include="src\state.h" />

@@ -12,7 +12,7 @@ const float defaultRenderDepth = 1.0f;
 
 namespace jw
 {
-	const float location::lightRenderOffset = 2.0f;
+	const float location::lightRenderOffset = 5.0f;
 
 	location::location(sf::Vector2f p_position, junctionController::behaviour junctionType, float shapeSize)
 		: _position(p_position)
