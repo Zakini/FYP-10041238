@@ -13,10 +13,13 @@ namespace UnitTests
 {
 	TEST_CLASS(world)
 	{
+	private:
+		const string rootPath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/tests";
+
 	public:
 		TEST_METHOD(loadGraphString)
 		{
-			jw::world::graph_type* testGraph = jw::world::loadWorld(std::string("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/load-unit-test1.json"));
+			jw::world::graph_type* testGraph = jw::world::loadWorld(rootPath + "/load-unit-test1.json");
 
 			// Assert node 1 is at 0,0
 			Assert::IsTrue(testGraph->nodeAt(1).position() == sf::Vector2f(0, 0));
@@ -31,7 +34,7 @@ namespace UnitTests
 
 		TEST_METHOD(loadGraphJson)
 		{
-			std::ifstream testFile("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/load-unit-test1.json");
+			std::ifstream testFile(rootPath + "/load-unit-test1.json");
 			nlohmann::json testJson;
 
 			testFile >> testJson;

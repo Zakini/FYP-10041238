@@ -17,11 +17,13 @@ namespace UnitTests
 {
 	TEST_CLASS(carFsm)
 	{
+	private:
+		const string rootPath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/tests";
+
 	public:
 		TEST_METHOD(moveToHome)
 		{
-			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test1.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(rootPath + "/carfsm-unit-test1.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
@@ -37,8 +39,7 @@ namespace UnitTests
 
 		TEST_METHOD(pathToHome)
 		{
-			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test1.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(rootPath + "/carfsm-unit-test1.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
@@ -57,8 +58,7 @@ namespace UnitTests
 
 		TEST_METHOD(pathToWork)
 		{
-			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test1.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(rootPath + "/carfsm-unit-test1.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
@@ -77,8 +77,7 @@ namespace UnitTests
 		
 		TEST_METHOD(targetRoadStart)
 		{
-			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test2.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(rootPath + "/carfsm-unit-test2.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
@@ -97,8 +96,7 @@ namespace UnitTests
 
 		TEST_METHOD(targetRoadEnd)
 		{
-			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test2.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(rootPath + "/carfsm-unit-test2.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
@@ -117,8 +115,7 @@ namespace UnitTests
 
 		TEST_METHOD(updatePath)
 		{
-			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test2.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(rootPath + "/carfsm-unit-test2.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
@@ -155,8 +152,7 @@ namespace UnitTests
 
 		TEST_METHOD(arrived)
 		{
-			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test2.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(rootPath + "/carfsm-unit-test2.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
@@ -184,8 +180,7 @@ namespace UnitTests
 
 		TEST_METHOD(atTarget)
 		{
-			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/carfsm-unit-test2.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(rootPath + "/carfsm-unit-test2.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
 			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);

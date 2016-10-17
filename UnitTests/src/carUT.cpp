@@ -17,16 +17,18 @@ namespace UnitTests
 {
 	TEST_CLASS(car)
 	{
+	private:
+		const string worldRootPath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/tests";
+		const string carRootPath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/entities/tests";
+
 	public:
 		TEST_METHOD(loadFromString)	// Tests homeLocation and workLocation methods too
 		{
-			std::string carJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/entities/load-cars-unit-test1.json";
-			std::string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test1.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldRootPath + "/car-unit-test1.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
 			auto testDetector = std::make_shared<jw::collisionDetector>();
-			std::vector<jw::car*> testCars = jw::car::loadCars(carJsonFilePath, testPather, testDetector);
+			std::vector<jw::car*> testCars = jw::car::loadCars(carRootPath + "/load-cars-unit-test1.json", testPather, testDetector);
 
 			// Assert car 0's home is 1
 			Assert::IsTrue(testCars[0]->homeLocation() == 1);
@@ -40,9 +42,8 @@ namespace UnitTests
 
 		TEST_METHOD(loadFromJson)	// Tests homeLocation and workLocation methods too
 		{
-			std::ifstream testFile("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/entities/load-cars-unit-test1.json");
-			std::string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test1.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			std::ifstream testFile(carRootPath + "/load-cars-unit-test1.json");
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldRootPath + "/car-unit-test1.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
 			auto testDetector = std::make_shared<jw::collisionDetector>();
@@ -78,8 +79,7 @@ namespace UnitTests
 
 		TEST_METHOD(getPosition)
 		{
-			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldRootPath + "/car-unit-test2.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
@@ -118,15 +118,7 @@ namespace UnitTests
 
 			Assert::IsTrue(testCar.getHeading() == sf::Vector2f(1, 0));
 
-			//float maxDeceleration = testCar.getMaxBrakeForce() / testCar.getMass();
-			//float currentSpeed = jw::maths::length(testCar.getVelocity());
-			//float closestStopDistance = (-(currentSpeed * currentSpeed)) / (2 * -maxDeceleration) * 2.0f;	// +100% buffer
-			//sf::Vector2f closestStopPosition = testCar.getPosition() + testCar.getHeading() * closestStopDistance;
-
 			testCar.targetPosition(testCar.getPosition());
-
-			//sf::Time minTimeToFullStop = sf::seconds((-currentSpeed) / (-(maxDeceleration * 2.0f)));	// +100% buffer
-			//sf::Time step = sf::milliseconds(10);
 
 			for (int i = 0; i < 1000; i++)
 			{
@@ -140,8 +132,7 @@ namespace UnitTests
 
 		TEST_METHOD(getSetCurrentLocationId)
 		{
-			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldRootPath + "/car-unit-test2.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
@@ -155,8 +146,7 @@ namespace UnitTests
 	
 		TEST_METHOD(pathToUpdateAndGetPath)
 		{
-			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldRootPath + "/car-unit-test2.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
@@ -177,8 +167,7 @@ namespace UnitTests
 		
 		TEST_METHOD(getPather)
 		{
-			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test1.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldRootPath + "/car-unit-test1.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
@@ -218,8 +207,7 @@ namespace UnitTests
 	
 		TEST_METHOD(isAtTarget)
 		{
-			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldRootPath + "/car-unit-test2.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
@@ -238,8 +226,7 @@ namespace UnitTests
 
 		TEST_METHOD(isAtPosition)
 		{
-			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test2.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldRootPath + "/car-unit-test2.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
@@ -255,9 +242,7 @@ namespace UnitTests
 
 		TEST_METHOD(checkEnvironmentLights)
 		{
-			// traffic lights
-			string worldJsonFilePath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/car-unit-test3.json";
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldJsonFilePath);
+			jw::world::graph_type* testGraph = jw::world::loadWorld(worldRootPath + "/car-unit-test3.json");
 			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
 
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
