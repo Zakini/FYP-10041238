@@ -245,7 +245,7 @@ void jw::car::moveTowardTarget(sf::Time period)
 	{
 
 	}
-	else	// TODO if traffic light is go or prepareToGo, no need to stop completely, go through junction at certain speed
+	else	// TODO if traffic light is go or prepareToGo or there is no traffic light, no need to stop completely, go through junction at certain speed
 	{
 
 	}
@@ -280,8 +280,9 @@ sf::Vector2f jw::car::generateForce(sf::Vector2f target, sf::Time period)
 	else	// far from target
 	{
 		// accelerate
-		sf::Vector2f trajectoryForCurrentStep = _velocity * period.asSeconds();
-		sf::Vector2f idealForce = (vectorToTarget - trajectoryForCurrentStep) / period.asSeconds();	// HACK something to do with removing the time component of the "force"... iunno
+		sf::Vector2f idealVelocity = vectorToTarget / period.asSeconds();
+		sf::Vector2f idealAcceleration = (idealVelocity - _velocity) / period.asSeconds();
+		sf::Vector2f idealForce = mass * idealAcceleration;
 
 		if (length(idealForce) <= maxEngineForce)
 		{

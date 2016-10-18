@@ -66,6 +66,11 @@ namespace UnitTests
 			Assert::IsTrue(testLocation.getInboundRoads() == testRoads);
 		}
 
+		TEST_METHOD(setJunctionBehaviour)
+		{
+			Assert::Fail();
+		}
+
 		TEST_METHOD(getRenderRadius)
 		{
 			jw::location testLocation(sf::Vector2f(1, 2), jw::junctionController::behaviour::none, 6.0f);

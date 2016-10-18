@@ -14,6 +14,8 @@ namespace jw
 		, cDetector(make_shared<collisionDetector>())
 		, entities()
 		, frameTimer()
+		, displayFont()
+		, timerDisplay()
 	{
 		auto cars = car::loadCars(carsJsonPath, pather, cDetector);
 		entities.assign(cars.begin(), cars.end());
@@ -22,6 +24,11 @@ namespace jw
 		{
 			cDetector->addCollisionTarget(car);
 		}
+
+		displayFont.loadFromFile("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/resources/fonts/arial.ttf");
+		timerDisplay.setFont(displayFont);
+		timerDisplay.setColor(sf::Color::Blue);
+		timerDisplay.setCharacterSize(20);
 	}
 
 	game* game::make_game()
@@ -70,6 +77,9 @@ namespace jw
 		{
 			entity->update(timeSinceLastFrame);
 		}
+
+		int currentFps = round(1 / timeSinceLastFrame.asSeconds());
+		timerDisplay.setString(std::to_string(currentFps) + " FPS");
 	}
 
 	void game::draw()
@@ -82,6 +92,8 @@ namespace jw
 		{
 			gameWindow.draw(*entity);
 		}
+
+		gameWindow.draw(timerDisplay);
 
 		gameWindow.display();
 	}

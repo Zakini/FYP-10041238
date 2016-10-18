@@ -25,10 +25,7 @@ namespace jw
 		renderShape.setOrigin(renderShape.getRadius(), renderShape.getRadius());
 		renderShape.setFillColor(sf::Color::White);
 
-		if (junctionType != junctionController::behaviour::none)
-		{
-			controller = new junctionController(junctionType);
-		}
+		setJunctionBehaviour(junctionType);
 	}
 
 	sf::Vector2f location::position()
@@ -47,17 +44,26 @@ namespace jw
 
 		if (controller != nullptr)
 		{
-			sf::CircleShape trafficLight(3.0f);
-			trafficLight.setOrigin(trafficLight.getRadius(), trafficLight.getRadius());
+			addTrafficLight(newRoad);
+		}
+	}
 
-			sf::Vector2f lightPosition = newRoad->endPosition();
-			sf::Vector2f roadUnitVector = normalise(newRoad->endPosition() - newRoad->startPosition());
-			sf::Vector2f roadLeftPerpendicular = leftPerpendicular(roadUnitVector);
-			trafficLight.setPosition(lightPosition + roadLeftPerpendicular * lightRenderOffset);
+	void location::setJunctionBehaviour(junctionController::behaviour newBehaviour)
+	{
+		if (newBehaviour != junctionController::behaviour::none)
+		{
+			controller = new junctionController(newBehaviour);
 
-			trafficLightShapes.push_back(trafficLight);
-
-			controller->setJunctionCount(inboundRoads.size());
+			for (road* inRoad : inboundRoads)
+			{
+				addTrafficLight(inRoad);
+			}
+		}
+		else
+		{
+			delete controller;
+			controller = nullptr;
+			trafficLightShapes.clear();
 		}
 	}
 
@@ -113,6 +119,21 @@ namespace jw
 		{
 			target.draw(lightShape);
 		}
+	}
+
+	void location::addTrafficLight(road* targetRoad)
+	{
+		sf::CircleShape trafficLight(3.0f);
+		trafficLight.setOrigin(trafficLight.getRadius(), trafficLight.getRadius());
+
+		sf::Vector2f lightPosition = targetRoad->endPosition();
+		sf::Vector2f roadUnitVector = normalise(targetRoad->endPosition() - targetRoad->startPosition());
+		sf::Vector2f roadLeftPerpendicular = leftPerpendicular(roadUnitVector);
+		trafficLight.setPosition(lightPosition + roadLeftPerpendicular * lightRenderOffset);
+
+		trafficLightShapes.push_back(trafficLight);
+
+		controller->setJunctionCount(inboundRoads.size());
 	}
 
 	bool operator==(const location& lhs, const location& rhs)

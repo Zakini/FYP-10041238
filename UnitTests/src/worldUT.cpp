@@ -30,6 +30,8 @@ namespace UnitTests
 			Assert::IsTrue(testGraph->nodeAt(2).position() == sf::Vector2f(1, 0));
 			// Assert node 2 has 1 edge to 1
 			Assert::IsTrue(testGraph->edgesAt(2).at(1).cost() == 1);
+
+			Assert::Fail();	// TODO test too simple
 		}
 
 		TEST_METHOD(loadGraphJson)
@@ -50,6 +52,8 @@ namespace UnitTests
 			Assert::IsTrue(testGraph->nodeAt(2).position() == sf::Vector2f(1, 0));
 			// Assert node 2 has 1 edge to 1
 			Assert::IsTrue(testGraph->edgesAt(2).at(1).cost() == 1);
+
+			Assert::Fail();	// TODO test too simple
 		}
 	};
 }

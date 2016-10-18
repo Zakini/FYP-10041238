@@ -30,6 +30,8 @@ namespace jw
 		shared_ptr<collisionDetector> cDetector;
 		vector<gameObject*> entities;
 		sf::Clock frameTimer;
+		sf::Font displayFont;
+		sf::Text timerDisplay;
 
 		void update(sf::Time timeSinceLastFrame);
 		void draw();

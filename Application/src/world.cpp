@@ -38,13 +38,12 @@ namespace jw
 	world::graph_type* world::loadWorld(nlohmann::json mapJson)
 	{
 		const string locationsKey = "locations";
-		const string junctionsKey = "junctions";
 		const string roadsKey = "roads";
 		const string positionKey = "position";
 		const string xKey = "x";
 		const string zKey = "z";
 		const string idKey = "id";
-		const string junctionBehaviourKey = "behaviour";
+		const string defaultJunctionBehaviourKey = "default_junction_behaviour";
 		const string fromKey = "from";
 		const string toKey = "to";
 		const string bidirectionalKey = "bidirectional";
@@ -66,21 +65,8 @@ namespace jw
 			int sourceId = locationJson.at(idKey);
 
 			location newLocation(position);
+			// TODO check location doesn't exist before inserting
 			outputGraph->insertNode(sourceId, newLocation);
-		}
-
-		for (auto& junctionJson : mapJson[junctionsKey])
-		{
-			nlohmann::json positionJson = junctionJson.at(positionKey);
-			sf::Vector2f position;
-			position.x = positionJson.at(xKey);
-			position.y = positionJson.at(zKey);
-			int sourceId = junctionJson.at(idKey);
-			string behaviourString = junctionJson.at(junctionBehaviourKey);
-			junctionController::behaviour junctionBehaviour = behaviourLookup.at(behaviourString);
-
-			location newJunction(position, junctionBehaviour);
-			outputGraph->insertNode(sourceId, newJunction);
 		}
 
 		for (auto& roadJson : mapJson[roadsKey])
@@ -92,6 +78,7 @@ namespace jw
 			road roadEdge(source, dest);
 			bool bidirectional = roadJson.at(bidirectionalKey);
 
+			// TODO check road doesn't exist before inserting (in each direction)
 			outputGraph->insertEdge(sourceId, destId, roadEdge);
 			dest->addRoad(&outputGraph->edgeBetween(sourceId, destId));
 
@@ -100,6 +87,19 @@ namespace jw
 				roadEdge.flip();
 				outputGraph->insertEdge(destId, sourceId, roadEdge);
 				source->addRoad(&outputGraph->edgeBetween(destId, sourceId));
+			}
+		}
+
+		string defaultBehaviourString = mapJson.at(defaultJunctionBehaviourKey);
+		junctionController::behaviour defaultBehaviour = behaviourLookup.at(defaultBehaviourString);
+
+		for (auto& idValuePair : *outputGraph)
+		{
+			location& currentLocation = idValuePair.second.first;
+
+			if (currentLocation.getInboundRoads().size() > 2)
+			{
+				currentLocation.setJunctionBehaviour(defaultBehaviour);
 			}
 		}
 

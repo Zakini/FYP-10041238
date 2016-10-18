@@ -16,10 +16,12 @@ namespace jw
 	{
 	public:
 		location(sf::Vector2f p_position = {0, 0}, junctionController::behaviour junctionType = junctionController::behaviour::none, float shapeSize = 15.0f);
+		// TODO d'tor
 
 		sf::Vector2f position();
 		void position(sf::Vector2f newPosition);
 		void addRoad(road* newRoad);
+		void setJunctionBehaviour(junctionController::behaviour newBehaviour);
 		float renderRadius() { return renderShape.getRadius(); }
 		const std::vector<road*>& getInboundRoads() { return inboundRoads; }
 		junctionController::signalState getSignalAtRoad(road* from);
@@ -43,5 +45,6 @@ namespace jw
 
 		// Inherited via gameObject
 		virtual void draw(RenderTarget& target, RenderStates states) const override;	// POSSIBLE UT?
+		void addTrafficLight(road* targetRoad);
 	};
 }
