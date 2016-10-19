@@ -116,6 +116,36 @@ namespace jw
 			virtual bool changeState() override;
 		};
 
+		class lightAheadStop : public carTransition
+		{
+		public:
+			lightAheadStop(car& targetCar) : carTransition(targetCar) {}
+
+			// Inherited via transition
+			virtual lightAheadStop* clone() override { return new lightAheadStop(*this); }
+			virtual bool changeState() override;
+		};
+
+		class lightAheadAbleToStop : public carTransition
+		{
+		public:
+			lightAheadAbleToStop(car& targetCar) : carTransition(targetCar) {}
+
+			// Inherited via transition
+			virtual lightAheadAbleToStop* clone() override { return new lightAheadAbleToStop(*this); }
+			virtual bool changeState() override;
+		};
+
+		class lightAheadGo : public carTransition
+		{
+		public:
+			lightAheadGo(car& targetCar) : carTransition(targetCar) {}
+
+			// Inherited via transition
+			virtual lightAheadGo* clone() override { return new lightAheadGo(*this); }
+			virtual bool changeState() override;
+		};
+
 		fsm generate(car& targetCar);
 	}
 }

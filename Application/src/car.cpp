@@ -43,7 +43,7 @@ jw::car::car(shared_ptr<pathEngine> p_pather, shared_ptr<collisionDetector> p_ca
 	, gameObject(defaultRenderDepth)
 {
 	renderShape.setOrigin(renderShape.getSize() / 2.0f);
-	renderShape.setFillColor(sf::Color::Green);
+	renderShape.setFillColor(sf::Color::Blue);
 
 	controller.initialise();
 }
@@ -99,11 +99,18 @@ void jw::car::currentLocation(int locationId)
 	_currentPath.clear();
 }
 
-void jw::car::popStepFromPath()
+void jw::car::completePathStep()
 {
+	// update current/previous location
 	previousLocationId = currentLocationId;
 	currentLocationId = _currentPath.front();
+
+	// update path
 	_currentPath.pop_front();
+
+	// clear traffic light perceptions
+	incomingTrafficLightPosition = nullptr;
+	incomingTrafficLightState = nullptr;
 }
 
 bool jw::car::isAtPosition(sf::Vector2f target)
@@ -123,9 +130,9 @@ bool jw::car::isAtTarget()
 
 void jw::car::update(sf::Time timeSinceLastFrame)
 {
-	controller.update(timeSinceLastFrame);
-
 	checkEnvironment();
+
+	controller.update(timeSinceLastFrame);
 
 	moveTowardTarget(timeSinceLastFrame);
 
@@ -169,7 +176,6 @@ void jw::car::checkEnvironment()
 	{
 		sf::Time minTimeToFullStop = sf::seconds((-length(_velocity)) * (-(mass / maxBrakeForce)));
 
-		// TODO check they are actually ahead! the front car doesn't need to respond and it does currently!
 		// find cars ahead
 		auto carsAhead = carDetector->predictCollisions(*this, minTimeToFullStop, renderShape.getGlobalBounds().width,
 			[this](collidable* collidee)
@@ -193,17 +199,13 @@ void jw::car::checkEnvironment()
 	// ### check traffic lights ###
 	// ############################
 
-	// no incoming light or light is now behind us
-	if (incomingTrafficLightPosition == nullptr || angleBetween(_velocity, *incomingTrafficLightPosition - _position) > 90.0f)
+	// no incoming light
+	if (incomingTrafficLightPosition == nullptr)
 	{
 		// find next light
 		if (_currentPath.size() > 0 && _pather->isLocationTrafficControlled(_currentPath.front()))
 		{
 			incomingTrafficLightPosition = new Vector2f(_pather->getRoadEndPosition(currentLocationId, _currentPath.front()));
-		}
-		else
-		{
-			incomingTrafficLightPosition = nullptr;
 		}
 	}
 
@@ -212,16 +214,7 @@ void jw::car::checkEnvironment()
 	// we have a light incoming/found a new one
 	if (incomingTrafficLightPosition != nullptr)
 	{
-		if (isAtPosition(*incomingTrafficLightPosition))	// already waiting at light
-		{
-			// check light at end of previous road
-			incomingTrafficLightState = new junctionController::signalState(_pather->getSignalAtRoadEnd(previousLocationId, currentLocationId));
-		}
-		else if (_targetPosition != nullptr && *_targetPosition == *incomingTrafficLightPosition)	// heading towards this light
-		{
-			// check light at end of next road
-			incomingTrafficLightState = new junctionController::signalState(_pather->getSignalAtRoadEnd(currentLocationId, _currentPath.front()));
-		}
+		incomingTrafficLightState = new junctionController::signalState(_pather->getSignalAtRoadEnd(currentLocationId, _currentPath.front()));
 	}
 }
 
@@ -236,25 +229,13 @@ void jw::car::moveTowardTarget(sf::Time period)
 	{
 		tempTarget = *safePositionBehindCarAhead;
 	}
-	// light ahead is red
-	else if (incomingTrafficLightState != nullptr && *incomingTrafficLightState == junctionController::signalState::stop)
-	{
-		tempTarget = *incomingTrafficLightPosition;
-	}
-	else if (false)	// TODO if traffic light is stopIfAble, only stop if there are no cars close behind
-	{
-
-	}
-	else	// TODO if traffic light is go or prepareToGo or there is no traffic light, no need to stop completely, go through junction at certain speed
-	{
-
-	}
 
 	sf::Vector2f force = generateForce(tempTarget, period);
 	applyForce(force, period);
 }
 
 // TODO arc paths, rather than straight, when turning
+// TODO add target velocity param to handle cars going straight through a junction (and maybe the above as well)
 // Move to target, aim to be stationary on arrival
 sf::Vector2f jw::car::generateForce(sf::Vector2f target, sf::Time period)
 {
@@ -262,7 +243,7 @@ sf::Vector2f jw::car::generateForce(sf::Vector2f target, sf::Time period)
 	sf::Vector2f force;
 
 	float speed = length(_velocity);
-	float currentStoppingDistance = std::pow(speed, 2) / (2 * maxBrakeForce);
+	float currentStoppingDistance = (speed * speed * mass) / (2 * maxBrakeForce);
 
 	sf::Vector2f vectorToTarget = target - _position;
 	float distanceFromTarget = length(vectorToTarget);
@@ -271,6 +252,7 @@ sf::Vector2f jw::car::generateForce(sf::Vector2f target, sf::Time period)
 	{
 		if (speed > 0)
 		{
+			// TODO decelerate slowly if close to target
 			// decelerate
 			// negate direction for opposite braking force
 			sf::Vector2f direction = _velocity / speed;

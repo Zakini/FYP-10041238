@@ -10,6 +10,7 @@ using std::pair;
 
 namespace jw
 {
+	// TODO sub fsms?
 	// Note: always initialise before update (especially after copy)
 	class fsm
 	{

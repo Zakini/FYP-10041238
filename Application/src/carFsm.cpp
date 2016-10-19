@@ -8,6 +8,8 @@
 using jw::maths::length;
 using std::out_of_range;
 
+using signalState = jw::junctionController::signalState;
+
 void jw::carFsm::moveToHome::update(sf::Time period)
 {
 	targetCar.currentLocation(targetCar.homeLocation());
@@ -39,9 +41,9 @@ void jw::carFsm::targetRoadEnd::update(sf::Time period)
 
 void jw::carFsm::updatePath::update(sf::Time period)
 {
-	if (targetCar.isAtTarget())
+	if (targetCar.isAtTarget())	// TODO remove?
 	{
-		targetCar.popStepFromPath();
+		targetCar.completePathStep();
 	}
 }
 
@@ -56,41 +58,81 @@ bool jw::carFsm::atTarget::changeState()
 	return targetCar.isAtTarget();
 }
 
+bool jw::carFsm::lightAheadStop::changeState()
+{
+	pair<const sf::Vector2f*, const junctionController::signalState*> trafficLightState = targetCar.getTrafficLightPerception();
+
+	if (trafficLightState.first == nullptr || trafficLightState.second == nullptr) return false;	// no light, no need to stop
+
+	return *trafficLightState.second == signalState::stop;
+}
+
+bool jw::carFsm::lightAheadAbleToStop::changeState()
+{
+	pair<const sf::Vector2f*, const junctionController::signalState*> trafficLightState = targetCar.getTrafficLightPerception();
+	
+	if (trafficLightState.first == nullptr || trafficLightState.second == nullptr) return false;	// no light, no need to stop
+
+	// TODO check cars behind
+	return *trafficLightState.second == signalState::stopIfAble;
+}
+
+bool jw::carFsm::lightAheadGo::changeState()
+{
+	pair<const sf::Vector2f*, const junctionController::signalState*> trafficLightState = targetCar.getTrafficLightPerception();
+	
+	if (trafficLightState.first == nullptr || trafficLightState.second == nullptr) return true;	// no light, go ahead
+
+	return *trafficLightState.second == signalState::go || *trafficLightState.second == signalState::prepareToGo;
+}
+
 jw::fsm jw::carFsm::generate(car& targetCar)
 {
 	fsm outputFsm;
-
-	outputFsm.fsmState( 1, new nullState());
+	// TODO reuse elements?
+	outputFsm.fsmState( 1, new nullState());	// start
 	outputFsm.fsmState( 2, new moveToHome(targetCar));
 	outputFsm.fsmState( 3, new pathToWork(targetCar));
 	outputFsm.fsmState( 4, new targetRoadStart(targetCar));
-	outputFsm.fsmState( 5, new nullState());
+	outputFsm.fsmState( 5, new nullState());	// travelling
 	outputFsm.fsmState( 6, new targetRoadEnd(targetCar));
-	outputFsm.fsmState( 7, new nullState());
-	outputFsm.fsmState( 8, new updatePath(targetCar));
-	outputFsm.fsmState( 9, new pathToHome(targetCar));
-	outputFsm.fsmState(10, new targetRoadStart(targetCar));
-	outputFsm.fsmState(11, new nullState());
-	outputFsm.fsmState(12, new targetRoadEnd(targetCar));
-	outputFsm.fsmState(13, new nullState());
-	outputFsm.fsmState(14, new updatePath(targetCar));
+	outputFsm.fsmState( 7, new nullState());	// waiting at traffic light
+	outputFsm.fsmState( 8, new nullState());	// moving through traffic light
+	outputFsm.fsmState( 9, new updatePath(targetCar));
+	outputFsm.fsmState(10, new pathToHome(targetCar));
+	outputFsm.fsmState(11, new targetRoadStart(targetCar));
+	outputFsm.fsmState(12, new nullState());	// travelling
+	outputFsm.fsmState(13, new targetRoadEnd(targetCar));
+	outputFsm.fsmState(14, new nullState());	// waiting at traffic light
+	outputFsm.fsmState(15, new nullState());	// moving through traffic light
+	outputFsm.fsmState(16, new updatePath(targetCar));
 
 	outputFsm.fsmTransition( 1,  2, new nullTransition());
 	outputFsm.fsmTransition( 2,  3, new nullTransition());
 	outputFsm.fsmTransition( 3,  4, new nullTransition());
 	outputFsm.fsmTransition( 4,  5, new nullTransition());
 	outputFsm.fsmTransition( 5,  6, new atTarget(targetCar));
-	outputFsm.fsmTransition( 6,  7, new nullTransition());
-	outputFsm.fsmTransition( 7,  8, new atTarget(targetCar));
-	outputFsm.fsmTransition( 8,  9, new arrived(targetCar));
-	outputFsm.fsmTransition( 8,  4, new nullTransition());
-	outputFsm.fsmTransition( 9, 10, new nullTransition());
+	outputFsm.fsmTransition( 6,  7, new lightAheadStop(targetCar));
+	outputFsm.fsmTransition( 6,  7, new lightAheadAbleToStop(targetCar));
+	outputFsm.fsmTransition( 6,  8, new lightAheadGo(targetCar));
+	outputFsm.fsmTransition( 7,  8, new lightAheadGo(targetCar));
+	outputFsm.fsmTransition( 8,  7, new lightAheadStop(targetCar));
+	outputFsm.fsmTransition( 8,  7, new lightAheadAbleToStop(targetCar));
+	outputFsm.fsmTransition( 8,  9, new atTarget(targetCar));
+	outputFsm.fsmTransition( 9, 10, new arrived(targetCar));
+	outputFsm.fsmTransition( 9,  4, new nullTransition());
 	outputFsm.fsmTransition(10, 11, new nullTransition());
-	outputFsm.fsmTransition(11, 12, new atTarget(targetCar));
-	outputFsm.fsmTransition(12, 13, new nullTransition());
-	outputFsm.fsmTransition(13, 14, new atTarget(targetCar));
-	outputFsm.fsmTransition(14,  3, new arrived(targetCar));
-	outputFsm.fsmTransition(14, 10, new nullTransition());
+	outputFsm.fsmTransition(11, 12, new nullTransition());
+	outputFsm.fsmTransition(12, 13, new atTarget(targetCar));
+	outputFsm.fsmTransition(13, 14, new lightAheadStop(targetCar));
+	outputFsm.fsmTransition(13, 14, new lightAheadAbleToStop(targetCar));
+	outputFsm.fsmTransition(13, 15, new lightAheadGo(targetCar));
+	outputFsm.fsmTransition(14, 15, new lightAheadGo(targetCar));
+	outputFsm.fsmTransition(15, 14, new lightAheadStop(targetCar));
+	outputFsm.fsmTransition(15, 14, new lightAheadAbleToStop(targetCar));
+	outputFsm.fsmTransition(15, 16, new atTarget(targetCar));
+	outputFsm.fsmTransition(16,  3, new arrived(targetCar));
+	outputFsm.fsmTransition(16, 11, new nullTransition());
 
 	outputFsm.initialState(1);
 

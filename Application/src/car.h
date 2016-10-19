@@ -43,7 +43,7 @@ namespace jw
 		int currentLocation() { return currentLocationId; }
 		void currentLocation(int locationId);
 		deque<int> currentPath() { return _currentPath; }
-		void popStepFromPath();
+		void completePathStep();
 		shared_ptr<pathEngine> pather() { return _pather; }
 		float getMass() { return mass; }
 		float getMaxEngineForce() { return maxEngineForce; }

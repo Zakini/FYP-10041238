@@ -206,6 +206,21 @@ namespace UnitTests
 			// pass
 		}
 
+		TEST_METHOD(lightAheadStop)
+		{
+			Assert::Fail();
+		}
+
+		TEST_METHOD(lightAheadStopIfAble)
+		{
+			Assert::Fail();
+		}
+
+		TEST_METHOD(lightAheadGo)
+		{
+			Assert::Fail();
+		}
+
 		TEST_METHOD(generate)
 		{
 			jw::car testCar(nullptr, nullptr, 1, 2);

@@ -160,9 +160,11 @@ namespace UnitTests
 			expectedPath1.push_back(2);	// maybe use more complicated map for a longer route?
 
 			Assert::IsTrue(testCar.currentPath() == expectedPath1);
-			testCar.popStepFromPath();
+			testCar.completePathStep();
 			Assert::IsTrue(testCar.currentPath() == expectedPath2);
 			Assert::IsTrue(testCar.currentLocation() == 2);
+
+			Assert::Fail();	// TODO check traffic light perceptions are cleared
 		}
 		
 		TEST_METHOD(getPather)
