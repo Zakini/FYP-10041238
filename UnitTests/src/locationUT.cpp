@@ -66,9 +66,17 @@ namespace UnitTests
 			Assert::IsTrue(testLocation.getInboundRoads() == testRoads);
 		}
 
-		TEST_METHOD(setJunctionBehaviour)
+		TEST_METHOD(getControllerSetControllerBehaviour)
 		{
-			Assert::Fail();
+			jw::location testLocation;
+			const jw::junctionController* controller = testLocation.getController();
+
+			Assert::IsTrue(controller == nullptr);
+
+			testLocation.setJunctionBehaviour(jw::junctionController::behaviour::cycle);
+			controller = testLocation.getController();
+
+			Assert::IsTrue(controller->getControllerBehaviour() == jw::junctionController::behaviour::cycle);
 		}
 
 		TEST_METHOD(getRenderRadius)

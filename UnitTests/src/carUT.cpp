@@ -151,20 +151,25 @@ namespace UnitTests
 
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
 
-			jw::car testCar(testPather, nullptr, 1, 2);
+			jw::car testCar(testPather, nullptr, 1, 2, jw::fsm());
 
 			testCar.currentLocation(1);
 			testCar.pathTo(2);
+			testCar.update(sf::seconds(1));
 
 			deque<int> expectedPath1, expectedPath2;
-			expectedPath1.push_back(2);	// maybe use more complicated map for a longer route?
+			expectedPath1.push_back(2);
+
+			auto trafficLightPerceptions = testCar.getTrafficLightPerception();
+			Assert::IsTrue(trafficLightPerceptions.first != nullptr);
 
 			Assert::IsTrue(testCar.currentPath() == expectedPath1);
 			testCar.completePathStep();
 			Assert::IsTrue(testCar.currentPath() == expectedPath2);
 			Assert::IsTrue(testCar.currentLocation() == 2);
 
-			Assert::Fail();	// TODO check traffic light perceptions are cleared
+			trafficLightPerceptions = testCar.getTrafficLightPerception();
+			Assert::IsTrue(trafficLightPerceptions.first == nullptr);
 		}
 		
 		TEST_METHOD(getPather)
@@ -250,48 +255,24 @@ namespace UnitTests
 			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
 			std::pair<const sf::Vector2f*, const jw::junctionController::signalState*> trafficLightPerceptions;
 
-			// light ahead, not moving towards it
-			jw::car testCar1(testPather, nullptr, 1, 2, jw::fsm());
-			testCar1.currentLocation(1);
-			testCar1.pathTo(2);
-			testCar1.update(sf::seconds(1));
+			// light ahead
+			jw::car testCar(testPather, nullptr, 1, 2, jw::fsm());
+			testCar.currentLocation(1);
+			testCar.pathTo(2);
+			testCar.update(sf::seconds(1));
 
-			trafficLightPerceptions = testCar1.getTrafficLightPerception();
+			trafficLightPerceptions = testCar.getTrafficLightPerception();
 
-			Assert::IsTrue(*trafficLightPerceptions.first == testPather->getRoadEndPosition(1, 4));
-			Assert::IsTrue(trafficLightPerceptions.second == nullptr);
+			Assert::IsTrue(*trafficLightPerceptions.first == testPather->getRoadEndPosition(testCar.currentLocation(), testCar.currentPath().front()));
+			Assert::IsTrue(*trafficLightPerceptions.second == jw::junctionController::signalState::stop);
 
-			// light ahead, moving towards it
+			// no light ahead
 			jw::car testCar2(testPather, nullptr, 1, 2, jw::fsm());
 			testCar2.currentLocation(1);
-			testCar2.pathTo(2);
-			testCar2.targetPosition(testPather->getRoadEndPosition(1, 4));
+			testCar2.pathTo(3);
 			testCar2.update(sf::seconds(1));
 
 			trafficLightPerceptions = testCar2.getTrafficLightPerception();
-
-			Assert::IsTrue(*trafficLightPerceptions.first == testPather->getRoadEndPosition(testCar2.currentLocation(), testCar2.currentPath().front()));
-			Assert::IsTrue(*trafficLightPerceptions.second == jw::junctionController::signalState::stop);
-
-			// no light ahead, not moving towards it
-			jw::car testCar3(testPather, nullptr, 1, 2, jw::fsm());
-			testCar3.currentLocation(1);
-			testCar3.pathTo(3);
-			testCar3.update(sf::seconds(1));
-
-			trafficLightPerceptions = testCar3.getTrafficLightPerception();
-
-			Assert::IsTrue(trafficLightPerceptions.first == nullptr);
-			Assert::IsTrue(trafficLightPerceptions.second == nullptr);
-
-			// no light ahead, moving towards it
-			jw::car testCar4(testPather, nullptr, 1, 2, jw::fsm());
-			testCar4.currentLocation(1);
-			testCar4.pathTo(3);
-			testCar4.targetPosition(testPather->getRoadEndPosition(testCar2.currentLocation(), testCar2.currentPath().front()));
-			testCar4.update(sf::seconds(1));
-
-			trafficLightPerceptions = testCar4.getTrafficLightPerception();
 
 			Assert::IsTrue(trafficLightPerceptions.first == nullptr);
 			Assert::IsTrue(trafficLightPerceptions.second == nullptr);

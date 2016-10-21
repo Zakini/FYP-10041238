@@ -22,6 +22,7 @@ namespace jw
 		sf::Time getLightChangeDelay() { return lightChangeDelay; }
 		void setJunctionCount(int newCount);
 		const std::vector<std::vector<int>>& getLightSequence() { return lightSequence; }
+		behaviour getControllerBehaviour() const { return controllerBehaviour; }
 
 	private:
 		behaviour controllerBehaviour;

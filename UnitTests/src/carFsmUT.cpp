@@ -160,11 +160,11 @@ namespace UnitTests
 			jw::car testCar(pather, nullptr, 1, 2, jw::fsm());
 			testCar.currentLocation(1);
 			testCar.targetPosition(pather->getRoadEndPosition(1, 2));
-			jw::carFsm::arrived testState(testCar);
+			jw::carFsm::arrived testTransition(testCar);
 
 			sf::Clock timer;	// start
 
-			while (!testState.changeState())
+			while (!testTransition.changeState())
 			{
 				// repeated update until we arrive at the location
 				testCar.update(sf::milliseconds(10));	// ~60fps
@@ -188,11 +188,11 @@ namespace UnitTests
 			jw::car testCar(pather, nullptr, 1, 2, jw::fsm());
 			testCar.targetPosition(pather->getRoadEndPosition(1, 2));
 			testCar.currentLocation(1);
-			jw::carFsm::atTarget testState(testCar);
+			jw::carFsm::atTarget testTransition(testCar);
 
 			sf::Clock timer;	// start
 
-			while (!testState.changeState())
+			while (!testTransition.changeState())
 			{
 				// repeated update until we arrive at the location
 				testCar.update(sf::milliseconds(10));	// ~60fps
@@ -208,17 +208,62 @@ namespace UnitTests
 
 		TEST_METHOD(lightAheadStop)
 		{
-			Assert::Fail();
+			jw::world::graph_type* testGraph = jw::world::loadWorld(rootPath + "/carfsm-unit-test2.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+
+			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
+			auto world = std::make_shared<jw::world>(testGraphSp);
+
+			jw::car testCar(pather, nullptr, 1, 2, jw::fsm());
+			testCar.currentLocation(1);
+			testCar.pathTo(2);
+			testCar.update(sf::seconds(1));
+			world->update(sf::seconds(0));
+
+			jw::carFsm::lightAheadStop testTransition(testCar);
+
+			Assert::IsTrue(testTransition.changeState());	// lights start at the stop state
 		}
 
-		TEST_METHOD(lightAheadStopIfAble)
+		TEST_METHOD(lightAheadAbleToStop)
 		{
-			Assert::Fail();
+			jw::world::graph_type* testGraph = jw::world::loadWorld(rootPath + "/carfsm-unit-test2.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+
+			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
+			auto world = std::make_shared<jw::world>(testGraphSp);
+
+			jw::car testCar(pather, nullptr, 1, 2, jw::fsm());
+			testCar.currentLocation(1);
+			testCar.pathTo(2);
+			world->update(sf::seconds(5));	// update lights, one step at a time
+			world->update(sf::seconds(5));
+			world->update(sf::seconds(5));
+			testCar.update(sf::seconds(1));
+
+			jw::carFsm::lightAheadAbleToStop testTransition(testCar);
+
+			Assert::IsTrue(testTransition.changeState());
 		}
 
 		TEST_METHOD(lightAheadGo)
 		{
-			Assert::Fail();
+			jw::world::graph_type* testGraph = jw::world::loadWorld(rootPath + "/carfsm-unit-test2.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+
+			auto pather = std::make_shared<jw::pathEngine>(testGraphSp);
+			auto world = std::make_shared<jw::world>(testGraphSp);
+
+			jw::car testCar(pather, nullptr, 1, 2, jw::fsm());
+			testCar.currentLocation(1);
+			testCar.pathTo(2);
+			world->update(sf::seconds(5));	// update lights, one step at a time
+			world->update(sf::seconds(5));
+			testCar.update(sf::seconds(1));
+
+			jw::carFsm::lightAheadGo testTransition(testCar);
+
+			Assert::IsTrue(testTransition.changeState());
 		}
 
 		TEST_METHOD(generate)
@@ -226,115 +271,87 @@ namespace UnitTests
 			jw::car testCar(nullptr, nullptr, 1, 2);
 			jw::fsm testFsm = jw::carFsm::generate(testCar);
 
-			// ###############
-			// ### state 1 ###
-			// ###############
-
+			// state 1
 			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 1));
 			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 1, 2, 1));
 
-			// ###############
-			// ### state 2 ###
-			// ###############
-
+			// state 2
 			Assert::IsTrue(checkStateType<jw::carFsm::moveToHome>(testFsm, 2));
 			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 2, 3, 1));
 
-			// ###############
-			// ### state 3 ###
-			// ###############
-
+			// state 3
 			Assert::IsTrue(checkStateType<jw::carFsm::pathToWork>(testFsm, 3));
 			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 3, 4, 1));
 
-			// ###############
-			// ### state 4 ###
-			// ###############
-
+			// state 4
 			Assert::IsTrue(checkStateType<jw::carFsm::targetRoadStart>(testFsm, 4));
 			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 4, 5, 1));
 
-			// ###############
-			// ### state 5 ###
-			// ###############
-
+			// state 5
 			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 5));
 			Assert::IsTrue(checkTransitionType<jw::carFsm::atTarget>(testFsm, 5, 6, 1));
 
-			// ###############
-			// ### state 6 ###
-			// ###############
-
+			// state 6
 			Assert::IsTrue(checkStateType<jw::carFsm::targetRoadEnd>(testFsm, 6));
-			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 6, 7, 1));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadStop>(testFsm, 6, 7, 1));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadAbleToStop>(testFsm, 6, 7, 2));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadGo>(testFsm, 6, 8, 3));
 
-			// ###############
-			// ### state 7 ###
-			// ###############
-
+			// state 7
 			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 7));
-			Assert::IsTrue(checkTransitionType<jw::carFsm::atTarget>(testFsm, 7, 8, 1));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadGo>(testFsm, 7, 8, 1));
 
-			// ###############
-			// ### state 8 ###
-			// ###############
+			// state 8
+			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 8));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadStop>(testFsm, 8, 7, 1));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadAbleToStop>(testFsm, 8, 7, 2));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::atTarget>(testFsm, 8, 9, 3));
 
-			Assert::IsTrue(checkStateType<jw::carFsm::updatePath>(testFsm, 8));
-			Assert::IsTrue(checkTransitionType<jw::carFsm::arrived>(testFsm, 8, 9, 1));
-			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 8, 4, 2));
+			// state 9
+			Assert::IsTrue(checkStateType<jw::carFsm::updatePath>(testFsm, 9));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::arrived>(testFsm, 9, 10, 1));
+			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 9, 4, 2));
 
-			// ###############
-			// ### state 9 ###
-			// ###############
-
-			Assert::IsTrue(checkStateType<jw::carFsm::pathToHome>(testFsm, 9));
-			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 9, 10, 1));
-
-			// ################
-			// ### state 10 ###
-			// ################
-
-			Assert::IsTrue(checkStateType<jw::carFsm::targetRoadStart>(testFsm, 10));
+			// state 10
+			Assert::IsTrue(checkStateType<jw::carFsm::pathToHome>(testFsm, 10));
 			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 10, 11, 1));
 
-			// ################
-			// ### state 11 ###
-			// ################
+			// state 11
+			Assert::IsTrue(checkStateType<jw::carFsm::targetRoadStart>(testFsm, 11));
+			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 11, 12, 1));
 
-			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 11));
-			Assert::IsTrue(checkTransitionType<jw::carFsm::atTarget>(testFsm, 11, 12, 1));
+			// state 12
+			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 12));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::atTarget>(testFsm, 12, 13, 1));
 
-			// ################
-			// ### state 12 ###
-			// ################
+			// state 13
+			Assert::IsTrue(checkStateType<jw::carFsm::targetRoadEnd>(testFsm, 13));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadStop>(testFsm, 13, 14, 1));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadAbleToStop>(testFsm, 13, 14, 2));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadGo>(testFsm, 13, 15, 3));
 
-			Assert::IsTrue(checkStateType<jw::carFsm::targetRoadEnd>(testFsm, 12));
-			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 12, 13, 1));
+			// state 14
+			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 14));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadGo>(testFsm, 14, 15, 1));
 
-			// ################
-			// ### state 13 ###
-			// ################
+			// state 15
+			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 15));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadStop>(testFsm, 15, 14, 1));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadAbleToStop>(testFsm, 15, 14, 2));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::atTarget>(testFsm, 15, 16, 3));
 
-			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 13));
-			Assert::IsTrue(checkTransitionType<jw::carFsm::atTarget>(testFsm, 13, 14, 1));
+			// state 16
+			Assert::IsTrue(checkStateType<jw::carFsm::updatePath>(testFsm, 16));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::arrived>(testFsm, 16, 3, 1));
+			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 16, 11, 2));
 
-			// ################
-			// ### state 14 ###
-			// ################
-
-			Assert::IsTrue(checkStateType<jw::carFsm::updatePath>(testFsm, 14));
-			Assert::IsTrue(checkTransitionType<jw::carFsm::arrived>(testFsm, 14, 3, 1));
-			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 14, 10, 2));
-
-			// #############
-			// ### other ###
-			// #############
+			// other
 
 			// check initial state is 1
 			Assert::IsTrue(testFsm.initialState() == 1);
 
-			// check there is only 14 states
-			Assert::IsTrue(testFsm.size() == 14);
+			// check there is only 16 states
+			Assert::IsTrue(testFsm.size() == 16);
 		}
 	
 	private:

@@ -26,6 +26,7 @@ namespace jw
 		const std::vector<road*>& getInboundRoads() { return inboundRoads; }
 		junctionController::signalState getSignalAtRoad(road* from);
 		bool isControlledJunction() { return controller != nullptr; }
+		const junctionController* getController() { return controller; }
 
 		float pathingHeuristic(location* target);
 

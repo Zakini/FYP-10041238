@@ -20,7 +20,7 @@ void jw::junctionController::update(sf::Time period)
 	// check if it's time to change the lights
 	timeSinceLastLightChange += period;
 	if (timeSinceLastLightChange < lightChangeDelay) return;
-	else timeSinceLastLightChange = sf::seconds(0);
+	else timeSinceLastLightChange = timeSinceLastLightChange - lightChangeDelay;	// keep any remainder
 
 	// check if the current sequence has finished
 	bool sequenceFinished = true;

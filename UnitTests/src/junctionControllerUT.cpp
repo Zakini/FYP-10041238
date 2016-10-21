@@ -35,6 +35,17 @@ namespace UnitTests
 			Assert::IsTrue(testController.getLightChangeDelay() == sf::seconds(5));
 		}
 
+		TEST_METHOD(getControllerBehaviour)
+		{
+			jw::junctionController testController;
+
+			Assert::IsTrue(testController.getControllerBehaviour() == jw::junctionController::behaviour::none);
+
+			testController = jw::junctionController(jw::junctionController::behaviour::cycle);
+
+			Assert::IsTrue(testController.getControllerBehaviour() == jw::junctionController::behaviour::cycle);
+		}
+
 		TEST_METHOD(update)
 		{
 			// controller behaviour: none
