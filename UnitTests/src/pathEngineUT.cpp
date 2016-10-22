@@ -7,6 +7,7 @@
 #include "../../Application/src/location.h"
 #include "../../Application/src/pathEngine.h"
 #include <memory>
+#include "../../Application/src/vectorMaths.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -260,6 +261,16 @@ namespace UnitTests
 
 			Assert::IsTrue(testPather.getRoadEndPosition(1, 2) == testGraph->edgesAt(1).at(2).endPosition());
 			Assert::IsTrue(testPather.getRoadEndPosition(2, 1) == testGraph->edgesAt(2).at(1).endPosition());
+		}
+
+		TEST_METHOD(getRoadDirection)
+		{
+			jw::pathEngine::graph_type* testGraph = jw::world::loadWorld(filePathBase + "/pather-test2.json");
+			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::pathEngine testPather(testGraphSp);
+			jw::road& testRoad = testGraph->edgeBetween(1, 2);
+
+			Assert::IsTrue(testPather.getRoadDirection(1, 2) == jw::maths::normalise(testRoad.endPosition() - testRoad.startPosition()));
 		}
 		
 		TEST_METHOD(isLocationTrafficControlled)

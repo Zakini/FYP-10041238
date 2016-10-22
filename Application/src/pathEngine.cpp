@@ -1,6 +1,7 @@
 #include "pathEngine.h"
 
 #include <typeinfo>
+#include "vectorMaths.h"
 
 namespace jw
 {
@@ -85,6 +86,12 @@ namespace jw
 	Vector2f pathEngine::getRoadEndPosition(int fromId, int toId)
 	{
 		return targetGraph->edgesAt(fromId).at(toId).endPosition();
+	}
+
+	Vector2f pathEngine::getRoadDirection(int fromId, int toId)
+	{
+		road& targetRoad = targetGraph->edgeBetween(fromId, toId);
+		return maths::normalise(targetRoad.endPosition() - targetRoad.startPosition());
 	}
 
 	junctionController::signalState pathEngine::getSignalAtRoadEnd(int fromId, int toId)

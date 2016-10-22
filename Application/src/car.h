@@ -29,6 +29,8 @@ namespace jw
 	class car : public gameObject, public collidable
 	{
 	public:
+		enum situation { none, onRoad, atLight, inJunction };
+
 		car(shared_ptr<pathEngine> p_pather, shared_ptr<collisionDetector> p_carDetector, int p_homeLocationId, int p_workLocationId)
 			: car(p_pather, p_carDetector, p_homeLocationId, p_workLocationId, carFsm::generate(*this)) {}
 		car(shared_ptr<pathEngine> p_pather, shared_ptr<collisionDetector> p_carDetector, int p_homeLocationId, int p_workLocationId, fsm carController);
@@ -51,13 +53,14 @@ namespace jw
 		bool isAtPosition(sf::Vector2f target);
 		bool isAtTarget();
 		pair<const sf::Vector2f*, const junctionController::signalState*> getTrafficLightPerception() { return make_pair(incomingTrafficLightPosition, incomingTrafficLightState); }
+		situation getCurrentSituation() { return currentSituation; }
 
 		// Inherited via gameObject
 		virtual void update(sf::Time timeSinceLastFrame) override;	// POSSIBLE UT?
 
 		// Inherited via collidable
 		virtual sf::Vector2f getVelocity() override { return _velocity; }
-		virtual sf::Vector2f getHeading() override { return _heading; }
+		virtual sf::Vector2f getHeading() override;
 		virtual sf::Vector2f getPosition() { return _position; }
 		virtual sf::FloatRect getBoundingBox() override { return renderShape.getGlobalBounds(); }
 
@@ -101,6 +104,7 @@ namespace jw
 		junctionController::signalState* incomingTrafficLightState;
 		shared_ptr<collisionDetector> carDetector;
 		sf::Vector2f* safePositionBehindCarAhead;	// TODO rename
+		situation currentSituation;
 
 		static const float defaultEngineForce;
 		static const float defaultBrakeForce;

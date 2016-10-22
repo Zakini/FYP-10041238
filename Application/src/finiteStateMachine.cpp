@@ -80,6 +80,7 @@ void jw::fsm::initialise()
 {
 	if (fsmGraph.empty()) return;
 
+	currentStateId = initialStateId;
 	_currentState = fsmGraph.nodeAt(initialStateId);
 	possibleTransitions = &fsmGraph.edgesAt(initialStateId);
 }
@@ -159,6 +160,7 @@ void jw::fsm::checkTransitions()
 
 		if (currentTransition->changeState())
 		{
+			currentStateId = possibleNewState;
 			_currentState = fsmGraph.nodeAt(possibleNewState);
 			possibleTransitions = &fsmGraph.edgesAt(possibleNewState);
 			break;

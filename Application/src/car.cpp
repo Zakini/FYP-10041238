@@ -40,6 +40,7 @@ jw::car::car(shared_ptr<pathEngine> p_pather, shared_ptr<collisionDetector> p_ca
 	, incomingTrafficLightState(nullptr)
 	, carDetector(p_carDetector)
 	, safePositionBehindCarAhead(nullptr)
+	, currentSituation(situation::none)
 	, gameObject(defaultRenderDepth)
 {
 	renderShape.setOrigin(renderShape.getSize() / 2.0f);
@@ -92,6 +93,7 @@ void jw::car::currentLocation(int locationId)
 	currentLocationId = locationId;
 	previousLocationId = locationId;
 	_position = newPosition;
+	currentSituation = situation::inJunction;
 
 	// reset values that might be invalid now
 	_velocity.x = 0;
@@ -144,6 +146,18 @@ void jw::car::draw(RenderTarget& target, RenderStates states) const
 	target.draw(renderShape);
 }
 
+sf::Vector2f jw::car::getHeading()
+{
+	if (_currentPath.size() > 0 && (currentSituation == situation::onRoad || currentSituation == situation::atLight))
+	{
+		return _pather->getRoadDirection(currentLocationId, _currentPath.front());
+	}
+	else
+	{
+		return _heading;
+	}
+}
+
 sf::Vector2f jw::car::targetPosition() const
 {
 	if (_targetPosition == nullptr) throw out_of_range("target position not set");
@@ -166,13 +180,40 @@ void jw::car::pathTo(int targetId)
 
 void jw::car::checkEnvironment()
 {
+	// #######################
+	// ### check situation ###
+	// #######################
+
+	if (_currentPath.size() > 0)
+	{
+		if (_targetPosition != nullptr)
+		{
+			// targeting road start
+			if (*_targetPosition == _pather->getRoadStartPosition(currentLocationId, _currentPath.front()))
+			{
+				currentSituation = situation::inJunction;
+			}
+			// targeting road end
+			else if (*_targetPosition == _pather->getRoadEndPosition(currentLocationId, _currentPath.front()))
+			{
+				currentSituation = situation::onRoad;
+			}
+		}
+		
+		// at end of road
+		if (currentSituation == situation::onRoad && isAtPosition(_pather->getRoadEndPosition(currentLocationId, _currentPath.front())))
+		{
+			currentSituation = situation::atLight;
+		}
+	}
+
 	// ##################
 	// ### check cars ###
 	// ##################
 
 	safePositionBehindCarAhead = nullptr;
 
-	if (carDetector != nullptr)
+	if (carDetector != nullptr && currentSituation != situation::inJunction)	// ignore other cars while inJunction
 	{
 		sf::Time minTimeToFullStop = sf::seconds((-length(_velocity)) * (-(mass / maxBrakeForce)));
 

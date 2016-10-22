@@ -44,6 +44,7 @@ namespace jw
 		transition_type fsmTransition(int fromId, int toId, int transitionPriority);
 		transitions_container_type currentPossibleTransitions();
 		int initialState();
+		int getCurrentStateId() { return currentStateId; }
 
 		// Modifiers
 		void fsmState(int id, state_type newNode);

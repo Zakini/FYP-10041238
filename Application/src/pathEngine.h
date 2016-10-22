@@ -36,6 +36,7 @@ namespace jw
 		bool isLocationTrafficControlled(int id);
 		Vector2f getRoadStartPosition(int fromId, int toId);
 		Vector2f getRoadEndPosition(int fromId, int toId);
+		Vector2f getRoadDirection(int fromId, int toId);
 		junctionController::signalState getSignalAtRoadEnd(int fromId, int toId);
 
 	private:

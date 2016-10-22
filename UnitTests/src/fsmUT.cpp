@@ -42,6 +42,7 @@ namespace UnitTests
 
 			Assert::IsTrue(testFsm.currentState() == expectedState);
 			Assert::IsTrue(testFsm.currentPossibleTransitions().empty());
+			Assert::IsTrue(testFsm.getCurrentStateId() == 2);
 		}
 
 		TEST_METHOD(addGetState)
