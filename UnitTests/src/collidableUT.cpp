@@ -64,6 +64,61 @@ namespace UnitTest
 			Assert::IsFalse(testObj1.collide(testObj1));
 		}
 
+		TEST_METHOD(collideAtPositionNoCollision)
+		{
+			testCollidable testObj1 = {}, testObj2 = {};
+			testObj1.boundingBox = sf::FloatRect(0, 0, 2, 2);
+			testObj2.boundingBox = sf::FloatRect(0, 0, 2, 2);
+
+			Assert::IsFalse(testObj2.collideAtPosition(sf::Vector2f(20, 20), testObj1));
+		}
+
+		TEST_METHOD(collideAtPositionCollision)
+		{
+			testCollidable testObj1 = {}, testObj2 = {};
+			testObj1.boundingBox = sf::FloatRect(0, 0, 2, 2);
+			testObj2.boundingBox = sf::FloatRect(19, 19, 2, 2);
+
+			Assert::IsTrue(testObj2.collideAtPosition(sf::Vector2f(20, 20), testObj1));
+		}
+		
+		TEST_METHOD(collideAtPositionCollisionWithMinDistance)
+		{
+			testCollidable testObj1 = {}, testObj2 = {};
+			testObj1.boundingBox = sf::FloatRect(0, 0, 2, 2);
+			testObj2.boundingBox = sf::FloatRect(22, 19, 2, 2);
+
+			Assert::IsFalse(testObj2.collideAtPosition(sf::Vector2f(20, 20), testObj1));
+			Assert::IsTrue(testObj2.collideAtPosition(sf::Vector2f(20, 20), testObj1, 2));
+		}
+
+		TEST_METHOD(collideAtPositionAlmostCollision)
+		{
+			testCollidable testObj1 = {}, testObj2 = {};
+			testObj1.boundingBox = sf::FloatRect(0, 0, 2, 2);
+			testObj2.boundingBox = sf::FloatRect(21.1f, 21.1f, 2, 2);
+
+			Assert::IsFalse(testObj2.collideAtPosition(sf::Vector2f(20, 20), testObj1));
+		}
+
+		TEST_METHOD(collideAtPositionBarelyCollision)
+		{
+			testCollidable testObj1 = {}, testObj2 = {};
+			testObj1.boundingBox = sf::FloatRect(0, 0, 2, 2);
+			testObj2.boundingBox = sf::FloatRect(21, 21, 2, 2);
+
+			Assert::IsTrue(testObj2.collideAtPosition(sf::Vector2f(20, 20), testObj1));
+		}
+
+		TEST_METHOD(collideAtPositionSelf)
+		{
+			testCollidable testObj1 = {};
+			testObj1.boundingBox = { 0, 0, 2, 2 };
+
+			Assert::IsFalse(testObj1.collideAtPosition(sf::Vector2f(20, 20), testObj1));
+			Assert::IsFalse(testObj1.collideAtPosition(sf::Vector2f(1, 1), testObj1));
+		}
+
 		TEST_METHOD(sweepCollideNoMovement)
 		{
 			testCollidable testObj1 = {}, testObj2 = {};

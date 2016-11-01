@@ -96,6 +96,16 @@ namespace jw
 			virtual void update(sf::Time period) override;
 		};
 
+		class moveToTarget : public carState
+		{
+		public:
+			moveToTarget(car& targetCar) : carState(targetCar) {}
+
+			// Inherited via carState
+			virtual moveToTarget* clone() override { return new moveToTarget(*this); }
+			virtual void update(sf::Time period) override;
+		};
+
 		class arrived : public carTransition
 		{
 		public:
@@ -143,6 +153,16 @@ namespace jw
 
 			// Inherited via transition
 			virtual lightAheadGo* clone() override { return new lightAheadGo(*this); }
+			virtual bool changeState() override;
+		};
+
+		class targetClear : public carTransition
+		{
+		public:
+			targetClear(car& targetCar) : carTransition(targetCar) {}
+
+			// Inherited via transition
+			virtual targetClear* clone() override { return new targetClear(*this); }
 			virtual bool changeState() override;
 		};
 

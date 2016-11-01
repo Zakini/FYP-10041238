@@ -11,6 +11,7 @@ namespace jw
 	{
 	public:
 		virtual bool collide(collidable& target, float minDistance = 0.0f);
+		virtual bool collideAtPosition(sf::Vector2f position, collidable& target, float minDistance = 0.0f);
 		virtual std::pair<bool, sf::Vector2f> sweepCollide(collidable& target, sf::Time period, float minDistance = 0.0f);
 		virtual sf::FloatRect getBoundingBox() = 0;
 

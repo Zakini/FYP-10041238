@@ -99,6 +99,9 @@ void jw::car::currentLocation(int locationId)
 	_velocity.x = 0;
 	_velocity.y = 0;
 	_currentPath.clear();
+	incomingTrafficLightPosition = nullptr;
+	incomingTrafficLightState = nullptr;
+	safePositionBehindCarAhead = nullptr;
 }
 
 void jw::car::completePathStep()
@@ -130,13 +133,20 @@ bool jw::car::isAtTarget()
 	else return isAtPosition(*_targetPosition);
 }
 
+bool jw::car::isTargetClear()
+{
+	if (_targetPosition == nullptr) return false;	// target can't be clear if we're no going anywhere
+
+	if (carDetector == nullptr) return true;	// we're not detecting anything, so always assume target is clear
+
+	return !carDetector->predictCollisionAtPosition(*this, *_targetPosition, renderShape.getGlobalBounds().width);
+}
+
 void jw::car::update(sf::Time timeSinceLastFrame)
 {
 	checkEnvironment();
 
 	controller.update(timeSinceLastFrame);
-
-	moveTowardTarget(timeSinceLastFrame);
 
 	renderShape.setPosition(_position);
 }
@@ -156,6 +166,19 @@ sf::Vector2f jw::car::getHeading()
 	{
 		return _heading;
 	}
+}
+
+void jw::car::setPosition(Vector2f newPosition)
+{
+	_position = newPosition;
+	renderShape.setPosition(newPosition);
+
+	_velocity = Vector2f();
+	currentSituation = situation::none;
+	_currentPath.clear();
+	incomingTrafficLightPosition = nullptr;
+	incomingTrafficLightState = nullptr;
+	safePositionBehindCarAhead = nullptr;
 }
 
 sf::Vector2f jw::car::targetPosition() const

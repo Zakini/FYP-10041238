@@ -55,6 +55,8 @@ namespace jw
 		pair<const sf::Vector2f*, const junctionController::signalState*> getTrafficLightPerception() { return make_pair(incomingTrafficLightPosition, incomingTrafficLightState); }
 		situation getCurrentSituation() { return currentSituation; }
 
+		bool isTargetClear();
+
 		// Inherited via gameObject
 		virtual void update(sf::Time timeSinceLastFrame) override;	// POSSIBLE UT?
 
@@ -64,13 +66,14 @@ namespace jw
 		virtual sf::Vector2f getPosition() { return _position; }
 		virtual sf::FloatRect getBoundingBox() override { return renderShape.getGlobalBounds(); }
 
+		void setPosition(Vector2f newPosition);
 		void targetPosition(sf::Vector2f target) { _targetPosition = new sf::Vector2f(target); }
 		sf::Vector2f targetPosition() const;
 		void pathTo(int targetId);
+		void moveTowardTarget(sf::Time period);
 
 	private:
 		void checkEnvironment();
-		void moveTowardTarget(sf::Time period);
 		// POSSIBLE separate for UTs?
 		sf::Vector2f generateForce(sf::Vector2f target, sf::Time period);
 		void applyForce(sf::Vector2f force, sf::Time period);

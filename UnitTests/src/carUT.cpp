@@ -77,18 +77,18 @@ namespace UnitTests
 			Assert::IsTrue(testCar.workLocation() == 2);
 		}
 
-		TEST_METHOD(getPosition)
+		TEST_METHOD(getSetPosition)
 		{
-			jw::world::graph_type* testGraph = jw::world::loadWorld(worldRootPath + "/car-unit-test2.json");
-			std::shared_ptr<jw::pathEngine::graph_type> testGraphSp(testGraph);
+			jw::car testCar(nullptr, nullptr, 1, 2);
+			sf::Vector2f targetPosition(3, 4);
+			testCar.setPosition(targetPosition);
 
-			auto testPather = std::make_shared<jw::pathEngine>(testGraphSp);
-
-			jw::car testCar(testPather, nullptr, 1, 2);
-
-			testCar.currentLocation(2);
-
-			Assert::IsTrue(testCar.getPosition() == sf::Vector2f(3, 4));
+			Assert::IsTrue(testCar.getPosition() == targetPosition);
+			Assert::IsTrue(testCar.getVelocity() == sf::Vector2f());
+			Assert::IsTrue(testCar.getCurrentSituation() == jw::car::situation::none);
+			Assert::IsTrue(testCar.currentPath() == deque<int>());
+			Assert::IsTrue(testCar.getTrafficLightPerception() == pair<const Vector2f*, const jw::junctionController::signalState*>(nullptr, nullptr));
+			// TODO assert car ahead position removed
 		}
 
 		TEST_METHOD(getVelocity)
@@ -103,7 +103,7 @@ namespace UnitTests
 			sf::Vector2f expectedAcceleration = expectedForce / testCar.getMass();
 			sf::Vector2f expectedVelocity = expectedAcceleration * updateLength.asSeconds();
 
-			testCar.update(updateLength);
+			testCar.moveTowardTarget(updateLength);
 
 			Assert::IsTrue(testCar.getVelocity() == expectedVelocity);
 		}
@@ -114,19 +114,19 @@ namespace UnitTests
 			sf::Vector2f targetPosition(10000, 0);
 			testCar.targetPosition(targetPosition);
 
-			testCar.update(sf::seconds(1));
+			testCar.moveTowardTarget(sf::seconds(1));
 
 			Assert::IsTrue(testCar.getHeading() == sf::Vector2f(1, 0));
 
 			testCar.targetPosition(testCar.getPosition());
 
-			for (int i = 0; i < 1000; i++)
+			sf::Clock timer;
+			while (jw::maths::length(testCar.getVelocity()) != 0)
 			{
-				testCar.update(sf::milliseconds(10));
-				if (jw::maths::length(testCar.getVelocity()) == 0) break;
+				testCar.moveTowardTarget(sf::milliseconds(10));
+				if (timer.getElapsedTime().asSeconds() > 10) Assert::Fail();	// setup has failed, not getHeading
 			}
 
-			Assert::IsTrue(jw::maths::length(testCar.getVelocity()) == 0);	// setup has failed, not getHeading
 			Assert::IsTrue(testCar.getHeading() == sf::Vector2f(1, 0));
 
 			jw::world::graph_type* testGraph = jw::world::loadWorld(worldRootPath + "/car-unit-test3.json");
@@ -138,14 +138,29 @@ namespace UnitTests
 			testCar2.currentLocation(1);
 			testCar2.pathTo(4);
 			testCar2.targetPosition(testPather->getRoadStartPosition(1, 4));
-			while (!testCar.isAtTarget()) testCar.update(sf::milliseconds(10));
+
+			timer.restart();
+			while (!testCar.isAtTarget())
+			{
+				testCar.moveTowardTarget(sf::milliseconds(10));
+				if (timer.getElapsedTime().asSeconds() > 10) Assert::Fail();	// setup has failed, not getHeading
+			}
+
 			testCar2.targetPosition(testPather->getRoadEndPosition(1, 4));
+			testCar2.moveTowardTarget(sf::milliseconds(10));
 			testCar2.update(sf::milliseconds(10));
 
 			Assert::IsTrue(testCar2.getCurrentSituation() == jw::car::situation::onRoad);
 			Assert::IsTrue(testCar2.getHeading() == testPather->getRoadDirection(1, 4));
 
-			while (!testCar2.isAtTarget()) testCar2.update(sf::milliseconds(10));
+			timer.restart();
+			while (!testCar2.isAtTarget())
+			{
+				testCar2.moveTowardTarget(sf::milliseconds(10));
+				if (timer.getElapsedTime().asSeconds() > 10) Assert::Fail();	// setup has failed, not getHeading
+			}
+
+			testCar2.moveTowardTarget(sf::milliseconds(10));
 			testCar2.update(sf::milliseconds(10));
 
 			Assert::IsTrue(testCar2.getCurrentSituation() == jw::car::situation::atLight);
@@ -325,13 +340,25 @@ namespace UnitTests
 
 			Assert::IsTrue(testCar.getCurrentSituation() == jw::car::situation::inJunction);
 
-			while (!testCar.isAtTarget()) testCar.update(sf::milliseconds(10));	// update to reach target
+			sf::Clock timer;
+			while (!testCar.isAtTarget())
+			{
+				testCar.moveTowardTarget(sf::milliseconds(10));	// update to reach target
+				if (timer.getElapsedTime().asSeconds() > 10) Assert::Fail();	// setup failed
+			}
+
 			testCar.targetPosition(testPather->getRoadEndPosition(1, 4));
 			testCar.update(sf::milliseconds(10));
 
 			Assert::IsTrue(testCar.getCurrentSituation() == jw::car::situation::onRoad);
 
-			while (!testCar.isAtTarget()) testCar.update(sf::milliseconds(10));	// update to reach target
+			timer.restart();
+			while (!testCar.isAtTarget())
+			{
+				testCar.moveTowardTarget(sf::milliseconds(10));	// update to reach target
+				if (timer.getElapsedTime().asSeconds() > 10) Assert::Fail();	// setup failed
+			}
+
 			testCar.update(sf::milliseconds(10));
 
 			Assert::IsTrue(testCar.getCurrentSituation() == jw::car::situation::atLight);
@@ -339,6 +366,32 @@ namespace UnitTests
 			testCar.currentLocation(3);
 
 			Assert::IsTrue(testCar.getCurrentSituation() == jw::car::situation::inJunction);
+		}
+
+		TEST_METHOD(isTargetClear)
+		{
+			std::shared_ptr<jw::collisionDetector> testDetector = std::make_shared<jw::collisionDetector>();
+			jw::car testCar1(nullptr, testDetector, 1, 2, jw::fsm());
+			jw::car testCar2(nullptr, testDetector, 1, 2, jw::fsm());
+			testDetector->addCollisionTarget(&testCar1);
+			testDetector->addCollisionTarget(&testCar2);
+
+			// no collision
+			testCar1.targetPosition(sf::Vector2f(20, 20));
+			Assert::IsTrue(testCar1.isTargetClear());
+
+			// collision
+			testCar2.setPosition(sf::Vector2f(20, 20));
+			Assert::IsFalse(testCar1.isTargetClear());
+
+			// min distance collision
+			testCar2.setPosition(sf::Vector2f(27, 20));
+			Assert::IsFalse(testCar1.isTargetClear());
+		}
+
+		TEST_METHOD(moveTowardTarget)
+		{
+			Assert::Fail();
 		}
 	};
 }

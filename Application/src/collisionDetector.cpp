@@ -30,4 +30,18 @@ namespace jw
 
 		return collisionResults;
 	}
+
+	bool collisionDetector::predictCollisionAtPosition(collidable& target, sf::Vector2f position, float minDistance)
+	{
+		bool collisionResult = false;
+
+		for (collidable* collidee : collisionTargets)
+		{
+			collisionResult = collidee->collideAtPosition(position, target, minDistance);
+
+			if (collisionResult) break;
+		}
+
+		return collisionResult;
+	}
 }

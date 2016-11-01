@@ -137,7 +137,7 @@ namespace UnitTests
 			while (!setupTransition.changeState())
 			{
 				// repeated update until we arrive at the location
-				testCar.update(sf::milliseconds(10));	// ~60fps
+				testCar.moveTowardTarget(sf::milliseconds(10));	// ~60fps
 
 				if (timer.getElapsedTime().asSeconds() >= 10)	// 10 sec time limit
 				{
@@ -195,7 +195,7 @@ namespace UnitTests
 			while (!testTransition.changeState())
 			{
 				// repeated update until we arrive at the location
-				testCar.update(sf::milliseconds(10));	// ~60fps
+				testCar.moveTowardTarget(sf::milliseconds(10));	// ~60fps
 
 				if (timer.getElapsedTime().asSeconds() >= 10)	// 10 sec time limit
 				{
@@ -266,6 +266,18 @@ namespace UnitTests
 			Assert::IsTrue(testTransition.changeState());
 		}
 
+		TEST_METHOD(targetClear)
+		{
+			// TODO This is pretty much unnecessary since car::isTargetClear is already UT'd
+			// If this transition does anything else in the future though, this will need updating
+		}
+
+		TEST_METHOD(moveToTarget)
+		{
+			// TODO This is pretty much unnecessary since car::isTargetClear is already UT'd
+			// If this transition does anything else in the future though, this will need updating
+		}
+
 		TEST_METHOD(generate)
 		{
 			jw::car testCar(nullptr, nullptr, 1, 2);
@@ -285,10 +297,10 @@ namespace UnitTests
 
 			// state 4
 			Assert::IsTrue(checkStateType<jw::carFsm::targetRoadStart>(testFsm, 4));
-			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 4, 5, 1));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::targetClear>(testFsm, 4, 5, 1));
 
 			// state 5
-			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 5));
+			Assert::IsTrue(checkStateType<jw::carFsm::moveToTarget>(testFsm, 5));
 			Assert::IsTrue(checkTransitionType<jw::carFsm::atTarget>(testFsm, 5, 6, 1));
 
 			// state 6
@@ -298,11 +310,11 @@ namespace UnitTests
 			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadGo>(testFsm, 6, 8, 3));
 
 			// state 7
-			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 7));
+			Assert::IsTrue(checkStateType<jw::carFsm::moveToTarget>(testFsm, 7));
 			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadGo>(testFsm, 7, 8, 1));
 
 			// state 8
-			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 8));
+			Assert::IsTrue(checkStateType<jw::carFsm::moveToTarget>(testFsm, 8));
 			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadStop>(testFsm, 8, 7, 1));
 			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadAbleToStop>(testFsm, 8, 7, 2));
 			Assert::IsTrue(checkTransitionType<jw::carFsm::atTarget>(testFsm, 8, 9, 3));
@@ -318,10 +330,10 @@ namespace UnitTests
 
 			// state 11
 			Assert::IsTrue(checkStateType<jw::carFsm::targetRoadStart>(testFsm, 11));
-			Assert::IsTrue(checkTransitionType<jw::nullTransition>(testFsm, 11, 12, 1));
+			Assert::IsTrue(checkTransitionType<jw::carFsm::targetClear>(testFsm, 11, 12, 1));
 
 			// state 12
-			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 12));
+			Assert::IsTrue(checkStateType<jw::carFsm::moveToTarget>(testFsm, 12));
 			Assert::IsTrue(checkTransitionType<jw::carFsm::atTarget>(testFsm, 12, 13, 1));
 
 			// state 13
@@ -331,11 +343,11 @@ namespace UnitTests
 			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadGo>(testFsm, 13, 15, 3));
 
 			// state 14
-			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 14));
+			Assert::IsTrue(checkStateType<jw::carFsm::moveToTarget>(testFsm, 14));
 			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadGo>(testFsm, 14, 15, 1));
 
 			// state 15
-			Assert::IsTrue(checkStateType<jw::nullState>(testFsm, 15));
+			Assert::IsTrue(checkStateType<jw::carFsm::moveToTarget>(testFsm, 15));
 			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadStop>(testFsm, 15, 14, 1));
 			Assert::IsTrue(checkTransitionType<jw::carFsm::lightAheadAbleToStop>(testFsm, 15, 14, 2));
 			Assert::IsTrue(checkTransitionType<jw::carFsm::atTarget>(testFsm, 15, 16, 3));

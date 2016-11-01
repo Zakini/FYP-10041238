@@ -21,6 +21,24 @@ namespace jw
 		return minkowskiRect.left <= 0 && minkowskiRect.top <= 0 && (minkowskiRect.left + minkowskiRect.width) >= 0 && (minkowskiRect.top + minkowskiRect.height) >= 0;
 	}
 
+	bool collidable::collideAtPosition(sf::Vector2f position, collidable& target, float minDistance)
+	{
+		if (&target == this) return false;	// can't collide with yourself!
+
+		sf::FloatRect targetBoundingBox = target.getBoundingBox();
+		sf::Vector2f offset = position - target.getPosition();
+		targetBoundingBox.left += offset.x;
+		targetBoundingBox.top += offset.y;
+
+		targetBoundingBox.left -= minDistance;
+		targetBoundingBox.top -= minDistance;
+		targetBoundingBox.width += minDistance * 2;
+		targetBoundingBox.height += minDistance * 2;
+
+		sf::FloatRect minkowskiRect = collidable::minkowskiDifference(this->getBoundingBox(), targetBoundingBox);
+		return minkowskiRect.left <= 0 && minkowskiRect.top <= 0 && (minkowskiRect.left + minkowskiRect.width) >= 0 && (minkowskiRect.top + minkowskiRect.height) >= 0;
+	}
+
 	// See: https://hamaluik.com/posts/swept-aabb-collision-using-minkowski-difference/
 	std::pair<bool, sf::Vector2f> collidable::sweepCollide(collidable& target, sf::Time period, float minDistance)
 	{
@@ -33,7 +51,7 @@ namespace jw
 		targetBoundingBox.top -= minDistance;
 		targetBoundingBox.width += minDistance * 2;
 		targetBoundingBox.height += minDistance * 2;
-		sf::Vector2f targetCentre(targetBoundingBox.left + targetBoundingBox.width / 2, targetBoundingBox.top + targetBoundingBox.height / 2);
+		sf::Vector2f targetCentre = target.getPosition();
 
 		if (this->collide(target, minDistance))	// already colliding
 		{

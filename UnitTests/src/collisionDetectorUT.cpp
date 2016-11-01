@@ -171,5 +171,43 @@ namespace UnitTest
 
 			Assert::IsTrue(testDetector.predictCollisions(testCollider, sf::seconds(1), 0.0f, filter) == expectedResults);
 		}
+
+		TEST_METHOD(predictCollisionAtPositionNone)
+		{
+			jw::collisionDetector testDetector;
+			testCollidable testCollider = {};
+			testCollider.boundingBox = { 0, 0, 2, 2 };
+
+			testDetector.addCollisionTarget(&testCollider);
+
+			Assert::IsFalse(testDetector.predictCollisionAtPosition(testCollider, sf::Vector2f(20, 20)));
+
+			testCollidable testCollidee = {};
+			testCollidee.boundingBox = { 100, 100, 2, 2 };
+
+			testDetector.addCollisionTarget(&testCollidee);
+
+			Assert::IsFalse(testDetector.predictCollisionAtPosition(testCollider, sf::Vector2f(20, 20)));
+		}
+
+		TEST_METHOD(predictCollisionAtPositionCollision)
+		{
+			jw::collisionDetector testDetector;
+			testCollidable testCollider = {}, testCollidee1 = {};
+			testCollider.boundingBox = { 0, 0, 2, 2 };
+			testCollidee1.boundingBox = { 19, 19, 2, 2 };
+
+			testDetector.addCollisionTarget(&testCollider);
+			testDetector.addCollisionTarget(&testCollidee1);
+
+			Assert::IsTrue(testDetector.predictCollisionAtPosition(testCollider, sf::Vector2f(20, 20)));
+
+			testCollidable testCollidee2 = {};
+			testCollidee2.boundingBox = { 20, 20, 2, 2 };
+
+			testDetector.addCollisionTarget(&testCollidee2);
+
+			Assert::IsTrue(testDetector.predictCollisionAtPosition(testCollider, sf::Vector2f(20, 20)));
+		}
 	};
 }
