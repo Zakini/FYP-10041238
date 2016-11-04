@@ -91,9 +91,11 @@ namespace UnitTests
 			// TODO assert car ahead position removed
 		}
 
-		TEST_METHOD(getVelocity)
+		TEST_METHOD(moveTowardTargetGetVelocity)
 		{
-			jw::car testCar(nullptr, nullptr, 1, 2, jw::fsm());
+			// no car ahead
+			std::shared_ptr<jw::collisionDetector> testDetector = std::make_shared<jw::collisionDetector>();
+			jw::car testCar(nullptr, testDetector, 1, 2, jw::fsm());
 			sf::Vector2f targetPosition(10000, 0);
 			testCar.targetPosition(targetPosition);
 
@@ -106,6 +108,18 @@ namespace UnitTests
 			testCar.moveTowardTarget(updateLength);
 
 			Assert::IsTrue(testCar.getVelocity() == expectedVelocity);
+
+			// car ahead
+			jw::car carAhead(nullptr, testDetector, 1, 2, jw::fsm());
+			carAhead.setPosition(sf::Vector2f(8, 0));	// already within min distance from testCar
+
+			testDetector->addCollisionTarget(&testCar);
+			testDetector->addCollisionTarget(&carAhead);
+
+			testCar.update(updateLength);	// so that carAhead is detected
+			testCar.moveTowardTarget(updateLength);
+
+			Assert::IsTrue(jw::maths::length(testCar.getVelocity()) < jw::maths::length(expectedVelocity));	// check testCar is now braking to avoid carAhead
 		}
 
 		TEST_METHOD(getHeading)
@@ -387,11 +401,6 @@ namespace UnitTests
 			// min distance collision
 			testCar2.setPosition(sf::Vector2f(27, 20));
 			Assert::IsFalse(testCar1.isTargetClear());
-		}
-
-		TEST_METHOD(moveTowardTarget)
-		{
-			Assert::Fail();
 		}
 	};
 }
