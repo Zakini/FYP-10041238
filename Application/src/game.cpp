@@ -2,8 +2,8 @@
 
 using std::make_shared;
 
-const string worldJsonPath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/maps/map.json";
-const string carsJsonPath = "C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/data/entities/entities.json";
+const string worldJsonPath = "./data/map.json";
+const string carsJsonPath = "./data/entities.json";
 
 namespace jw
 {
@@ -25,7 +25,7 @@ namespace jw
 			cDetector->addCollisionTarget(car);
 		}
 
-		displayFont.loadFromFile("C:/Users/Josh Wells/Google Drive/Uni/Level 6/Final Year Project/Artefact/resources/fonts/arial.ttf");
+		displayFont.loadFromFile("./resources/arial.ttf");
 		timerDisplay.setFont(displayFont);
 		timerDisplay.setColor(sf::Color::Blue);
 		timerDisplay.setCharacterSize(20);
